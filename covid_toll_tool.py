@@ -2,7 +2,7 @@
 
 """
 Use OWID's data to create PNG charts and CSV datasets of all-cause mortality compared to COVID-19 mortality, for a given
-country and year in the context of a country's all-cause mortality in the preceding years.
+country and year in the context of a country's all-cause mortality in preceding years.
 """
 
 __author__ = "Maciej Sieczka <msieczka@sieczka.org>"
