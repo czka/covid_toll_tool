@@ -157,7 +157,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
-    fig, axs = mpyplot.subplots(figsize=(16, 8))  # Create an empty matplotlib figure and axes.
+    fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
                        color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
@@ -180,7 +180,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
                 'death count in {} from all causes'.format(year),
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)])
+                    min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
     # axs.yaxis.set_major_locator(mpyplot.MultipleLocator(1000))
@@ -192,7 +192,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
 
-    mpyplot.figtext(-0.02, -0.04,
+    mpyplot.figtext(0.01, -0.04,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
                     '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project '
@@ -204,7 +204,8 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
 
     mpyplot.tight_layout(pad=1)
 
-    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.2)
+    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
+                pil_kwargs={'optimize': True})
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
@@ -212,7 +213,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
-    fig, axs = mpyplot.subplots(figsize=(16, 8))  # Create an empty matplotlib figure and axes.
+    fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
 
     df_merged_one.plot(kind='line', use_index=True, grid=True, rot='50',
                        color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
@@ -228,7 +229,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
                 'death count in {} from all causes'.format(year),
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)])
+                    min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
 
     axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
     # axs.yaxis.set_major_locator(mpyplot.MultipleLocator(1000))
@@ -238,7 +239,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
 
-    mpyplot.figtext(-0.02, -0.04,
+    mpyplot.figtext(0.01, -0.04,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
                     '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project '
@@ -250,7 +251,8 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
 
     mpyplot.tight_layout(pad=1)
 
-    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.2)
+    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
+                pil_kwargs={'optimize': True})
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
