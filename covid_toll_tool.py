@@ -54,12 +54,12 @@ def main(country, year, if_list_countries):
 
 
 def list_countries(common_countries):
-    print("Please set --country to one of the following {} countries present in both input CSVs: {}.".
+    print("Please set '--country' to one of the following {} countries present in both input datasets: {}.".
           format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
 def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
-    # A year is typically 52 weeks. Some years, eg. 2015 and 2020, are 53 weeks (see eg.
+    # A year is typically 52 weeks. Some years, e.g. 2015 and 2020, are 53 weeks (see e.g.
     # https://www.timeanddate.com/calendar/?year=2015). Weekly mortality data in excess_mortality.csv for 2010-2019 are
     # capped at week 52 regardless of that, so the charts this script creates for year 2020 inherit this cap on the
     # background graph of the mortality in previous years. In spite of this I'm not trimming the covid mortality data
@@ -73,15 +73,15 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always have to use the 2020's data, also if
-    # creating a chart for eg. 2021. If args.year was > 2020 move week dates ahead as needed.
+    # creating a chart for e.g. 2021. If args.year was > 2020 move week dates ahead as needed.
     df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
 
     # If a DateOffset was applied, move the week's date to an *actual Sunday* of the given year. Not altering the data
-    # in any way, just taking the first value (as we are resampling weekly to weekly there's *only* one, so eg. last()
+    # in any way, just taking the first value (as we are resampling weekly to weekly there's *only* one, so e.g. last()
     # would work as well), and using the resultant DatetimeIndex items which resample() set to weeks' Sundays of the
     # args.year, to update the `date` column. Does nothing if args.year == 2020.
     df_death_one['date'] = df_death_one.resample(rule='W', on='date').first().index
-    # If dates changed, week numbers could use an update to compensate for 2020's 53 weeks vs eg. 2021's 52; just for
+    # If dates changed, week numbers could use an update to compensate for 2020's 53 weeks vs e.g. 2021's 52; just for
     # the sake of it, as `df_death_one[df_death_one['date'].dt.isocalendar().year` will trim at week 52 anyway. Does
     # nothing if args.year == 2020.
     df_death_one['time'] = df_death_one['date'].dt.isocalendar().week
@@ -97,7 +97,7 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
     # Merge both datasets now that they are aligned on their dates.
     df_merged_one = pd.merge(df_death_one, df_covid_one, how='outer')
 
-    # Exclude the mortality columns which have no data. Eg. many countries have data only for 2015-2019.
+    # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
     mortality_cols = [col for col in mortality_cols if df_merged_one[col].notnull().values.any()]
 
     df_merged_one['deaths_min'] = df_merged_one[mortality_cols].min(axis=1)
@@ -119,12 +119,12 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always have to use the 2020's data, also if
-    # creating a chart for eg. 2021. If args.year was > 2020 move month dates ahead as needed.
+    # creating a chart for e.g. 2021. If args.year was > 2020 move month dates ahead as needed.
     df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
 
     # If a DateOffset was applied, move the month date to the *actual last day of a month* of the given year. This
     # doesn't do anything except fixing February's last date in case of a leap year. Not altering the data in any way,
-    # just taking the first value (as we are resampling monthly to monthly there's *only* one, so eg. last() would work
+    # just taking the first value (as we are resampling monthly to monthly there's *only* one, so e.g. last() would work
     # as well), and using the resultant DatetimeIndex items which resample() set to months' last days of the args.year,
     # to update the `date` column. Does nothing if args.year == 2020.
     df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().index
@@ -140,7 +140,7 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # Merge both datasets now that they are aligned on their dates.
     df_merged_one = pd.merge(df_death_one, df_covid_one, how='outer')
 
-    # Exclude the mortality columns which have no data. Eg. many countries have data only for 2015-2019.
+    # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
     mortality_cols = [col for col in mortality_cols if df_merged_one[col].notnull().values.any()]
 
     df_merged_one['deaths_min'] = df_merged_one[mortality_cols].min(axis=1)
@@ -165,7 +165,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
 
     # TODO: Watch out for the status of 'x_compat' above. It's not documented where it should have been [1] although
-    #  mentioned few times in [2]. If it's going to be depreciated, a workaround will be needed as eg. per [3], [4].
+    #  mentioned few times in [2]. If it's going to be depreciated, a workaround will be needed as e.g. per [3], [4].
     #  [1] https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html
     #  [2] https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html
     #  [3] https://stackoverflow.com/questions/12945971/pandas-timeseries-plot-setting-x-axis-major-and-minor-ticks-and-labels
@@ -255,7 +255,11 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__, add_help=False)
+    parser = argparse.ArgumentParser(
+        add_help=False,
+        description=__doc__,
+        epilog="The output are a PNG chart and CSV dataset for the '--country' and the '--year' specified on the "
+               "command line - e.g. 'Poland_2020.png' and 'Poland_2020.csv'.")
 
     parser._optionals.title = 'Arguments'
 
@@ -267,12 +271,12 @@ if __name__ == '__main__':
                                     help='List countries available in both input CSV.')
 
     mutually_exclusive.add_argument('--country',
-                                    help='Country to process.')
+                                    help="Country to process - e.g. 'Poland'.")
 
     parser.add_argument('--year',
-                        help='Year to process, in YYYY format.',
                         required='--country' in sys.argv,
-                        type=int)
+                        type=int,
+                        help="Year to process - e.g. '2020'.")
 
     parser.add_argument('--help', '-h',
                         action='help',
