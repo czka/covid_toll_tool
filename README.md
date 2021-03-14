@@ -27,8 +27,9 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
   [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
   and [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
 
-- Run `./covid_toll_tool.py --help` to figure out how to proceed. The output are a PNG chart and CSV dataset for the 
-  `--country` and the `--year` specified on the command line - e.g. `Poland_2020.png` and `Poland_2020.csv`.
+- Run `./covid_toll_tool.py --help` to figure out how to proceed. The final product will be a PNG chart and a CSV 
+  dataset for the `--country` and the `--year` specified on the command line - e.g. `Poland_2020.png` and 
+  `Poland_2020.csv`.
 
 ### To explore the charts and datasets I have rendered so far:
 
