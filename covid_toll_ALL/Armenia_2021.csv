@@ -1,7 +1,7 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,deaths_min,deaths_max,deaths_mean,deaths_noncovid
 Armenia,2021-01-31,1,monthly,,,,,,2582.0,2722.0,3027.0,2534.0,2773.0,2567.0,3295.0,257.0,2534.0,3027.0,2727.6,3038.0
 Armenia,2021-02-28,2,monthly,,,,,,2363.0,2576.0,2442.0,2273.0,2247.0,2434.0,,112.0,2247.0,2576.0,2380.2,
-Armenia,2021-03-31,3,monthly,,,,,,2763.0,2349.0,2568.0,2215.0,2353.0,2288.0,,51.0,2215.0,2763.0,2449.6,
+Armenia,2021-03-31,3,monthly,,,,,,2763.0,2349.0,2568.0,2215.0,2353.0,2288.0,,61.0,2215.0,2763.0,2449.6,
 Armenia,2021-04-30,4,monthly,,,,,,2442.0,2243.0,2246.0,1968.0,2203.0,2156.0,,,1968.0,2442.0,2220.4,
 Armenia,2021-05-31,5,monthly,,,,,,2197.0,2247.0,2323.0,2220.0,2285.0,2103.0,,,2197.0,2323.0,2254.4,
 Armenia,2021-06-30,6,monthly,,,,,,2288.0,2169.0,2103.0,1902.0,1929.0,2869.0,,,1902.0,2288.0,2078.2,
