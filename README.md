@@ -7,10 +7,10 @@ It uses 2 input datasets provided by the [Our World in Data (OWID)](https://ourw
 under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/):
 
 1. All-cause mortality obtained by OWID from:
-  - [Human Mortality Database Short-term Mortality Fluctuations project](https://www.mortality.org)
-  - [World Mortality Dataset](https://github.com/akarlinsky/world_mortality)
+   - [Human Mortality Database Short-term Mortality Fluctuations project](https://www.mortality.org)
+   - [World Mortality Dataset](https://github.com/akarlinsky/world_mortality)
 2. COVID-19 mortality obtained by OWID from:
-  - [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
+   - [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
 
 ## Usage
 
