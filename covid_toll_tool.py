@@ -72,8 +72,8 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
     df_covid_one = df_covid_one.resample(rule='W', on='date').sum().reset_index()
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
-    # ending at 2019) are only present in the 2020's rows. So we have to always have to use the 2020's data, also if
-    # creating a chart for e.g. 2021. If args.year was > 2020 move week dates ahead as needed.
+    # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
+    # chart for e.g. 2021. If args.year was > 2020 move week dates ahead as needed.
     df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
 
     # If a DateOffset was applied, move the week's date to an *actual Sunday* of the given year. Not altering the data
@@ -118,8 +118,8 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     df_covid_one = df_covid_one.resample(rule='M', on='date').sum().reset_index()
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
-    # ending at 2019) are only present in the 2020's rows. So we have to always have to use the 2020's data, also if
-    # creating a chart for e.g. 2021. If args.year was > 2020 move month dates ahead as needed.
+    # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
+    # chart for e.g. 2021. If args.year was > 2020 move month dates ahead as needed.
     df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
 
     # If a DateOffset was applied, move the month date to the *actual last day of a month* of the given year. This
