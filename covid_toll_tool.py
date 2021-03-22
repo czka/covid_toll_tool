@@ -13,6 +13,7 @@ import pandas as pd
 import matplotlib.pyplot as mpyplot
 import matplotlib.dates as mdates
 import matplotlib.ticker as mticker
+from datetime import date as ddate
 
 
 def main(country, year, if_list_countries):
@@ -154,6 +155,9 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
 
 
 def plot_weekly(df_merged_one, country, year, mortality_cols):
+    # By ISO specification the 28th of December is always in the last week of the year.
+    weeks_count = ddate(year, 12, 28).isocalendar().week
+
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
@@ -187,6 +191,8 @@ def plot_weekly(df_merged_one, country, year, mortality_cols):
     axs.margins(x=0, y=0.05)
     # axs.set(xlabel="date - week number", ylabel="number of deaths")
     axs.set(xlabel="date", ylabel="number of deaths")
+    axs.set(xlabel="date", ylabel="number of deaths",
+            xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]])
     # axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m - %V'))
     axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m'))
 
@@ -292,5 +298,5 @@ if __name__ == '__main__':
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
 #  - Add lockdown stringency index.
-#  - Fix defect: inconsistent X axis length on charts of different countries .
+
 #  - Fix defect: inconsistent Y axis length on charts of a country in different years.
