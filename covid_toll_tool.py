@@ -16,7 +16,7 @@ import matplotlib.ticker as mticker
 from datetime import date as ddate
 
 
-def main(country, year, if_list_countries):
+def main(country, year, if_list_countries, if_interpolate_week_53):
     mortality_cols = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages', 'deaths_2013_all_ages',
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',
                       'deaths_2018_all_ages', 'deaths_2019_all_ages']
@@ -42,8 +42,9 @@ def main(country, year, if_list_countries):
         df_death_one = df_death_all[df_death_all['location'] == country].copy()
 
         if df_death_one['time_unit'].all() == 'weekly':
-            df_merged_one, mortality_cols = process_weekly(df_covid_one, df_death_one, year, mortality_cols)
-            plot_weekly(df_merged_one, country, year, mortality_cols)
+            df_merged_one, mortality_cols, weeks_count = process_weekly(df_covid_one, df_death_one, year,
+                                                                        mortality_cols, if_interpolate_week_53)
+            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count)
 
         elif df_death_one['time_unit'].all() == 'monthly':
             df_merged_one, mortality_cols = process_monthly(df_covid_one, df_death_one, year, mortality_cols)
@@ -59,13 +60,7 @@ def list_countries(common_countries):
           format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
-def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
-    # A year is typically 52 weeks. Some years, e.g. 2015 and 2020, are 53 weeks (see e.g.
-    # https://www.timeanddate.com/calendar/?year=2015). Weekly mortality data in excess_mortality.csv for 2010-2019 are
-    # capped at week 52 regardless of that, so the charts this script creates for year 2020 inherit this cap on the
-    # background graph of the mortality in previous years. In spite of this I'm not trimming the covid mortality data
-    # at week 52. A side-effect is that the charts for 2020 stand out of the background mortality graph by 1 week.
-
+def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
@@ -105,10 +100,35 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols):
     df_merged_one['deaths_max'] = df_merged_one[mortality_cols].max(axis=1)
     df_merged_one['deaths_mean'] = df_merged_one[mortality_cols].mean(axis=1)
 
+    # A year is typically 52 weeks. Some years, e.g. 2015 and 2020, are 53 weeks (see e.g.
+    # https://www.timeanddate.com/calendar/?year=2015). All-cause mortality data in excess_mortality.csv for 2010-2019
+    # are capped at week 52 regardless of that. There are 3 ways to mitigate this I can think of:
+    # 1. Trim all-cause and covid data at week 52 for all years, always. This means e.g. losing data in 2020. Not really
+    # an option.
+    # 2. Have mortality graph for 2020 stand out of the historical background mortality graph by 1 week, and deal with
+    # the missing historical mortality data at week 53 in any calculations for 2020. Better, but I'd rather avoid
+    # producing charts which seem incomplete/corrupted at the last week of a year, as well as complicating the code that
+    # would be simpler if mortality data in a given year and in previous years were symmetrical. If that's what the user
+    # prefers, there's the `--dont_interpolate_week_53` to enable such behaviour for charts rendering. It used to be the
+    # default.
+    # 3. Interpolate the historical all-cause mortality at week 53 from week's 1 and 52 data. This is the current
+    # default. I don't think this is too much of a stretch - a year is circle after all... Let me know if you think
+    # that's wrong. Mind that OWID themselves just assume the average at week 53 equals the average at week 52, and
+    # apparently even that is good enough (see e.g.
+    # https://ourworldindata.org/grapher/excess-mortality-raw-death-count?tab=chart&stackMode=absolute&country=~POL&region=World).
+
+    # By ISO specification the 28th of December is always in the last week of the year.
+    weeks_count = ddate(year, 12, 28).isocalendar().week
+
+    if if_interpolate_week_53 and weeks_count == 53:
+        df_merged_one.loc[52, 'deaths_min'] = (df_merged_one['deaths_min'][0] + df_merged_one['deaths_min'][51]) / 2
+        df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
+        df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
+
     df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(df_merged_one['new_deaths'],
                                                                                             fill_value=None)
 
-    return df_merged_one, mortality_cols
+    return df_merged_one, mortality_cols, weeks_count
 
 
 def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
@@ -154,10 +174,7 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     return df_merged_one, mortality_cols
 
 
-def plot_weekly(df_merged_one, country, year, mortality_cols):
-    # By ISO specification the 28th of December is always in the last week of the year.
-    weeks_count = ddate(year, 12, 28).isocalendar().week
-
+def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
@@ -286,13 +303,22 @@ if __name__ == '__main__':
                         type=int,
                         help="Year to process - e.g. '2020'.")
 
+    parser.add_argument('--dont_interpolate_week_53',
+                        action='store_false',
+                        dest='if_interpolate_week_53',
+                        default=True,
+                        help='Don\'t interpolate the historical 2010-2019 all-cause mortality at week 53 from data of '
+                             'week 1 and 52, for 53-week years (eg. 2020). Such interpolation is enabled by default '
+                             'because the OWID\'s excess_mortality.csv has its historical 2010-2019 all-cause mortality'
+                             ' data capped at week 52.')
+
     parser.add_argument('--help', '-h',
                         action='help',
                         help='Show this help message.')
 
     args = parser.parse_args()
 
-    main(args.country, args.year, args.if_list_countries)
+    main(args.country, args.year, args.if_list_countries, args.if_interpolate_week_53)
 
 # TODO:
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
@@ -300,3 +326,4 @@ if __name__ == '__main__':
 #  - Add lockdown stringency index.
 
 #  - Fix defect: inconsistent Y axis length on charts of a country in different years.
+## Liczyć max wysokość w oparciu o dane z 2020 i 2021 (jak?) i używać jej na obu wykresach dla osi Y.
