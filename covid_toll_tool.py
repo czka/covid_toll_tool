@@ -207,7 +207,6 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count):
     # axs.yaxis.set_major_locator(mpyplot.MultipleLocator(1000))
     axs.margins(x=0, y=0.05)
     # axs.set(xlabel="date - week number", ylabel="number of deaths")
-    axs.set(xlabel="date", ylabel="number of deaths")
     axs.set(xlabel="date", ylabel="number of deaths",
             xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]])
     # axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m - %V'))
