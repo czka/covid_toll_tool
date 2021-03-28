@@ -42,13 +42,18 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
         df_death_one = df_death_all[df_death_all['location'] == country].copy()
 
         if df_death_one['time_unit'].all() == 'weekly':
-            df_merged_one, mortality_cols, weeks_count = process_weekly(df_covid_one, df_death_one, year,
-                                                                        mortality_cols, if_interpolate_week_53)
-            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count)
+
+            df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
+                df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
+
+            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
 
         elif df_death_one['time_unit'].all() == 'monthly':
-            df_merged_one, mortality_cols = process_monthly(df_covid_one, df_death_one, year, mortality_cols)
-            plot_monthly(df_merged_one, country, year, mortality_cols)
+
+            df_merged_one, mortality_cols, y_min, y_max = process_monthly(
+                df_covid_one, df_death_one, year, mortality_cols)
+
+            plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -66,6 +71,8 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
     df_covid_one = df_covid_one.resample(rule='W', on='date').sum().reset_index()
+
+    y_min, y_max = find_yrange_weekly(df_covid_one, df_death_one)
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
@@ -125,10 +132,60 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
         df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
         df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
 
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(df_merged_one['new_deaths'],
-                                                                                            fill_value=None)
+    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(
+        df_merged_one['new_deaths'], fill_value=None)
 
-    return df_merged_one, mortality_cols, weeks_count
+    return df_merged_one, mortality_cols, weeks_count, y_min, y_max
+
+
+def find_yrange_weekly(df_covid_one, df_death_one):
+    """
+    Find the Y axis bottom and top value in all-time OWID's data for a given country with weekly resolution of
+    historical mortality data; to have an identical Y axis range on that country's charts in different years.
+    """
+    deaths_noncovid_mins = []
+    deaths_noncovid_maxs = []
+
+    # This loop calculates the number of non-covid deaths *for each year* covered in the OWID's data, to be able to
+    # include it when calculating the Y axis value range. For some countries the number of non-covid deaths in a given
+    # year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in previous
+    # years. For some, it's higher than the highest number of deaths in previous years - probably due to borked data,
+    # but anyway (e.g. Kyrgyzstan in 2020).
+    for y in df_covid_one['date'].dt.isocalendar().year.unique():
+        # See process_weekly comments for explanations. This is mostly a copy-paste from there.
+        df_covid_one_tmp = df_covid_one.copy()
+        df_death_one_tmp = df_death_one.copy()
+
+        df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
+        df_death_one_tmp['date'] = df_death_one_tmp.resample(rule='W', on='date').first().index
+
+        df_death_one_tmp['time'] = df_death_one_tmp['date'].dt.isocalendar().week
+
+        df_covid_one_tmp = df_covid_one_tmp[df_covid_one_tmp['date'].dt.isocalendar().year == y]
+        df_death_one_tmp = df_death_one_tmp[df_death_one_tmp['date'].dt.isocalendar().year == y]
+
+        df_covid_one_tmp['time'] = df_covid_one_tmp['date'].dt.isocalendar().week
+
+        df_merged_one = pd.merge(df_death_one_tmp, df_covid_one_tmp, how='outer')
+
+        df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(y)].sub(
+            df_merged_one['new_deaths'], fill_value=None)
+
+        if df_merged_one['deaths_noncovid'].notnull().any():
+            deaths_noncovid_mins.append(df_merged_one['deaths_noncovid'].min())
+            deaths_noncovid_maxs.append(df_merged_one['deaths_noncovid'].max())
+
+    if deaths_noncovid_mins:
+        y_min = min(*deaths_noncovid_mins, df_merged_one.filter(regex='deaths_.*_all_ages').min().min())
+    else:
+        y_min = df_merged_one.filter(regex='deaths_.*_all_ages').min().min()
+
+    if deaths_noncovid_maxs:
+        y_max = max(*deaths_noncovid_maxs, df_merged_one.filter(regex='deaths_.*_all_ages').max().max())
+    else:
+        y_max = df_merged_one.filter(regex='deaths_.*_all_ages').max().max()
+
+    return y_min, y_max
 
 
 def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
@@ -137,6 +194,8 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
     df_covid_one = df_covid_one.resample(rule='M', on='date').sum().reset_index()
+
+    y_min, y_max = find_yrange_monthly(df_covid_one, df_death_one)
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
@@ -171,10 +230,58 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(df_merged_one['new_deaths'],
                                                                                             fill_value=None)
 
-    return df_merged_one, mortality_cols
+    return df_merged_one, mortality_cols, y_min, y_max
 
 
-def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count):
+def find_yrange_monthly(df_covid_one, df_death_one):
+    """
+    Find the Y axis bottom and top value in all-time OWID's data for a given country with monthly resolution of
+    historical mortality data; to have an identical Y axis range on that country's charts in different years.
+    """
+    deaths_noncovid_mins = []
+    deaths_noncovid_maxs = []
+
+    # This loop calculates the number of non-covid deaths *for each year* covered in the OWID's data, to be able to
+    # include it when calculating the Y axis value range. For some countries the number of non-covid deaths in a given
+    # year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in previous
+    # years. For some, it's higher than the highest number of deaths in previous years - probably due to borked data,
+    # but anyway (e.g. Kyrgyzstan in 2020).
+    for y in df_covid_one['date'].dt.year.unique():
+        # See process_monthly comments for explanations. This is mostly a copy-paste from there.
+        df_covid_one_tmp = df_covid_one.copy()
+        df_death_one_tmp = df_death_one.copy()
+
+        df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
+        df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().index
+
+        df_covid_one_tmp = df_covid_one_tmp[df_covid_one_tmp['date'].dt.year == y]
+        df_death_one_tmp = df_death_one_tmp[df_death_one_tmp['date'].dt.year == y]
+
+        df_covid_one_tmp['time'] = df_covid_one_tmp['date'].dt.month
+
+        df_merged_one = pd.merge(df_death_one_tmp, df_covid_one_tmp, how='outer')
+
+        df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(y)].sub(
+            df_merged_one['new_deaths'], fill_value=None)
+
+        if df_merged_one['deaths_noncovid'].notnull().any():
+            deaths_noncovid_mins.append(df_merged_one['deaths_noncovid'].min())
+            deaths_noncovid_maxs.append(df_merged_one['deaths_noncovid'].max())
+
+    if deaths_noncovid_mins:
+        y_min = min(*deaths_noncovid_mins, df_merged_one.filter(regex='deaths_.*_all_ages').min().min())
+    else:
+        y_min = df_merged_one.filter(regex='deaths_.*_all_ages').min().min()
+
+    if deaths_noncovid_maxs:
+        y_max = max(*deaths_noncovid_maxs, df_merged_one.filter(regex='deaths_.*_all_ages').max().max())
+    else:
+        y_max = df_merged_one.filter(regex='deaths_.*_all_ages').max().max()
+
+    return y_min, y_max
+
+
+def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
@@ -204,12 +311,11 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count):
                     min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
-    # axs.yaxis.set_major_locator(mpyplot.MultipleLocator(1000))
-    axs.margins(x=0, y=0.05)
-    # axs.set(xlabel="date - week number", ylabel="number of deaths")
+
     axs.set(xlabel="date", ylabel="number of deaths",
-            xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]])
-    # axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m - %V'))
+            xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]],
+            ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
+
     axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m'))
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
@@ -228,10 +334,11 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count):
 
     fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
                 pil_kwargs={'optimize': True})
+
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
-def plot_monthly(df_merged_one, country, year, mortality_cols):
+def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
@@ -254,9 +361,11 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
                     min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
 
     axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
-    # axs.yaxis.set_major_locator(mpyplot.MultipleLocator(1000))
-    axs.margins(x=0, y=0.05)
-    axs.set(xlabel="date", ylabel="number of deaths")
+
+    axs.set(xlabel="date", ylabel="number of deaths",
+            xlim=[1, 12],
+            ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
+
     axs.xaxis.set_major_formatter(mticker.FixedFormatter([d.strftime('%d.%m') for d in df_merged_one['date']]))
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
@@ -275,6 +384,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols):
 
     fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
                 pil_kwargs={'optimize': True})
+
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
@@ -323,6 +433,8 @@ if __name__ == '__main__':
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
 #  - Add lockdown stringency index.
-
-#  - Fix defect: inconsistent Y axis length on charts of a country in different years.
-## Liczyć max wysokość w oparciu o dane z 2020 i 2021 (jak?) i używać jej na obu wykresach dla osi Y.
+#  - Add an "all" country.
+#  - Cosmetics:
+#    - Maintain a uniform chart length. 1) There's more padding on monthly charts' right than on weekly. Move X ticks
+#    labels to the left on monthly charts? 2) Depending on Y axis range, the Y axis labels are shorter or longer,
+#    affecting a chart's length. Equalize labels' width by padding it with a leading white space?
