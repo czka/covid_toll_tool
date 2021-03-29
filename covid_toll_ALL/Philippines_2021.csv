@@ -1,7 +1,7 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,deaths_min,deaths_max,deaths_mean,deaths_noncovid
 Philippines,2021-01-31,1,monthly,,,,,,50381.0,49293.0,50476.0,52126.0,57701.0,53466.0,,1505.0,49293.0,57701.0,51995.4,
 Philippines,2021-02-28,2,monthly,,,,,,44540.0,43931.0,44765.0,45236.0,48798.0,46216.0,,1569.0,43931.0,48798.0,45454.0,
-Philippines,2021-03-31,3,monthly,,,,,,46452.0,46493.0,47136.0,48366.0,51109.0,45748.0,,448.0,46452.0,51109.0,47911.2,
+Philippines,2021-03-31,3,monthly,,,,,,46452.0,46493.0,47136.0,48366.0,51109.0,45748.0,,841.0,46452.0,51109.0,47911.2,
 Philippines,2021-04-30,4,monthly,,,,,,44421.0,47511.0,46487.0,47626.0,50247.0,44510.0,,,44421.0,50247.0,47258.4,
 Philippines,2021-05-31,5,monthly,,,,,,46953.0,48648.0,48141.0,49662.0,52108.0,50124.0,,,46953.0,52108.0,49102.4,
 Philippines,2021-06-30,6,monthly,,,,,,44172.0,44862.0,46118.0,46353.0,49028.0,48403.0,,,44172.0,49028.0,46106.6,

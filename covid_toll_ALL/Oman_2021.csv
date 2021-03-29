@@ -1,7 +1,7 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,deaths_min,deaths_max,deaths_mean,deaths_noncovid
 Oman,2021-01-31,1,monthly,,,,,,732.0,801.0,773.0,874.0,813.0,817.0,835.0,30.0,732.0,874.0,798.6,805.0
 Oman,2021-02-28,2,monthly,,,,,,550.0,730.0,742.0,706.0,676.0,696.0,,41.0,550.0,742.0,680.8,
-Oman,2021-03-31,3,monthly,,,,,,602.0,830.0,815.0,771.0,763.0,817.0,,30.0,602.0,830.0,756.2,
+Oman,2021-03-31,3,monthly,,,,,,602.0,830.0,815.0,771.0,763.0,817.0,,80.0,602.0,830.0,756.2,
 Oman,2021-04-30,4,monthly,,,,,,587.0,722.0,713.0,721.0,659.0,694.0,,,587.0,722.0,680.4,
 Oman,2021-05-31,5,monthly,,,,,,611.0,724.0,725.0,687.0,677.0,758.0,,,611.0,725.0,684.8,
 Oman,2021-06-30,6,monthly,,,,,,574.0,657.0,748.0,701.0,684.0,868.0,,,574.0,748.0,672.8,
