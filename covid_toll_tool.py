@@ -434,6 +434,7 @@ if __name__ == '__main__':
     main(args.country, args.year, args.if_list_countries, args.if_interpolate_week_53)
 
 # TODO:
+#  - Add a note on charts which helps finding it online after printing.
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
 #  - Add lockdown stringency index.
