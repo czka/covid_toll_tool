@@ -118,10 +118,10 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     # the missing historical mortality data at week 53 in any calculations for 2020. Better, but I'd rather avoid
     # producing charts which seem incomplete/corrupted at the last week of a year, as well as complicating the code that
     # would be simpler if mortality data in a given year and in previous years were symmetrical. If that's what the user
-    # prefers, there's the `--dont_interpolate_week_53` to enable such behaviour for charts rendering. It used to be the
-    # default.
+    # prefers however, there's the `--dont_interpolate_week_53` to enable such behaviour for charts rendering. It used
+    # to be the default.
     # 3. Interpolate the historical all-cause mortality at week 53 from week's 1 and 52 data. This is the current
-    # default. I don't think this is too much of a stretch - a year is circle after all... Let me know if you think
+    # default. I don't think this is too much of a stretch - a year is a circle after all... Let me know if you think
     # that's wrong. Mind that OWID themselves just assume the average at week 53 equals the average at week 52, and
     # apparently even that is good enough (see e.g.
     # https://ourworldindata.org/grapher/excess-mortality-raw-death-count?tab=chart&stackMode=absolute&country=~POL&region=World).
