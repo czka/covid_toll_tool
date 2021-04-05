@@ -108,8 +108,8 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     df_merged_one['deaths_mean'] = df_merged_one[mortality_cols].mean(axis=1)
 
     # A year is typically 52 weeks. Some years, e.g. 2015 and 2020, are 53 weeks (see e.g.
-    # https://www.timeanddate.com/calendar/?year=2015). All-cause mortality data in excess_mortality.csv for 2010-2019
-    # are capped at week 52 regardless of that. There are 3 ways to mitigate this I can think of:
+    # https://www.timeanddate.com/date/week-numbers.html). All-cause mortality data in excess_mortality.csv for
+    # 2010-2019 are capped at week 52 regardless of that. There are 3 ways to mitigate this I can think of:
     # 1. Trim all-cause and covid data at week 52 for all years, always. This means e.g. losing data in 2020. Not really
     # an option.
     # 2. Have mortality graph for 2020 stand out of the historical background mortality graph by 1 week, and deal with
