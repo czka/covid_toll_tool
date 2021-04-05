@@ -82,8 +82,10 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     # If a DateOffset was applied, move the week's date to an *actual Sunday* of the given year. Not altering the data
     # in any way, just taking the first value (as we are resampling weekly to weekly there's *only* one, so e.g. last()
     # would work as well), and using the resultant DatetimeIndex items which resample() set to weeks' Sundays of the
-    # args.year, to update the `date` column. Does nothing if args.year == 2020.
-    df_death_one['date'] = df_death_one.resample(rule='W', on='date').first().index
+    # args.year, to update the `date` column. Does nothing if args.year == 2020. dropna() deals with weekly datasets
+    # which don't follow the ISO week numbering (the only such case currently is Tunisia - capped at week 52 even in
+    # 2020, see https://github.com/akarlinsky/world_mortality/issues/7 for details), or otherwise incomplete.
+    df_death_one['date'] = df_death_one.resample(rule='W', on='date').first().dropna(how='all').index
     # If dates changed, week numbers could use an update to compensate for 2020's 53 weeks vs e.g. 2021's 52; just for
     # the sake of it, as `df_death_one[df_death_one['date'].dt.isocalendar().year` will trim at week 52 anyway. Does
     # nothing if args.year == 2020.
@@ -157,7 +159,7 @@ def find_yrange_weekly(df_covid_one, df_death_one):
         df_death_one_tmp = df_death_one.copy()
 
         df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
-        df_death_one_tmp['date'] = df_death_one_tmp.resample(rule='W', on='date').first().index
+        df_death_one_tmp['date'] = df_death_one_tmp.resample(rule='W', on='date').first().dropna(how='all').index
 
         df_death_one_tmp['time'] = df_death_one_tmp['date'].dt.isocalendar().week
 
@@ -206,8 +208,10 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # doesn't do anything except fixing February's last date in case of a leap year. Not altering the data in any way,
     # just taking the first value (as we are resampling monthly to monthly there's *only* one, so e.g. last() would work
     # as well), and using the resultant DatetimeIndex items which resample() set to months' last days of the args.year,
-    # to update the `date` column. Does nothing if args.year == 2020.
-    df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().index
+    # to update the `date` column. Does nothing if args.year == 2020. dropna() deals with incomplete data (the only such
+    # case currently for monthly datasets is El Salvador - capped at September in all years, see
+    # https://github.com/akarlinsky/world_mortality/issues/6 for details).
+    df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().dropna(how='all').index
 
     # Take only rows of the given year.
     df_covid_one = df_covid_one[df_covid_one['date'].dt.year == year]
@@ -252,7 +256,7 @@ def find_yrange_monthly(df_covid_one, df_death_one):
         df_death_one_tmp = df_death_one.copy()
 
         df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
-        df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().index
+        df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().dropna(how='all').index
 
         df_covid_one_tmp = df_covid_one_tmp[df_covid_one_tmp['date'].dt.year == y]
         df_death_one_tmp = df_death_one_tmp[df_death_one_tmp['date'].dt.year == y]
