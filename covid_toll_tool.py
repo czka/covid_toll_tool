@@ -28,32 +28,21 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
 
     df_covid_all = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
+
     df_death_all = pd.read_csv("./excess_mortality.csv", parse_dates=['date'], usecols=death_cols).reindex(
         columns=death_cols)
 
-    common_countries = sorted(set(df_death_all['location']) & set(df_covid_all['location']))
+    common_countries = ['ALL'] + sorted(set(df_death_all['location']) & set(df_covid_all['location']))
 
     if if_list_countries:
         list_countries(common_countries)
 
+    elif country == 'ALL':
+        for country in common_countries:
+            get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53)
+
     elif country in common_countries:
-        # Take only rows for the specified country.
-        df_covid_one = df_covid_all[df_covid_all['location'] == country]
-        df_death_one = df_death_all[df_death_all['location'] == country].copy()
-
-        if df_death_one['time_unit'].all() == 'weekly':
-
-            df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
-                df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
-
-            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
-
-        elif df_death_one['time_unit'].all() == 'monthly':
-
-            df_merged_one, mortality_cols, y_min, y_max = process_monthly(
-                df_covid_one, df_death_one, year, mortality_cols)
-
-            plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
+        get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -61,8 +50,29 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
 
 
 def list_countries(common_countries):
-    print("Please set '--country' to one of the following {} countries present in both input datasets: {}.".
-          format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
+    print("Please set '--country' to one of the following {} countries present in both input datasets, or 'ALL', to "
+          "process them all one by one: {}.".
+          format(len(common_countries)-1, ', '.join("'{}'".format(c) for c in common_countries)))
+
+
+def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53):
+    # Take only rows for the specified country.
+    df_covid_one = df_covid_all[df_covid_all['location'] == country]
+    df_death_one = df_death_all[df_death_all['location'] == country].copy()
+
+    if df_death_one['time_unit'].all() == 'weekly':
+
+        df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
+            df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
+
+        plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
+
+    elif df_death_one['time_unit'].all() == 'monthly':
+
+        df_merged_one, mortality_cols, y_min, y_max = process_monthly(
+            df_covid_one, df_death_one, year, mortality_cols)
+
+        plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
 
 
 def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
@@ -409,7 +419,8 @@ if __name__ == '__main__':
                                     help='List countries available in both input CSV.')
 
     mutually_exclusive.add_argument('--country',
-                                    help="Country to process - e.g. 'Poland'.")
+                                    help="Country to process - e.g. 'Poland'. Use 'ALL' to process all countries one by"
+                                         " one.")
 
     parser.add_argument('--year',
                         required='--country' in sys.argv,
@@ -438,7 +449,6 @@ if __name__ == '__main__':
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
 #  - Add lockdown stringency index.
-#  - Add an "all" country.
 #  - Cosmetics:
 #    - Maintain a uniform chart length. 1) There's more padding on monthly charts' right than on weekly. Move X ticks
 #    labels to the left on monthly charts? 2) Depending on Y axis range, the Y axis labels are shorter or longer,
