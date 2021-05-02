@@ -1,0 +1,13 @@
+location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,deaths_min,deaths_max,deaths_mean,deaths_noncovid
+Greenland,2020-01-31,1,monthly,,,,,,44.0,36.0,50.0,48.0,46.0,36.0,,,36.0,50.0,44.8,
+Greenland,2020-02-29,2,monthly,,,,,,33.0,44.0,49.0,25.0,50.0,48.0,,,25.0,50.0,40.2,
+Greenland,2020-03-31,3,monthly,,,,,,45.0,35.0,56.0,49.0,55.0,44.0,,,35.0,56.0,48.0,
+Greenland,2020-04-30,4,monthly,,,,,,39.0,42.0,27.0,62.0,47.0,30.0,,,27.0,62.0,43.4,
+Greenland,2020-05-31,5,monthly,,,,,,41.0,46.0,42.0,52.0,32.0,35.0,,,32.0,52.0,42.6,
+Greenland,2020-06-30,6,monthly,,,,,,41.0,36.0,40.0,45.0,49.0,49.0,,,36.0,49.0,42.2,
+Greenland,2020-07-31,7,monthly,,,,,,39.0,42.0,45.0,31.0,40.0,39.0,,,31.0,45.0,39.4,
+Greenland,2020-08-31,8,monthly,,,,,,39.0,36.0,34.0,49.0,40.0,49.0,,,34.0,49.0,39.6,
+Greenland,2020-09-30,9,monthly,,,,,,34.0,43.0,41.0,34.0,59.0,53.0,,,34.0,59.0,42.2,
+Greenland,2020-10-31,10,monthly,,,,,,29.0,37.0,37.0,28.0,42.0,32.0,,,28.0,42.0,34.6,
+Greenland,2020-11-30,11,monthly,,,,,,35.0,34.0,36.0,30.0,42.0,45.0,,,30.0,42.0,35.4,
+Greenland,2020-12-31,12,monthly,,,,,,53.0,56.0,42.0,34.0,46.0,60.0,,,34.0,56.0,46.2,
