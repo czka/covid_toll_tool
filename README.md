@@ -1,7 +1,8 @@
 ## About
 
 This is a Python script which creates PNG charts and CSV datasets of all-cause mortality compared to COVID-19 mortality, 
-for a given country and year in the context of a country's all-cause mortality in preceding years.
+for a given country and year in the context of lockdown stringency and the country's all-cause mortality in preceding
+years.
 
 It uses 2 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
 under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/):
@@ -11,6 +12,10 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
    - [World Mortality Dataset](https://github.com/akarlinsky/world_mortality)
 2. COVID-19 mortality obtained by OWID from:
    - [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
+3. Lockdown stringency index obtained by OWID from:
+   - [OxCGRT dataset](https://github.com/OxCGRT/covid-policy-tracker). See their 2021 paper
+     [A global panel database of pandemic policies (Oxford COVID-19 Government Response Tracker)](https://doi.org/10.1038/s41562-021-01079-8)
+     published in Nature Human Behaviour and the [OxCGRT website](https://covidtracker.bsg.ox.ac.uk).
 
 ## Usage
 
