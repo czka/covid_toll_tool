@@ -21,7 +21,7 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',
                       'deaths_2018_all_ages', 'deaths_2019_all_ages']
 
-    covid_cols = ['location', 'date', 'new_deaths']
+    covid_cols = ['location', 'date', 'new_deaths', 'stringency_index']
 
     death_cols = ['location', 'date', 'time', 'time_unit'] + mortality_cols + ['deaths_2020_all_ages',
                                                                                'deaths_2021_all_ages']
@@ -80,7 +80,8 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
-    df_covid_one = df_covid_one.resample(rule='W', on='date').sum().reset_index()
+    df_covid_one = df_covid_one.resample(rule='W', on='date').\
+        agg({'new_deaths': pd.DataFrame.sum, 'stringency_index': pd.DataFrame.mean}).reset_index()
 
     y_min, y_max = find_yrange_weekly(df_covid_one, df_death_one)
 
@@ -205,7 +206,8 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
-    df_covid_one = df_covid_one.resample(rule='M', on='date').sum().reset_index()
+    df_covid_one = df_covid_one.resample(rule='M', on='date').\
+        agg({'new_deaths': pd.DataFrame.sum, 'stringency_index': pd.DataFrame.mean}).reset_index()
 
     y_min, y_max = find_yrange_monthly(df_covid_one, df_death_one)
 
@@ -301,10 +303,16 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
 
     fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
 
+    axs2 = axs.twinx()
+
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
                        color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
+
+    df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
+                       color=['fuchsia'], style=['-'],
+                       ax=axs2, x='date', y=['stringency_index'])
 
     # TODO: Watch out for the status of 'x_compat' above. It's not documented where it should have been [1] although
     #  mentioned few times in [2]. If it's going to be depreciated, a workaround will be needed as e.g. per [3], [4].
@@ -322,13 +330,33 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                 'death count in {} from all causes'.format(year),
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
+                    min_deaths_year, max_deaths_year)],
+               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
+
+    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full'],
+                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
 
-    axs.set(xlabel="date", ylabel="number of deaths",
+    axs.set_xlabel(xlabel="date", loc="right")
+
+    axs2.set(ylabel="percent",
+             xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count - 1]],
+             ylim=[0, 99])
+
+    axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
+
+    axs.set(ylabel="number of people",
             xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
+
+    axs2.set_xlabel(xlabel="date", loc="right")
+
+    # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
+    # For more details see https://github.com/matplotlib/matplotlib/issues/3706.
+    legend = axs.get_legend()
+    axs.get_legend().remove()
+    axs2.add_artist(legend)
 
     axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m'))
 
@@ -341,7 +369,10 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                     '(https://www.mortality.org), World Mortality Dataset '
                     '(https://github.com/akarlinsky/world_mortality).\n'
                     '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University '
-                    '(https://github.com/CSSEGISandData/COVID-19).',
+                    '(https://github.com/CSSEGISandData/COVID-19).\n'
+                    '- Lockdown stringency index: "A global panel database of pandemic policies (Oxford COVID-19 '
+                    'Government Response Tracker)", 2021, Nature Human Behaviour '
+                    '(https://doi.org/10.1038/s41562-021-01079-8).',
                     fontsize=8, va="bottom", ha="left")
 
     mpyplot.tight_layout(pad=1)
@@ -358,10 +389,16 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
 
     fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
 
+    axs2 = axs.twinx()
+
     df_merged_one.plot(kind='line', use_index=True, grid=True, rot='50',
                        color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='time', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
+
+    df_merged_one.plot(kind='line', use_index=True, grid=False, rot='50',
+                       color=['fuchsia'], style=['-'],
+                       ax=axs2, x='time', y=['stringency_index'])
 
     axs.fill_between(df_merged_one['time'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
                      color='yellowgreen')
@@ -372,13 +409,33 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                 'death count in {} from all causes'.format(year),
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)], fontsize='small', handlelength=1.6)
+                    min_deaths_year, max_deaths_year)],
+               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
+
+    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full'],
+                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
 
     axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
 
-    axs.set(xlabel="date", ylabel="number of deaths",
+    axs.set_xlabel(xlabel="date", loc="right")
+
+    axs2.set(ylabel="percent",
+             xlim=[1, 12],
+             ylim=[0, 99])
+
+    axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
+
+    axs.set(ylabel="number of people",
             xlim=[1, 12],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
+
+    axs2.set_xlabel(xlabel="date", loc="right")
+
+    # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
+    # For more details see https://github.com/matplotlib/matplotlib/issues/3706.
+    legend = axs.get_legend()
+    axs.get_legend().remove()
+    axs2.add_artist(legend)
 
     axs.xaxis.set_major_formatter(mticker.FixedFormatter([d.strftime('%d.%m') for d in df_merged_one['date']]))
 
@@ -391,7 +448,10 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                     '(https://www.mortality.org), World Mortality Dataset '
                     '(https://github.com/akarlinsky/world_mortality).\n'
                     '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University '
-                    '(https://github.com/CSSEGISandData/COVID-19).',
+                    '(https://github.com/CSSEGISandData/COVID-19).\n'
+                    '- Lockdown stringency index: "A global panel database of pandemic policies (Oxford COVID-19 '
+                    'Government Response Tracker)", 2021, Nature Human Behaviour '
+                    '(https://doi.org/10.1038/s41562-021-01079-8).',
                     fontsize=8, va="bottom", ha="left")
 
     mpyplot.tight_layout(pad=1)
@@ -448,7 +508,6 @@ if __name__ == '__main__':
 #  - Add a note on charts which helps finding it online after printing.
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
-#  - Add lockdown stringency index.
 #  - Cosmetics:
 #    - Maintain a uniform chart length. 1) There's more padding on monthly charts' right than on weekly. Move X ticks
 #    labels to the left on monthly charts? 2) Depending on Y axis range, the Y axis labels are shorter or longer,
