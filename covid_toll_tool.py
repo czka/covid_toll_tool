@@ -16,6 +16,11 @@ import matplotlib.ticker as mticker
 from datetime import date as ddate
 
 
+if sys.version_info < (3, 9):
+    print("Python 3.9+ is required to run this script.")
+    sys.exit(1)
+
+
 def main(country, year, if_list_countries, if_interpolate_week_53):
     mortality_cols = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages', 'deaths_2013_all_ages',
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',

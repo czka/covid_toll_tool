@@ -21,7 +21,7 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 
 ### To render up-to-date charts and datasets yourself:
 
-- Make sure you have `Python 3` with `Pandas` and `matplotlib` libraries installed.
+- Make sure you have `Python 3.9+` with `Pandas` and `matplotlib` libraries installed.
 
 - `git clone` this repository.
 
