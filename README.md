@@ -4,7 +4,7 @@ This is a Python script which creates PNG charts and CSV datasets of all-cause m
 for a given country and year in the context of lockdown stringency and the country's all-cause mortality in preceding
 years.
 
-It uses 2 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
+It uses 3 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
 under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/):
 
 1. All-cause mortality obtained by OWID from:
@@ -21,7 +21,7 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 
 ### To render up-to-date charts and datasets yourself:
 
-- Make sure you have `Python 3.9+` with `Pandas` and `matplotlib` libraries installed.
+- Make sure you have `Python` 3.9 or newer with `Pandas` and `matplotlib` libraries installed.
 
 - `git clone` this repository.
 
