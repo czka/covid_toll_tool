@@ -4,18 +4,20 @@ This is a Python script which creates PNG charts and CSV datasets of all-cause m
 for a given country and year in the context of lockdown stringency and the country's all-cause mortality in preceding
 years.
 
-It uses 3 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
+It uses 4 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
 under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/):
 
-1. All-cause mortality obtained by OWID from:
+1. All-cause mortality:
    - [Human Mortality Database Short-term Mortality Fluctuations project](https://www.mortality.org)
    - [World Mortality Dataset](https://github.com/akarlinsky/world_mortality)
-2. COVID-19 mortality obtained by OWID from:
+2. COVID-19 mortality:
    - [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
-3. Lockdown stringency index obtained by OWID from:
-   - [OxCGRT dataset](https://github.com/OxCGRT/covid-policy-tracker). See their 2021 paper
-     [A global panel database of pandemic policies (Oxford COVID-19 Government Response Tracker)](https://doi.org/10.1038/s41562-021-01079-8)
-     published in Nature Human Behaviour and the [OxCGRT website](https://covidtracker.bsg.ox.ac.uk).
+3. Lockdown stringency index:
+   - Hale, T. et al. A global panel database of pandemic policies (Oxford COVID-19 Government Response Tracker). Nature
+     Human Behaviour (2021). https://doi.org/10.1038/s41562-021-01079-8
+4. Vaccinations:
+   - Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human Behaviour (2021).
+     https://doi.org/10.1038/s41562-021-01122-8
 
 ## Usage
 
@@ -36,12 +38,14 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
   dataset for the `--country` and the `--year` specified on the command line - e.g. `Poland_2020.png` and 
   `Poland_2020.csv`.
 
-### To explore the charts and datasets I have rendered so far:
+### To explore charts and datasets I have already published with the script:
 
-- Directory [covid_toll_ALL](covid_toll_ALL) contains the script's output PNG and CSV files for all the countries which 
-  have had their data in
+- Enter directory [covid_toll_ALL] which contains the script's charts (in PNG format) and data (in CSV format) for the
+  countries which have had their data in both the
   [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
-  and [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
+  and the [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
   
+- Click on any file. E.g. on the [covid_toll_ALL/Poland_2020.png] to see the chart for Poland in 2020.
+
 - Directories [covid_toll_2020](covid_toll_2020) and [covid_toll_2021](covid_toll_2021) contain links to PNG and CSV 
   files in [covid_toll_ALL](covid_toll_ALL) for a given year.
