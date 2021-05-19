@@ -40,12 +40,13 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 
 ### To explore charts and datasets I have already published with the script:
 
-- Enter directory [covid_toll_ALL] which contains the script's charts (in PNG format) and data (in CSV format) for the
-  countries which have had their data in both the
+- Enter directory [covid_toll_ALL](covid_toll_ALL) which contains the script's charts (in PNG format) and data (in CSV
+  format) for the countries which have had their data in both the
   [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
   and the [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
   
-- Click on any file. E.g. on the [covid_toll_ALL/Poland_2020.png] to see the chart for Poland in 2020.
+- Click on any file. E.g. on the [covid_toll_ALL/Poland_2020.png](covid_toll_ALL/Poland_2020.png) to see the chart for
+  Poland in 2020.
 
 - Directories [covid_toll_2020](covid_toll_2020) and [covid_toll_2021](covid_toll_2021) contain links to PNG and CSV 
   files in [covid_toll_ALL](covid_toll_ALL) for a given year.
