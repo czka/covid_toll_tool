@@ -47,6 +47,3 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
   
 - Click on any file. E.g. on the [covid_toll_ALL/Poland_2020.png](covid_toll_ALL/Poland_2020.png) to see the chart for
   Poland in 2020.
-
-- Directories [covid_toll_2020](covid_toll_2020) and [covid_toll_2021](covid_toll_2021) contain links to PNG and CSV 
-  files in [covid_toll_ALL](covid_toll_ALL) for a given year.
