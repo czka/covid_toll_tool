@@ -403,18 +403,20 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
 
-    mpyplot.figtext(0.01, -0.04,
+    mpyplot.figtext(0.01, -0.06,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
-                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project '
-                    '(https://www.mortality.org), World Mortality Dataset '
-                    '(https://github.com/akarlinsky/world_mortality).\n'
-                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University '
-                    '(https://github.com/CSSEGISandData/COVID-19).\n'
-                    '- Lockdown stringency index: "A global panel database of pandemic policies (Oxford COVID-19 '
-                    'Government Response Tracker)", 2021, Nature Human Behaviour '
-                    '(https://doi.org/10.1038/s41562-021-01079-8).',
-                    fontsize=8, va="bottom", ha="left")
+                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
+                    'https://www.mortality.org and World Mortality Dataset. '
+                    'https://github.com/akarlinsky/world_mortality\n'
+                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University. '
+                    'https://github.com/CSSEGISandData/COVID-19\n'
+                    '- Lockdown stringency index: Hale, T. et al. A global panel database of pandemic policies (Oxford '
+                    'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
+                    'https://doi.org/10.1038/s41562-021-01079-8\n'
+                    '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
+                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
+                    fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
     mpyplot.tight_layout(pad=1)
 
@@ -485,18 +487,20 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
 
     mpyplot.title("{}, {}".format(country, year), fontweight="bold")
 
-    mpyplot.figtext(0.01, -0.04,
+    mpyplot.figtext(0.01, -0.06,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
-                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project '
-                    '(https://www.mortality.org), World Mortality Dataset '
-                    '(https://github.com/akarlinsky/world_mortality).\n'
-                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University '
-                    '(https://github.com/CSSEGISandData/COVID-19).\n'
-                    '- Lockdown stringency index: "A global panel database of pandemic policies (Oxford COVID-19 '
-                    'Government Response Tracker)", 2021, Nature Human Behaviour '
-                    '(https://doi.org/10.1038/s41562-021-01079-8).',
-                    fontsize=8, va="bottom", ha="left")
+                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
+                    'https://www.mortality.org and World Mortality Dataset. '
+                    'https://github.com/akarlinsky/world_mortality\n'
+                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University. '
+                    'https://github.com/CSSEGISandData/COVID-19\n'
+                    '- Lockdown stringency index: Hale, T. et al. A global panel database of pandemic policies (Oxford '
+                    'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
+                    'https://doi.org/10.1038/s41562-021-01079-8\n'
+                    '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
+                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
+                    fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
     mpyplot.tight_layout(pad=1)
 
