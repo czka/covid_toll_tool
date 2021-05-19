@@ -26,7 +26,8 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',
                       'deaths_2018_all_ages', 'deaths_2019_all_ages']
 
-    covid_cols = ['location', 'date', 'new_deaths', 'stringency_index']
+    covid_cols = ['location', 'date', 'new_deaths', 'stringency_index', 'people_vaccinated', 'people_fully_vaccinated',
+                  'population']
 
     death_cols = ['location', 'date', 'time', 'time_unit'] + mortality_cols + ['deaths_2020_all_ages',
                                                                                'deaths_2021_all_ages']
@@ -62,7 +63,7 @@ def list_countries(common_countries):
 
 def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53):
     # Take only rows for the specified country.
-    df_covid_one = df_covid_all[df_covid_all['location'] == country]
+    df_covid_one = df_covid_all[df_covid_all['location'] == country].copy()
     df_death_one = df_death_all[df_death_all['location'] == country].copy()
 
     if df_death_one['time_unit'].all() == 'weekly':
@@ -81,12 +82,28 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
 
 
 def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
+    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a previous known
+    # value, so that the resampled weekly count isn't distorted.
+    df_covid_one['people_vaccinated'].ffill(inplace=True)
+    df_covid_one['people_fully_vaccinated'].ffill(inplace=True)
+
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
-    df_covid_one = df_covid_one.resample(rule='W', on='date').\
-        agg({'new_deaths': pd.DataFrame.sum, 'stringency_index': pd.DataFrame.mean}).reset_index()
+    df_covid_one = df_covid_one.resample(rule='W', on='date').agg(
+        {'new_deaths': 'sum',
+         'stringency_index': 'mean',
+         'people_vaccinated': 'mean',
+         'people_fully_vaccinated': 'mean',
+         'population': 'mean'}
+    ).reset_index()
+
+    df_covid_one['people_vaccinated_percent'] = \
+        df_covid_one['people_vaccinated'] / df_covid_one['population'] * 100
+
+    df_covid_one['people_fully_vaccinated_percent'] = \
+        df_covid_one['people_fully_vaccinated'] / df_covid_one['population'] * 100
 
     y_min, y_max = find_yrange_weekly(df_covid_one, df_death_one)
 
@@ -207,12 +224,28 @@ def find_yrange_weekly(df_covid_one, df_death_one):
 
 
 def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
-    # We need to resample the daily covid data to match the monthly mortality data.
+    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a previous known
+    # value, so that the resampled monthly count isn't distorted.
+    df_covid_one['people_vaccinated'].ffill(inplace=True)
+    df_covid_one['people_fully_vaccinated'].ffill(inplace=True)
+
+    # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
-    df_covid_one = df_covid_one.resample(rule='M', on='date').\
-        agg({'new_deaths': pd.DataFrame.sum, 'stringency_index': pd.DataFrame.mean}).reset_index()
+    df_covid_one = df_covid_one.resample(rule='M', on='date').agg(
+        {'new_deaths': 'sum',
+         'stringency_index': 'mean',
+         'people_vaccinated': 'mean',
+         'people_fully_vaccinated': 'mean',
+         'population': 'mean'}
+    ).reset_index()
+
+    df_covid_one['people_vaccinated_percent'] = \
+        df_covid_one['people_vaccinated'] / df_covid_one['population'] * 100
+
+    df_covid_one['people_fully_vaccinated_percent'] = \
+        df_covid_one['people_fully_vaccinated'] / df_covid_one['population'] * 100
 
     y_min, y_max = find_yrange_monthly(df_covid_one, df_death_one)
 
@@ -311,13 +344,14 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
     axs2 = axs.twinx()
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
-                       color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
+                       color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia'], style=['-'],
-                       ax=axs2, x='date', y=['stringency_index'])
+                       color=['fuchsia', 'mediumspringgreen', 'mediumspringgreen'], style=['-', '--', '-'],
+                       ax=axs2, x='date', y=['stringency_index', 'people_vaccinated_percent',
+                                             'people_fully_vaccinated_percent'])
 
     # TODO: Watch out for the status of 'x_compat' above. It's not documented where it should have been [1] although
     #  mentioned few times in [2]. If it's going to be depreciated, a workaround will be needed as e.g. per [3], [4].
@@ -338,7 +372,9 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                     min_deaths_year, max_deaths_year)],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
 
-    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full'],
+    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
+                 'percent of people vaccinated',
+                 'percent of people vaccinated fully'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
@@ -397,13 +433,14 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     axs2 = axs.twinx()
 
     df_merged_one.plot(kind='line', use_index=True, grid=True, rot='50',
-                       color=['blue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
+                       color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='time', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
 
     df_merged_one.plot(kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia'], style=['-'],
-                       ax=axs2, x='time', y=['stringency_index'])
+                       color=['fuchsia', 'mediumspringgreen', 'mediumspringgreen'], style=['-', '--', '-'],
+                       ax=axs2, x='time', y=['stringency_index', 'people_vaccinated_percent',
+                                             'people_fully_vaccinated_percent'])
 
     axs.fill_between(df_merged_one['time'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
                      color='yellowgreen')
@@ -417,7 +454,9 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                     min_deaths_year, max_deaths_year)],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
 
-    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full'],
+    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
+                 'percent of people vaccinated',
+                 'percent of people vaccinated fully'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
 
     axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
