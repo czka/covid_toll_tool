@@ -38,7 +38,7 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
   dataset for the `--country` and the `--year` specified on the command line - e.g. `Poland_2020.png` and 
   `Poland_2020.csv`.
 
-### To explore charts and datasets I have already published with the script:
+### To explore charts and datasets I have already created with the script:
 
 - Enter directory [covid_toll_ALL](covid_toll_ALL) which contains the script's charts (in PNG format) and data (in CSV
   format) for the countries which have had their data in both the
