@@ -40,8 +40,8 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 
 ### To explore charts and datasets I have already created with the script:
 
-- Enter directory [covid_toll_ALL](covid_toll_ALL) which contains the script's charts (in PNG format) and data (in CSV
-  format) for the countries which have had their data in both the
+- Enter directory [covid_toll_ALL](covid_toll_ALL) which contains charts (in PNG format) and data (in CSV format) for
+  countries which have had their data in both the
   [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
   and the [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
   
