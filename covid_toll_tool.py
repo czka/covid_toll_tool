@@ -29,8 +29,8 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
     covid_cols = ['location', 'date', 'new_deaths', 'stringency_index', 'people_vaccinated', 'people_fully_vaccinated',
                   'population']
 
-    death_cols = ['location', 'date', 'time', 'time_unit'] + mortality_cols + ['deaths_2020_all_ages',
-                                                                               'deaths_2021_all_ages']
+    death_cols = ['location', 'date', 'time', 'time_unit'] + mortality_cols + \
+                 ['deaths_2020_all_ages', 'deaths_2021_all_ages']
 
     df_covid_all = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
