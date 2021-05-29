@@ -1,7 +1,7 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,stringency_index,people_vaccinated,people_fully_vaccinated,population,people_vaccinated_percent,people_fully_vaccinated_percent,deaths_min,deaths_max,deaths_mean,deaths_noncovid
-Kosovo,2020-01-31,1,monthly,,,,,,794.0,758.0,796.0,881.0,959.0,918.0,1714.0,,,,,,,,758.0,959.0,837.6,
-Kosovo,2020-02-29,2,monthly,,,,,,759.0,842.0,784.0,700.0,751.0,745.0,1509.0,,,,,,,,700.0,842.0,767.2,
-Kosovo,2020-03-31,3,monthly,,,,,,777.0,800.0,789.0,791.0,855.0,831.0,,1.0,87.08555555555553,,,1932774.0,,,777.0,855.0,802.4,830.0
+Kosovo,2020-01-31,1,monthly,,,,,,794.0,758.0,796.0,881.0,959.0,918.0,1167.0,,,,,,,,758.0,959.0,837.6,
+Kosovo,2020-02-29,2,monthly,,,,,,759.0,842.0,784.0,700.0,751.0,745.0,1187.0,,,,,,,,700.0,842.0,767.2,
+Kosovo,2020-03-31,3,monthly,,,,,,777.0,800.0,789.0,791.0,855.0,831.0,1177.0,1.0,87.08555555555553,,,1932774.0,,,777.0,855.0,802.4,830.0
 Kosovo,2020-04-30,4,monthly,,,,,,776.0,742.0,633.0,817.0,774.0,481.0,,21.0,92.59,,,1932774.0,,,633.0,817.0,748.4,460.0
 Kosovo,2020-05-31,5,monthly,,,,,,733.0,792.0,766.0,637.0,866.0,778.0,,8.0,90.08354838709676,,,1932774.0,,,637.0,866.0,758.8,770.0
 Kosovo,2020-06-30,6,monthly,,,,,,754.0,767.0,699.0,727.0,819.0,629.0,,19.0,62.50099999999999,,,1932774.0,,,699.0,819.0,753.2,610.0
