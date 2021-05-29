@@ -339,7 +339,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
-    fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
+    fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
     axs2 = axs.twinx()
 
@@ -370,12 +370,14 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
                     min_deaths_year, max_deaths_year)],
-               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
+               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
+               bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
                  'percent of people vaccinated',
                  'percent of people vaccinated fully'],
-                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
+                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
+                bbox_to_anchor=(1.057, 1.375))
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
 
@@ -383,7 +385,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
 
     axs2.set(ylabel="percent",
              xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count - 1]],
-             ylim=[0, 99])
+             ylim=[0, 100])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
@@ -401,9 +403,9 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
 
     axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m'))
 
-    mpyplot.title("{}, {}".format(country, year), fontweight="bold")
+    mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
 
-    mpyplot.figtext(0.01, -0.06,
+    mpyplot.figtext(0.065, 0,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
                     '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
@@ -418,9 +420,9 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                     'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
                     fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
-    mpyplot.tight_layout(pad=1)
+    # mpyplot.tight_layout(pad=1)
 
-    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
+    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
                 pil_kwargs={'optimize': True})
 
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
@@ -430,7 +432,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
-    fig, axs = mpyplot.subplots(figsize=(12, 6))  # Create an empty matplotlib figure and axes.
+    fig, axs = mpyplot.subplots(figsize=(13.55, 5.078))  # Create an empty matplotlib figure and axes.
 
     axs2 = axs.twinx()
 
@@ -454,12 +456,14 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
                     min_deaths_year, max_deaths_year)],
-               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left')
+               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
+               bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
                  'percent of people vaccinated',
                  'percent of people vaccinated fully'],
-                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right')
+                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
+                bbox_to_anchor=(1.057, 1.375))
 
     axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
 
@@ -467,7 +471,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
 
     axs2.set(ylabel="percent",
              xlim=[1, 12],
-             ylim=[0, 99])
+             ylim=[0, 100])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
@@ -485,9 +489,9 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
 
     axs.xaxis.set_major_formatter(mticker.FixedFormatter([d.strftime('%d.%m') for d in df_merged_one['date']]))
 
-    mpyplot.title("{}, {}".format(country, year), fontweight="bold")
+    mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
 
-    mpyplot.figtext(0.01, -0.06,
+    mpyplot.figtext(0.065, -0.1164,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
                     '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
@@ -502,9 +506,9 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                     'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
                     fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
-    mpyplot.tight_layout(pad=1)
+    # mpyplot.tight_layout(pad=1)
 
-    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.1,
+    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
                 pil_kwargs={'optimize': True})
 
     df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
@@ -556,7 +560,3 @@ if __name__ == '__main__':
 #  - Add a note on charts which helps finding it online after printing.
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
 #  - Add per-million counts.
-#  - Cosmetics:
-#    - Maintain a uniform chart length. 1) There's more padding on monthly charts' right than on weekly. Move X ticks
-#    labels to the left on monthly charts? 2) Depending on Y axis range, the Y axis labels are shorter or longer,
-#    affecting a chart's length. Equalize labels' width by padding it with a leading white space?
