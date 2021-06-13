@@ -259,7 +259,7 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # just taking the first value (as we are resampling monthly to monthly there's *only* one, so e.g. last() would work
     # as well), and using the resultant DatetimeIndex items which resample() set to months' last days of the args.year,
     # to update the `date` column. Does nothing if args.year == 2020. dropna() deals with incomplete data (the only such
-    # case currently for monthly datasets is El Salvador - capped at September in all years, see
+    # case for monthly datasets was El Salvador, capped at September in all years until 13.06.2021, see
     # https://github.com/akarlinsky/world_mortality/issues/6 for details).
     df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().dropna(how='all').index
 
