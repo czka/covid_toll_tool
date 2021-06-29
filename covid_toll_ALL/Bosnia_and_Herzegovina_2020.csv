@@ -1,7 +1,7 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,stringency_index,people_vaccinated,people_fully_vaccinated,population,people_vaccinated_percent,people_fully_vaccinated_percent,deaths_min,deaths_max,deaths_mean,deaths_noncovid
-Bosnia and Herzegovina,2020-01-31,1,monthly,,,,,,4082.0,3539.0,3443.0,2774.0,3444.0,2800.0,,,,,,,,,2774.0,4082.0,3456.4,
-Bosnia and Herzegovina,2020-02-29,2,monthly,,,,,,3464.0,3139.0,3372.0,3377.0,3512.0,3203.0,,,,,,,,,3139.0,3512.0,3372.8,
-Bosnia and Herzegovina,2020-03-31,3,monthly,,,,,,3657.0,3360.0,3223.0,3640.0,3239.0,2970.0,,13.0,60.59481481481479,,,3280815.0,,,3223.0,3657.0,3423.8,2957.0
+Bosnia and Herzegovina,2020-01-31,1,monthly,,,,,,4082.0,3539.0,3443.0,2774.0,3444.0,2800.0,3452.0,,,,,,,,2774.0,4082.0,3456.4,
+Bosnia and Herzegovina,2020-02-29,2,monthly,,,,,,3464.0,3139.0,3372.0,3377.0,3512.0,3203.0,3454.0,,,,,,,,3139.0,3512.0,3372.8,
+Bosnia and Herzegovina,2020-03-31,3,monthly,,,,,,3657.0,3360.0,3223.0,3640.0,3239.0,2970.0,4787.0,13.0,60.59481481481479,,,3280815.0,,,3223.0,3657.0,3423.8,2957.0
 Bosnia and Herzegovina,2020-04-30,4,monthly,,,,,,3257.0,2995.0,2783.0,3186.0,3122.0,3207.0,,56.0,91.32433333333326,,,3280815.0,,,2783.0,3257.0,3068.6,3151.0
 Bosnia and Herzegovina,2020-05-31,5,monthly,,,,,,3059.0,2941.0,3078.0,2964.0,3240.0,2938.0,,84.0,79.36096774193545,,,3280815.0,,,2941.0,3240.0,3056.4,2854.0
 Bosnia and Herzegovina,2020-06-30,6,monthly,,,,,,2831.0,2866.0,2899.0,2698.0,2817.0,2953.0,,33.0,52.961999999999975,,,3280815.0,,,2698.0,2899.0,2822.2,2920.0
