@@ -1,6 +1,6 @@
 location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,stringency_index,people_vaccinated,people_fully_vaccinated,population,people_vaccinated_percent,people_fully_vaccinated_percent,deaths_min,deaths_max,deaths_mean,deaths_noncovid
-Ireland,2020-01-31,1,monthly,,,,,,2967.0,3110.0,3425.0,3488.0,3035.0,2949.0,3919.0,,,,,,,,2967.0,3488.0,3205.0,
-Ireland,2020-02-29,2,monthly,,,,,,2756.0,2688.0,2532.0,2850.0,2615.0,2640.0,3147.0,0.0,11.11,,,4937796.0,,,2532.0,2850.0,2688.2,2640.0
+Ireland,2020-01-31,1,monthly,,,,,,2967.0,3110.0,3425.0,3488.0,3035.0,2949.0,3919.0,0.0,0.0,,,4937796.0,,,2967.0,3488.0,3205.0,2949.0
+Ireland,2020-02-29,2,monthly,,,,,,2756.0,2688.0,2532.0,2850.0,2615.0,2640.0,3147.0,0.0,5.558,,,4937796.0,,,2532.0,2850.0,2688.2,2640.0
 Ireland,2020-03-31,3,monthly,,,,,,2875.0,2846.0,2604.0,2994.0,2685.0,2864.0,2640.0,71.0,40.08451612903225,,,4937796.0,,,2604.0,2994.0,2800.8,2793.0
 Ireland,2020-04-30,4,monthly,,,,,,2478.0,2533.0,2414.0,2596.0,2504.0,3504.0,2539.0,1161.0,89.81499999999996,,,4937796.0,,,2414.0,2596.0,2505.0,2343.0
 Ireland,2020-05-31,5,monthly,,,,,,2539.0,2489.0,2376.0,2385.0,2652.0,2639.0,2612.0,420.0,87.39354838709674,,,4937796.0,,,2376.0,2652.0,2488.2,2219.0
