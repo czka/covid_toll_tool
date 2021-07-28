@@ -19,7 +19,22 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
    - Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human Behaviour (2021).
      https://doi.org/10.1038/s41562-021-01122-8
 
-## Usage
+## How to use this repository:
+
+### To explore charts and datasets uploaded to this repository:
+
+- To see all charts on a single page: Click on [CHARTS.md](CHARTS.md).
+
+- To see just a single chart, or its source dataset:
+
+  - Enter directory [covid_toll_ALL](covid_toll_ALL) which contains charts (in PNG format) and data (in CSV format) for
+    countries which have had their data in both the
+    [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
+    and the [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
+
+  - Click on any file. E.g. on the [covid_toll_ALL/Poland_2021.png](covid_toll_ALL/Poland_2021.png) to see the chart for
+    Poland in 2021, or the [covid_toll_ALL/Poland_2021.csv](covid_toll_ALL/Poland_2021.csv) to see the chart's raw
+    numbers.
 
 ### To render up-to-date charts and datasets yourself:
 
@@ -37,13 +52,3 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 - Run `./covid_toll_tool.py --help` to figure out how to proceed. The final product will be a PNG chart and a CSV 
   dataset for the `--country` and the `--year` specified on the command line - e.g. `Poland_2020.png` and 
   `Poland_2020.csv`.
-
-### To explore charts and datasets I have already created with the script:
-
-- Enter directory [covid_toll_ALL](covid_toll_ALL) which contains charts (in PNG format) and data (in CSV format) for
-  countries which have had their data in both the
-  [excess_mortality.csv](https://github.com/owid/covid-19-data/blob/master/public/data/excess_mortality/excess_mortality.csv)
-  and the [owid-covid-data.csv](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv).
-  
-- Click on any file. E.g. on the [covid_toll_ALL/Poland_2021.png](covid_toll_ALL/Poland_2021.png) to see the chart for
-  Poland in 2021.
