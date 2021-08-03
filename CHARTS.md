@@ -6,6 +6,10 @@ Andorra 2020:
 ![Andorra_2020](./covid_toll_ALL/Andorra_2020.png)
 Andorra 2021:
 ![Andorra_2021](./covid_toll_ALL/Andorra_2021.png)
+Argentina 2020:
+![Argentina_2020](./covid_toll_ALL/Argentina_2020.png)
+Argentina 2021:
+![Argentina_2021](./covid_toll_ALL/Argentina_2021.png)
 Armenia 2020:
 ![Armenia_2020](./covid_toll_ALL/Armenia_2020.png)
 Armenia 2021:
@@ -34,6 +38,10 @@ Belgium 2020:
 ![Belgium_2020](./covid_toll_ALL/Belgium_2020.png)
 Belgium 2021:
 ![Belgium_2021](./covid_toll_ALL/Belgium_2021.png)
+Bermuda 2020:
+![Bermuda_2020](./covid_toll_ALL/Bermuda_2020.png)
+Bermuda 2021:
+![Bermuda_2021](./covid_toll_ALL/Bermuda_2021.png)
 Bolivia 2020:
 ![Bolivia_2020](./covid_toll_ALL/Bolivia_2020.png)
 Bolivia 2021:
