@@ -26,8 +26,8 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',
                       'deaths_2018_all_ages', 'deaths_2019_all_ages']
 
-    covid_cols = ['location', 'date', 'new_deaths', 'stringency_index', 'people_vaccinated', 'people_fully_vaccinated',
-                  'population']
+    covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
+                  'people_vaccinated', 'people_fully_vaccinated', 'population']
 
     death_cols = ['location', 'date', 'time', 'time_unit'] + mortality_cols + \
                  ['deaths_2020_all_ages', 'deaths_2021_all_ages']
@@ -93,11 +93,16 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     # with reset_index().
     df_covid_one = df_covid_one.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
+         'new_cases_smoothed': 'mean',
+         'new_tests_smoothed': 'mean',
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
          'population': 'mean'}
     ).reset_index()
+
+    df_covid_one['positive_test_percent'] = \
+        df_covid_one['new_cases_smoothed'] / df_covid_one['new_tests_smoothed'] * 100
 
     df_covid_one['people_vaccinated_percent'] = \
         df_covid_one['people_vaccinated'] / df_covid_one['population'] * 100
@@ -235,11 +240,16 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # with reset_index().
     df_covid_one = df_covid_one.resample(rule='M', on='date').agg(
         {'new_deaths': 'sum',
+         'new_cases_smoothed': 'mean',
+         'new_tests_smoothed': 'mean',
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
          'population': 'mean'}
     ).reset_index()
+
+    df_covid_one['positive_test_percent'] = \
+        df_covid_one['new_cases_smoothed'] / df_covid_one['new_tests_smoothed'] * 100
 
     df_covid_one['people_vaccinated_percent'] = \
         df_covid_one['people_vaccinated'] / df_covid_one['population'] * 100
@@ -349,8 +359,9 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia', 'mediumspringgreen', 'mediumspringgreen'], style=['-', '--', '-'],
-                       ax=axs2, x='date', y=['stringency_index', 'people_vaccinated_percent',
+                       color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
+                       style=['-', '-', '--', '-'],
+                       ax=axs2, x='date', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
                                              'people_fully_vaccinated_percent'])
 
     # TODO: Watch out for the status of 'x_compat' above. It's not documented where it should have been [1] although
@@ -374,6 +385,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
+                 'percent of positive test results',
                  'percent of people vaccinated',
                  'percent of people vaccinated fully'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
@@ -417,8 +429,10 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                     'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
                     'https://doi.org/10.1038/s41562-021-01079-8\n'
                     '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
-                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
-                    fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
+                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8\n'
+                    '- Testing: Hasell, J., Mathieu, E., Beltekian, D. et al. A cross-country database of COVID-19 '
+                    'testing. Sci Data 7, 345 (2020). https://doi.org/10.1038/s41597-020-00688-8',
+                    fontsize=6.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
     # mpyplot.tight_layout(pad=1)
 
@@ -442,8 +456,9 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                                             'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
 
     df_merged_one.plot(kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia', 'mediumspringgreen', 'mediumspringgreen'], style=['-', '--', '-'],
-                       ax=axs2, x='time', y=['stringency_index', 'people_vaccinated_percent',
+                       color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
+                       style=['-', '-', '--', '-'],
+                       ax=axs2, x='time', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
                                              'people_fully_vaccinated_percent'])
 
     axs.fill_between(df_merged_one['time'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
@@ -460,6 +475,7 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
+                 'percent of positive test results',
                  'percent of people vaccinated',
                  'percent of people vaccinated fully'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
@@ -503,8 +519,10 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                     'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
                     'https://doi.org/10.1038/s41562-021-01079-8\n'
                     '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
-                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8',
-                    fontsize=7.5, va="bottom", ha="left", fontstretch="extra-condensed")
+                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8\n'
+                    '- Testing: Hasell, J., Mathieu, E., Beltekian, D. et al. A cross-country database of COVID-19 '
+                    'testing. Sci Data 7, 345 (2020). https://doi.org/10.1038/s41597-020-00688-8',
+                    fontsize=6.5, va="bottom", ha="left", fontstretch="extra-condensed")
 
     # mpyplot.tight_layout(pad=1)
 
