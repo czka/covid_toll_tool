@@ -1,10 +1,10 @@
 ## About
 
 This is a Python script which creates PNG charts and CSV datasets of all-cause mortality compared to COVID-19 mortality, 
-for a given country and year, in the context of lockdown stringency, vaccinations count and the country's all-cause
+for a given country and year, in the context of lockdown stringency, vaccinations, testing and the country's all-cause
 mortality in preceding years.
 
-It uses 4 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
+It uses 5 input datasets provided by the [Our World in Data (OWID)](https://ourworldindata.org/) project for open access
 under the [Creative Commons BY license](https://creativecommons.org/licenses/by/4.0/):
 
 1. All-cause mortality:
@@ -18,6 +18,9 @@ under the [Creative Commons BY license](https://creativecommons.org/licenses/by/
 4. Vaccinations:
    - Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human Behaviour (2021).
      https://doi.org/10.1038/s41562-021-01122-8
+5. Testing:
+   - Hasell, J., Mathieu, E., Beltekian, D. et al. A cross-country database of COVID-19 testing. Sci Data 7, 345 (2020).
+     https://doi.org/10.1038/s41597-020-00688-8
 
 ## How to use this repository:
 
