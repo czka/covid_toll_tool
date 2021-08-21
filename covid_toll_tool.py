@@ -387,9 +387,9 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
                bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
-                 'percent of positive test results',
-                 'percent of people vaccinated',
-                 'percent of people vaccinated fully'],
+                 'percent of positive results in all COVID-19 test results',
+                 'percent of people vaccinated in the country\'s populace',
+                 'percent of people vaccinated fully in the country\'s populace'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
@@ -477,9 +477,9 @@ def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
-                 'percent of positive test results',
-                 'percent of people vaccinated',
-                 'percent of people vaccinated fully'],
+                 'percent of positive results in all COVID-19 test results',
+                 'percent of people vaccinated in the country\'s populace',
+                 'percent of people vaccinated fully in the country\'s populace'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
