@@ -66,19 +66,21 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
     df_covid_one = df_covid_all[df_covid_all['location'] == country].copy()
     df_death_one = df_death_all[df_death_all['location'] == country].copy()
 
-    if df_death_one['time_unit'].all() == 'weekly':
+    if df_death_one['time_unit'].nunique() == 1:
 
-        df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
-            df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
+        if df_death_one['time_unit'].unique()[0] == 'weekly':
 
-        plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
+            df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
+                df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
 
-    elif df_death_one['time_unit'].all() == 'monthly':
+            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
 
-        df_merged_one, mortality_cols, y_min, y_max = process_monthly(
-            df_covid_one, df_death_one, year, mortality_cols)
+        elif df_death_one['time_unit'].unique()[0] == 'monthly':
 
-        plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
+            df_merged_one, mortality_cols, y_min, y_max = process_monthly(
+                df_covid_one, df_death_one, year, mortality_cols)
+
+            plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
 
 
 def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
