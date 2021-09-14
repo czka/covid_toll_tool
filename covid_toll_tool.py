@@ -84,10 +84,10 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
 
 
 def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
-    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a previous known
-    # value, so that the resampled weekly count isn't distorted.
-    df_covid_one['people_vaccinated'].ffill(inplace=True)
-    df_covid_one['people_fully_vaccinated'].ffill(inplace=True)
+    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
+    # interpolation between the 2 known closest values.
+    df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
+    df_covid_one['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
 
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
@@ -231,10 +231,10 @@ def find_yrange_weekly(df_covid_one, df_death_one):
 
 
 def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
-    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a previous known
-    # value, so that the resampled monthly count isn't distorted.
-    df_covid_one['people_vaccinated'].ffill(inplace=True)
-    df_covid_one['people_fully_vaccinated'].ffill(inplace=True)
+    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
+    # interpolation between the 2 known closest values.
+    df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
+    df_covid_one['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
 
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
