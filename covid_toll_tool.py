@@ -89,6 +89,10 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
     df_covid_one['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
 
+    # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
+    # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
+    df_covid_one['stringency_index'].interpolate(limit_area='inside', inplace=True)
+
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
@@ -235,6 +239,10 @@ def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
     # interpolation between the 2 known closest values.
     df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
     df_covid_one['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+
+    # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
+    # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
+    df_covid_one['stringency_index'].interpolate(limit_area='inside', inplace=True)
 
     # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
