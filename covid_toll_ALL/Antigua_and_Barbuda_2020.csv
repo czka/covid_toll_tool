@@ -1,0 +1,13 @@
+location,date,time,time_unit,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,new_deaths,new_cases_smoothed,new_tests_smoothed,stringency_index,people_vaccinated,people_fully_vaccinated,population,positive_test_percent,people_vaccinated_percent,people_fully_vaccinated_percent,deaths_min,deaths_max,deaths_mean,deaths_noncovid
+Antigua and Barbuda,2020-01-31,1,monthly,,,,,,109.0,95.0,77.0,79.0,99.0,104.0,,,,,,,,,,,,77.0,109.0,91.8,
+Antigua and Barbuda,2020-02-29,2,monthly,,,,,,84.0,89.0,80.0,83.0,81.0,77.0,,,,,,,,,,,,80.0,89.0,83.4,
+Antigua and Barbuda,2020-03-31,3,monthly,,,,,,91.0,96.0,82.0,77.0,80.0,74.0,,0.0,0.4081428571428571,,,,,98728.0,,,,77.0,96.0,85.2,74.0
+Antigua and Barbuda,2020-04-30,4,monthly,,,,,,81.0,76.0,72.0,71.0,71.0,78.0,,3.0,0.5856999999999999,,,,,98728.0,,,,71.0,81.0,74.2,75.0
+Antigua and Barbuda,2020-05-31,5,monthly,,,,,,75.0,78.0,69.0,78.0,83.0,85.0,,0.0,0.03690322580645161,,,,,98728.0,,,,69.0,83.0,76.6,85.0
+Antigua and Barbuda,2020-06-30,6,monthly,,,,,,87.0,73.0,89.0,73.0,91.0,86.0,,0.0,1.2,,,,,98728.0,,,,73.0,91.0,82.6,86.0
+Antigua and Barbuda,2020-07-31,7,monthly,,,,,,96.0,71.0,68.0,70.0,88.0,77.0,,0.0,0.8341612903225806,,,,,98728.0,,,,68.0,96.0,78.6,77.0
+Antigua and Barbuda,2020-08-31,8,monthly,,,,,,97.0,105.0,82.0,89.0,88.0,89.0,,0.0,0.2259032258064516,,,,,98728.0,,,,82.0,105.0,92.2,89.0
+Antigua and Barbuda,2020-09-30,9,monthly,,,,,,98.0,103.0,111.0,81.0,102.0,116.0,,0.0,0.18576666666666666,,,,,98728.0,,,,81.0,111.0,99.0,116.0
+Antigua and Barbuda,2020-10-31,10,monthly,,,,,,112.0,83.0,133.0,95.0,107.0,129.0,,0.0,0.8202258064516129,,,,,98728.0,,,,83.0,133.0,106.0,129.0
+Antigua and Barbuda,2020-11-30,11,monthly,,,,,,94.0,103.0,134.0,113.0,101.0,112.0,,1.0,0.5191666666666667,,,,,98728.0,,,,94.0,134.0,109.0,111.0
+Antigua and Barbuda,2020-12-31,12,monthly,,,,,,135.0,91.0,111.0,106.0,97.0,114.0,,1.0,0.5253548387096774,,,,,98728.0,,,,91.0,135.0,108.0,113.0
