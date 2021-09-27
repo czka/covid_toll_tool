@@ -6,6 +6,10 @@ Andorra 2020:
 ![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)
 Andorra 2021:
 ![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)
+Antigua and Barbuda 2020:
+![Antigua and Barbuda 2020](./covid_toll_ALL/Antigua_and_Barbuda_2020.png)
+Antigua and Barbuda 2021:
+![Antigua and Barbuda 2021](./covid_toll_ALL/Antigua_and_Barbuda_2021.png)
 Argentina 2020:
 ![Argentina 2020](./covid_toll_ALL/Argentina_2020.png)
 Argentina 2021:
@@ -162,6 +166,10 @@ Iceland 2020:
 ![Iceland 2020](./covid_toll_ALL/Iceland_2020.png)
 Iceland 2021:
 ![Iceland 2021](./covid_toll_ALL/Iceland_2021.png)
+Iran 2020:
+![Iran 2020](./covid_toll_ALL/Iran_2020.png)
+Iran 2021:
+![Iran 2021](./covid_toll_ALL/Iran_2021.png)
 Ireland 2020:
 ![Ireland 2020](./covid_toll_ALL/Ireland_2020.png)
 Ireland 2021:
