@@ -342,6 +342,10 @@ Slovenia 2020:
 ![Slovenia 2020](./covid_toll_ALL/Slovenia_2020.png)
 Slovenia 2021:
 ![Slovenia 2021](./covid_toll_ALL/Slovenia_2021.png)
+South Africa 2020:
+![South Africa 2020](./covid_toll_ALL/South_Africa_2020.png)
+South Africa 2021:
+![South Africa 2021](./covid_toll_ALL/South_Africa_2021.png)
 South Korea 2020:
 ![South Korea 2020](./covid_toll_ALL/South_Korea_2020.png)
 South Korea 2021:
