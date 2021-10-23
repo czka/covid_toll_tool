@@ -42,6 +42,10 @@ Belgium 2020:
 ![Belgium 2020](./covid_toll_ALL/Belgium_2020.png)
 Belgium 2021:
 ![Belgium 2021](./covid_toll_ALL/Belgium_2021.png)
+Belize 2020:
+![Belize 2020](./covid_toll_ALL/Belize_2020.png)
+Belize 2021:
+![Belize 2021](./covid_toll_ALL/Belize_2021.png)
 Bermuda 2020:
 ![Bermuda 2020](./covid_toll_ALL/Bermuda_2020.png)
 Bermuda 2021:
