@@ -102,6 +102,10 @@ Denmark 2020:
 ![Denmark 2020](./covid_toll_ALL/Denmark_2020.png)
 Denmark 2021:
 ![Denmark 2021](./covid_toll_ALL/Denmark_2021.png)
+Dominican Republic 2020:
+![Dominican Republic 2020](./covid_toll_ALL/Dominican_Republic_2020.png)
+Dominican Republic 2021:
+![Dominican Republic 2021](./covid_toll_ALL/Dominican_Republic_2021.png)
 Ecuador 2020:
 ![Ecuador 2020](./covid_toll_ALL/Ecuador_2020.png)
 Ecuador 2021:
@@ -202,6 +206,10 @@ Kosovo 2020:
 ![Kosovo 2020](./covid_toll_ALL/Kosovo_2020.png)
 Kosovo 2021:
 ![Kosovo 2021](./covid_toll_ALL/Kosovo_2021.png)
+Kuwait 2020:
+![Kuwait 2020](./covid_toll_ALL/Kuwait_2020.png)
+Kuwait 2021:
+![Kuwait 2021](./covid_toll_ALL/Kuwait_2021.png)
 Kyrgyzstan 2020:
 ![Kyrgyzstan 2020](./covid_toll_ALL/Kyrgyzstan_2020.png)
 Kyrgyzstan 2021:
