@@ -274,6 +274,10 @@ Netherlands 2020:
 ![Netherlands 2020](./covid_toll_ALL/Netherlands_2020.png)
 Netherlands 2021:
 ![Netherlands 2021](./covid_toll_ALL/Netherlands_2021.png)
+New Caledonia 2020:
+![New Caledonia 2020](./covid_toll_ALL/New_Caledonia_2020.png)
+New Caledonia 2021:
+![New Caledonia 2021](./covid_toll_ALL/New_Caledonia_2021.png)
 New Zealand 2020:
 ![New Zealand 2020](./covid_toll_ALL/New_Zealand_2020.png)
 New Zealand 2021:
