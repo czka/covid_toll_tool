@@ -62,6 +62,10 @@ Brazil 2020:
 ![Brazil 2020](./covid_toll_ALL/Brazil_2020.png)
 Brazil 2021:
 ![Brazil 2021](./covid_toll_ALL/Brazil_2021.png)
+Brunei 2020:
+![Brunei 2020](./covid_toll_ALL/Brunei_2020.png)
+Brunei 2021:
+![Brunei 2021](./covid_toll_ALL/Brunei_2021.png)
 Bulgaria 2020:
 ![Bulgaria 2020](./covid_toll_ALL/Bulgaria_2020.png)
 Bulgaria 2021:
