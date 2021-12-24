@@ -68,22 +68,33 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
 
     if df_death_one['time_unit'].nunique() == 1:
 
-        if df_death_one['time_unit'].unique()[0] == 'weekly':
+        # Weekly index starts at the end of the 1st week of a year:
+        weekly_index_1 = pd.date_range(start=str(year), end=str(year + 1), freq='W')
+        # And it ends at the end of the 1st week of a following year. Plus 1 week for adjacent charts to overlap by 1
+        # week to improve their readability at the year end/start (eg. a 2020 chart will additionaly contain the 1st
+        # week of 2021).
+        weekly_index_2 = pd.date_range(start=str(year + 1), periods=2, freq='W')
 
-            df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
-                df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53)
+        weekly_index = weekly_index_1.append(weekly_index_2)
 
-            plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
+        df_weekly_index = weekly_index.to_frame(index=False, name='date')
 
-        elif df_death_one['time_unit'].unique()[0] == 'monthly':
+        if df_death_one['time_unit'].unique()[0] == 'monthly':
 
-            df_merged_one, mortality_cols, y_min, y_max = process_monthly(
-                df_covid_one, df_death_one, year, mortality_cols)
+            # Interpolate monthly mortality data to weekly so that they can be visualized together with other weekly
+            # data.
+            df_death_one = df_death_one.set_index('date').resample(rule='W').first().interpolate(limit_area='inside').\
+                reset_index()
 
-            plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max)
+        df_death_one = pd.merge(left=df_weekly_index, right=df_death_one, on='date', how='left')
+
+        df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
+            df_covid_one, df_death_one, df_weekly_index, year, mortality_cols, if_interpolate_week_53)
+
+        plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
 
 
-def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpolate_week_53):
+def process_weekly(df_covid_one, df_death_one, df_weekly_index, year, mortality_cols, if_interpolate_week_53):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
     df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
@@ -136,8 +147,9 @@ def process_weekly(df_covid_one, df_death_one, year, mortality_cols, if_interpol
     df_death_one['time'] = df_death_one['date'].dt.isocalendar().week
 
     # Take only rows of the given year. `dt.isocalendar().year` automagically takes 52/53 weeks a year into account.
-    df_covid_one = df_covid_one[df_covid_one['date'].dt.isocalendar().year == year]
-    df_death_one = df_death_one[df_death_one['date'].dt.isocalendar().year == year]
+    # df_covid_one = df_covid_one[df_covid_one['date'].dt.isocalendar().year == year]
+    # df_death_one = df_death_one[df_death_one['date'].dt.isocalendar().year == year]
+    df_covid_one = pd.merge(left=df_weekly_index, right=df_covid_one, on='date', how='left')
 
     # Add week of year column based on the week date resampled from day dates (not used - just for parity with the
     # mortality dataframe).
@@ -234,127 +246,6 @@ def find_yrange_weekly(df_covid_one, df_death_one):
     return y_min, y_max
 
 
-def process_monthly(df_covid_one, df_death_one, year, mortality_cols):
-    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
-    # interpolation between the 2 known closest values.
-    df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
-    df_covid_one['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
-
-    # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
-    # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
-    df_covid_one['stringency_index'].interpolate(limit_area='inside', inplace=True)
-
-    # We need to resample the daily covid data to match the weekly mortality data, with week date on Sunday.
-    # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
-    # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
-    # with reset_index().
-    df_covid_one = df_covid_one.resample(rule='M', on='date').agg(
-        {'new_deaths': 'sum',
-         'new_cases_smoothed': 'mean',
-         'new_tests_smoothed': 'mean',
-         'stringency_index': 'mean',
-         'people_vaccinated': 'mean',
-         'people_fully_vaccinated': 'mean',
-         'population': 'mean'}
-    ).reset_index()
-
-    df_covid_one['positive_test_percent'] = \
-        df_covid_one['new_cases_smoothed'] / df_covid_one['new_tests_smoothed'] * 100
-
-    df_covid_one['people_vaccinated_percent'] = \
-        df_covid_one['people_vaccinated'] / df_covid_one['population'] * 100
-
-    df_covid_one['people_fully_vaccinated_percent'] = \
-        df_covid_one['people_fully_vaccinated'] / df_covid_one['population'] * 100
-
-    y_min, y_max = find_yrange_monthly(df_covid_one, df_death_one)
-
-    # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
-    # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
-    # chart for e.g. 2021. If args.year was > 2020 move month dates ahead as needed.
-    df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
-
-    # If a DateOffset was applied, move the month date to the *actual last day of a month* of the given year. This
-    # doesn't do anything except fixing February's last date in case of a leap year. Not altering the data in any way,
-    # just taking the first value (as we are resampling monthly to monthly there's *only* one, so e.g. last() would work
-    # as well), and using the resultant DatetimeIndex items which resample() set to months' last days of the args.year,
-    # to update the `date` column. Does nothing if args.year == 2020. dropna() deals with incomplete data (the only such
-    # case for monthly datasets was El Salvador, capped at September in all years until 13.06.2021, see
-    # https://github.com/akarlinsky/world_mortality/issues/6 for details).
-    df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().dropna(how='all').index
-
-    # Take only rows of the given year.
-    df_covid_one = df_covid_one[df_covid_one['date'].dt.year == year]
-    df_death_one = df_death_one[df_death_one['date'].dt.year == year]
-
-    # Add week of year column based on the week date resampled from day dates (not used - just for parity with the
-    # mortality dataframe).
-    df_covid_one['time'] = df_covid_one['date'].dt.month
-
-    # Merge both datasets now that they are aligned on their dates.
-    df_merged_one = pd.merge(df_death_one, df_covid_one, how='outer')
-
-    # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
-    mortality_cols = [col for col in mortality_cols if df_merged_one[col].notnull().values.any()]
-
-    df_merged_one['deaths_min'] = df_merged_one[mortality_cols].min(axis=1)
-    df_merged_one['deaths_max'] = df_merged_one[mortality_cols].max(axis=1)
-    df_merged_one['deaths_mean'] = df_merged_one[mortality_cols].mean(axis=1)
-
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(df_merged_one['new_deaths'],
-                                                                                            fill_value=None)
-
-    return df_merged_one, mortality_cols, y_min, y_max
-
-
-def find_yrange_monthly(df_covid_one, df_death_one):
-    """
-    Find the Y axis bottom and top value in all-time OWID's data for a given country with monthly resolution of
-    historical mortality data; to have an identical Y axis range on that country's charts in different years.
-    """
-    deaths_noncovid_mins = []
-    deaths_noncovid_maxs = []
-
-    # This loop calculates the number of non-covid deaths *for each year* covered in the OWID's data, to be able to
-    # include it when calculating the Y axis value range. For some countries the number of non-covid deaths in a given
-    # year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in previous
-    # years. For some, it's higher than the highest number of deaths in previous years - probably due to borked data,
-    # but anyway (e.g. Kyrgyzstan in 2020).
-    for y in df_covid_one['date'].dt.year.unique():
-        # See process_monthly comments for explanations. This is mostly a copy-paste from there.
-        df_covid_one_tmp = df_covid_one.copy()
-        df_death_one_tmp = df_death_one.copy()
-
-        df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
-        df_death_one['date'] = df_death_one.resample(rule='M', on='date').first().dropna(how='all').index
-
-        df_covid_one_tmp = df_covid_one_tmp[df_covid_one_tmp['date'].dt.year == y]
-        df_death_one_tmp = df_death_one_tmp[df_death_one_tmp['date'].dt.year == y]
-
-        df_covid_one_tmp['time'] = df_covid_one_tmp['date'].dt.month
-
-        df_merged_one = pd.merge(df_death_one_tmp, df_covid_one_tmp, how='outer')
-
-        df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(y)].sub(
-            df_merged_one['new_deaths'], fill_value=None)
-
-        if df_merged_one['deaths_noncovid'].notnull().any():
-            deaths_noncovid_mins.append(df_merged_one['deaths_noncovid'].min())
-            deaths_noncovid_maxs.append(df_merged_one['deaths_noncovid'].max())
-
-    if deaths_noncovid_mins:
-        y_min = min(*deaths_noncovid_mins, df_merged_one.filter(regex='deaths_.*_all_ages').min().min())
-    else:
-        y_min = df_merged_one.filter(regex='deaths_.*_all_ages').min().min()
-
-    if deaths_noncovid_maxs:
-        y_max = max(*deaths_noncovid_maxs, df_merged_one.filter(regex='deaths_.*_all_ages').max().max())
-    else:
-        y_max = df_merged_one.filter(regex='deaths_.*_all_ages').max().max()
-
-    return y_min, y_max
-
-
 def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
@@ -428,96 +319,6 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
     mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
 
     mpyplot.figtext(0.065, 0,
-                    'Data sources, via Our World in Data (https://ourworldindata.org, '
-                    'https://github.com/owid/covid-19-data):\n'
-                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
-                    'https://www.mortality.org and World Mortality Dataset. '
-                    'https://github.com/akarlinsky/world_mortality\n'
-                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University. '
-                    'https://github.com/CSSEGISandData/COVID-19\n'
-                    '- Lockdown stringency index: Hale, T. et al. A global panel database of pandemic policies (Oxford '
-                    'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
-                    'https://doi.org/10.1038/s41562-021-01079-8\n'
-                    '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
-                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8\n'
-                    '- Testing: Hasell, J., Mathieu, E., Beltekian, D. et al. A cross-country database of COVID-19 '
-                    'testing. Sci Data 7, 345 (2020). https://doi.org/10.1038/s41597-020-00688-8',
-                    fontsize=6.5, va="bottom", ha="left", fontstretch="extra-condensed")
-
-    # mpyplot.tight_layout(pad=1)
-
-    fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
-                pil_kwargs={'optimize': True})
-
-    df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
-
-
-def plot_monthly(df_merged_one, country, year, mortality_cols, y_min, y_max):
-    min_deaths_year = mortality_cols[0].split('_')[1]
-    max_deaths_year = mortality_cols[-1].split('_')[1]
-
-    fig, axs = mpyplot.subplots(figsize=(13.55, 5.078))  # Create an empty matplotlib figure and axes.
-
-    axs2 = axs.twinx()
-
-    df_merged_one.plot(kind='line', use_index=True, grid=True, rot='50',
-                       color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
-                       ax=axs, x='time', y=['deaths_min', 'deaths_mean', 'deaths_max',
-                                            'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
-
-    df_merged_one.plot(kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
-                       style=['-', '-', '--', '-'],
-                       ax=axs2, x='time', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
-                                             'people_fully_vaccinated_percent'])
-
-    axs.fill_between(df_merged_one['time'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
-                     color='yellowgreen')
-
-    axs.legend(['lowest death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
-                'average death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
-                'highest death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
-                'death count in {} from all causes'.format(year),
-                'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
-                'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)],
-               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
-               bbox_to_anchor=(-0.0845, 1.3752))
-
-    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
-                 'percent of positive results in all COVID-19 tests',
-                 'percent of people vaccinated in the country\'s populace',
-                 'percent of people vaccinated fully in the country\'s populace'],
-                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
-                bbox_to_anchor=(1.057, 1.375))
-
-    axs.xaxis.set_major_locator(mticker.FixedLocator(locs=df_merged_one['time']))
-
-    axs.set_xlabel(xlabel="date", loc="right")
-
-    axs2.set(ylabel="percent",
-             xlim=[1, 12],
-             ylim=[0, 100])
-
-    axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
-
-    axs.set(ylabel="number of people",
-            xlim=[1, 12],
-            ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
-
-    axs2.set_xlabel(xlabel="date", loc="right")
-
-    # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
-    # For more details see https://github.com/matplotlib/matplotlib/issues/3706.
-    legend = axs.get_legend()
-    axs.get_legend().remove()
-    axs2.add_artist(legend)
-
-    axs.xaxis.set_major_formatter(mticker.FixedFormatter([d.strftime('%d.%m') for d in df_merged_one['date']]))
-
-    mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
-
-    mpyplot.figtext(0.065, -0.1164,
                     'Data sources, via Our World in Data (https://ourworldindata.org, '
                     'https://github.com/owid/covid-19-data):\n'
                     '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
