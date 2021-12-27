@@ -97,7 +97,7 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
         df_weekly_death_index = pd.DataFrame(weekly_death_index, columns=['date'], dtype='datetime64[ns]')
         df_weekly_covid_index = pd.DataFrame(weekly_covid_index, columns=['date'], dtype='datetime64[ns]')
 
-        print(df_weekly_death_index, "\n", df_weekly_covid_index)
+        # print(df_weekly_death_index, "\n", df_weekly_covid_index)
 
         if df_death_one['time_unit'].unique()[0] == 'monthly':
 
@@ -105,9 +105,15 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
             # data.
             df_death_one = df_death_one.set_index('date').resample(rule='W').first().interpolate(limit_area='inside').\
                 reset_index()
+            # Prepend 'date' column with 4 initial week dates missing (2020-01-05, 2020-01-12, 2020-01-19,
+            # 2020-01-26), as the 1st month-date we get after resampling month dates to week dates is 2020-02-02.
+            df_death_one = df_weekly_death_index[0:4].append(df_death_one, ignore_index=True)
+
+            # TODO: Update the whole 'time_unit' column to 'monthly'?
 
         df_deaths_during_covid = df_death_one[['date']].copy()
 
+        # Take only rows of the given year.
         df_death_one = pd.merge(left=df_weekly_death_index, right=df_death_one, on='date', how='left')
 
         # deaths_during_covid = df_death_one['deaths_2020_all_ages'].dropna().append(
@@ -178,7 +184,9 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_
     # df_covid_one = df_covid_one[df_covid_one['date'].dt.isocalendar().year == year]
     # df_death_one = df_death_one[df_death_one['date'].dt.isocalendar().year == year]
     print(df_covid_one)
+    # Take only rows of the given year.
     df_covid_one = pd.merge(left=df_weekly_covid_index, right=df_covid_one, on='date', how='left')
+    # Merge death count during covid *demics in a given year into the covid DataFrame.
     df_covid_one = pd.merge(left=df_covid_one, right=df_deaths_during_covid, on='date', how='left')
     # df_covid_one['deaths_during_covid'] = deaths_during_covid
 
