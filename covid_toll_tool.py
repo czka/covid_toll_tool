@@ -14,6 +14,7 @@ import matplotlib.pyplot as mpyplot
 import matplotlib.dates as mdates
 import matplotlib.ticker as mticker
 from datetime import date as ddate
+from datetime import datetime as ddatetime
 
 
 if sys.version_info < (3, 9):
@@ -63,21 +64,40 @@ def list_countries(common_countries):
 
 def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53):
     # Take only rows for the specified country.
-    df_covid_one = df_covid_all[df_covid_all['location'] == country].copy()
-    df_death_one = df_death_all[df_death_all['location'] == country].copy()
+    df_covid_one = df_covid_all[df_covid_all['location'] == country].copy().reset_index(drop=True)
+    df_death_one = df_death_all[df_death_all['location'] == country].copy().reset_index(drop=True)
 
     if df_death_one['time_unit'].nunique() == 1:
 
-        # Weekly index starts at the end of the 1st week of a year:
-        weekly_index_1 = pd.date_range(start=str(year), end=str(year + 1), freq='W')
-        # And it ends at the end of the 1st week of a following year. Plus 1 week for adjacent charts to overlap by 1
-        # week to improve their readability at the year end/start (eg. a 2020 chart will additionaly contain the 1st
-        # week of 2021).
-        weekly_index_2 = pd.date_range(start=str(year + 1), periods=2, freq='W')
+        # Create ISO-week date index, starting at the end (7 = Sunday) of the 1st week of a year, and ending at the end
+        # of the 1st week of the following year. So that there's a 1 week overlap between charts for subsequent years -
+        # (eg. a 2020 chart will also have the 1st week of 2021). By ISO specification the 28th of December is always
+        # in the last week of the year.
 
-        weekly_index = weekly_index_1.append(weekly_index_2)
+        # weekly_death_index_1 = pd.date_range(start='2020', end='2021', freq='W')
+        weekly_death_index = [ddatetime.fromisocalendar(2020, i, 7).strftime('%Y-%m-%d')
+                              for i in range(1, ddate(2020, 12, 28).isocalendar().week + 1)] + \
+                             [ddatetime.fromisocalendar(2021, 1, 7).strftime('%Y-%m-%d')]
 
-        df_weekly_index = weekly_index.to_frame(index=False, name='date')
+        # weekly_covid_index_1 = pd.date_range(start=str(year), end=str(year + 1), freq='W')
+        weekly_covid_index = [ddatetime.fromisocalendar(year, i, 7).strftime('%Y-%m-%d')
+                              for i in range(1, ddate(year, 12, 28).isocalendar().week + 1)] + \
+                             [ddatetime.fromisocalendar(year + 1, 1, 7).strftime('%Y-%m-%d')]
+
+        # weekly_death_index_2 = pd.date_range(start='2021', periods=1, freq='W')
+        # weekly_death_index_2 = ddatetime.fromisocalendar(2021, 1, 7).strftime('%Y-%m-%d')
+        # weekly_covid_index_2 = pd.date_range(start=str(year + 1), periods=1, freq='W')
+        # weekly_covid_index_2 = ddatetime.fromisocalendar(year + 1, 1, 7).strftime('%Y-%m-%d')
+
+        # weekly_death_index = weekly_death_index_1.append(weekly_death_index_2)
+        # weekly_covid_index = weekly_covid_index_1.append(weekly_covid_index_2)
+
+        # df_weekly_death_index = weekly_death_index.to_frame(index=False, name='date')
+        # df_weekly_covid_index = weekly_covid_index.to_frame(index=False, name='date')
+        df_weekly_death_index = pd.DataFrame(weekly_death_index, columns=['date'], dtype='datetime64[ns]')
+        df_weekly_covid_index = pd.DataFrame(weekly_covid_index, columns=['date'], dtype='datetime64[ns]')
+
+        print(df_weekly_death_index, "\n", df_weekly_covid_index)
 
         if df_death_one['time_unit'].unique()[0] == 'monthly':
 
@@ -86,15 +106,23 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
             df_death_one = df_death_one.set_index('date').resample(rule='W').first().interpolate(limit_area='inside').\
                 reset_index()
 
-        df_death_one = pd.merge(left=df_weekly_index, right=df_death_one, on='date', how='left')
+        df_deaths_during_covid = df_death_one[['date']].copy()
 
-        df_merged_one, mortality_cols, weeks_count, y_min, y_max = process_weekly(
-            df_covid_one, df_death_one, df_weekly_index, year, mortality_cols, if_interpolate_week_53)
+        df_death_one = pd.merge(left=df_weekly_death_index, right=df_death_one, on='date', how='left')
 
-        plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max)
+        # deaths_during_covid = df_death_one['deaths_2020_all_ages'].dropna().append(
+        #     df_death_one['deaths_2021_all_ages'], ignore_index=True)
+        # TODO: Explain [0:-1]
+        df_deaths_during_covid['deaths_during_covid'] = df_death_one['deaths_2020_all_ages'][0:-1].append(df_death_one['deaths_2021_all_ages'], ignore_index=True)
+
+        df_merged_one, mortality_cols, y_min, y_max = process_weekly(df_covid_one, df_death_one, df_weekly_covid_index,
+                                                                     df_deaths_during_covid, year, mortality_cols,
+                                                                     if_interpolate_week_53)
+
+        plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max)
 
 
-def process_weekly(df_covid_one, df_death_one, df_weekly_index, year, mortality_cols, if_interpolate_week_53):
+def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_during_covid, year, mortality_cols, if_interpolate_week_53):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
     df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
@@ -149,18 +177,25 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, year, mortality_
     # Take only rows of the given year. `dt.isocalendar().year` automagically takes 52/53 weeks a year into account.
     # df_covid_one = df_covid_one[df_covid_one['date'].dt.isocalendar().year == year]
     # df_death_one = df_death_one[df_death_one['date'].dt.isocalendar().year == year]
-    df_covid_one = pd.merge(left=df_weekly_index, right=df_covid_one, on='date', how='left')
+    print(df_covid_one)
+    df_covid_one = pd.merge(left=df_weekly_covid_index, right=df_covid_one, on='date', how='left')
+    df_covid_one = pd.merge(left=df_covid_one, right=df_deaths_during_covid, on='date', how='left')
+    # df_covid_one['deaths_during_covid'] = deaths_during_covid
+
+    # print(df_death_one)
+    print(df_covid_one)
 
     # Add week of year column based on the week date resampled from day dates (not used - just for parity with the
     # mortality dataframe).
     df_covid_one['time'] = df_covid_one['date'].dt.isocalendar().week
 
     # Merge both datasets now that they are aligned on their dates.
-    df_merged_one = pd.merge(df_death_one, df_covid_one, how='outer')
+    df_merged_one = pd.merge(df_death_one, df_covid_one, how='inner')
 
     # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
     mortality_cols = [col for col in mortality_cols if df_merged_one[col].notnull().values.any()]
-
+    print('mortality_cols after exclude:')
+    print(mortality_cols)
     df_merged_one['deaths_min'] = df_merged_one[mortality_cols].min(axis=1)
     df_merged_one['deaths_max'] = df_merged_one[mortality_cols].max(axis=1)
     df_merged_one['deaths_mean'] = df_merged_one[mortality_cols].mean(axis=1)
@@ -190,10 +225,10 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, year, mortality_
         df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
         df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
 
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(year)].sub(
+    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_during_covid'].sub(
         df_merged_one['new_deaths'], fill_value=None)
 
-    return df_merged_one, mortality_cols, weeks_count, y_min, y_max
+    return df_merged_one, mortality_cols, y_min, y_max
 
 
 def find_yrange_weekly(df_covid_one, df_death_one):
@@ -246,7 +281,7 @@ def find_yrange_weekly(df_covid_one, df_death_one):
     return y_min, y_max
 
 
-def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min, y_max):
+def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     min_deaths_year = mortality_cols[0].split('_')[1]
     max_deaths_year = mortality_cols[-1].split('_')[1]
 
@@ -257,7 +292,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
                        color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
-                                            'deaths_{}_all_ages'.format(year), 'deaths_noncovid'])
+                                            'deaths_during_covid', 'deaths_noncovid'])
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
                        color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
@@ -297,13 +332,13 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, weeks_count, y_min
     axs.set_xlabel(xlabel="date", loc="right")
 
     axs2.set(ylabel="percent",
-             xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count - 1]],
+             xlim=[df_merged_one['date'].head(1), df_merged_one['date'].tail(1)],
              ylim=[0, 100])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
     axs.set(ylabel="number of people",
-            xlim=[df_merged_one['date'][0], df_merged_one['date'][weeks_count-1]],
+            xlim=[df_merged_one['date'].head(1), df_merged_one['date'].tail(1)],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
 
     axs2.set_xlabel(xlabel="date", loc="right")
