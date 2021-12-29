@@ -65,7 +65,14 @@ def list_countries(common_countries):
 def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, if_interpolate_week_53):
     # Take only rows for the specified country.
     df_covid_one = df_covid_all[df_covid_all['location'] == country].copy().reset_index(drop=True)
-    df_death_one = df_death_all[df_death_all['location'] == country].copy().reset_index(drop=True)
+    # dropna() here removes any empty 'deaths_<year>_all_ages' columns.
+    df_death_one = df_death_all[df_death_all['location'] == country].copy().reset_index(drop=True).dropna(
+        axis='columns', how='all')
+
+    # TODO: This could be faster if filtered on the list of column names rather than on a whole pandas.DataFrame
+    mortality_cols = df_death_one.filter(regex='deaths_.*_all_ages').columns
+    min_deaths_year = int(mortality_cols[0].split('_')[1])
+    max_deaths_year = int(mortality_cols[-1].split('_')[1])
 
     if df_death_one['time_unit'].nunique() == 1:
 
@@ -73,62 +80,70 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
         # of the 1st week of the following year. So that there's a 1 week overlap between charts for subsequent years -
         # (eg. a 2020 chart will also have the 1st week of 2021). By ISO specification the 28th of December is always
         # in the last week of the year.
-
-        # weekly_death_index_1 = pd.date_range(start='2020', end='2021', freq='W')
         weekly_death_index = [ddatetime.fromisocalendar(2020, i, 7).strftime('%Y-%m-%d')
                               for i in range(1, ddate(2020, 12, 28).isocalendar().week + 1)] + \
                              [ddatetime.fromisocalendar(2021, 1, 7).strftime('%Y-%m-%d')]
 
-        # weekly_covid_index_1 = pd.date_range(start=str(year), end=str(year + 1), freq='W')
         weekly_covid_index = [ddatetime.fromisocalendar(year, i, 7).strftime('%Y-%m-%d')
                               for i in range(1, ddate(year, 12, 28).isocalendar().week + 1)] + \
                              [ddatetime.fromisocalendar(year + 1, 1, 7).strftime('%Y-%m-%d')]
 
-        # weekly_death_index_2 = pd.date_range(start='2021', periods=1, freq='W')
-        # weekly_death_index_2 = ddatetime.fromisocalendar(2021, 1, 7).strftime('%Y-%m-%d')
-        # weekly_covid_index_2 = pd.date_range(start=str(year + 1), periods=1, freq='W')
-        # weekly_covid_index_2 = ddatetime.fromisocalendar(year + 1, 1, 7).strftime('%Y-%m-%d')
-
-        # weekly_death_index = weekly_death_index_1.append(weekly_death_index_2)
-        # weekly_covid_index = weekly_covid_index_1.append(weekly_covid_index_2)
-
-        # df_weekly_death_index = weekly_death_index.to_frame(index=False, name='date')
-        # df_weekly_covid_index = weekly_covid_index.to_frame(index=False, name='date')
         df_weekly_death_index = pd.DataFrame(weekly_death_index, columns=['date'], dtype='datetime64[ns]')
         df_weekly_covid_index = pd.DataFrame(weekly_covid_index, columns=['date'], dtype='datetime64[ns]')
 
-        # print(df_weekly_death_index, "\n", df_weekly_covid_index)
+        time_unit = df_death_one['time_unit'].unique()[0]
 
-        if df_death_one['time_unit'].unique()[0] == 'monthly':
+        if time_unit == 'monthly':
+            # From min_deaths_year to max_deaths_year. So that there is data overlap at year boundaries for monthly ->
+            # weekly interpolation.
+            monthly_death_index = pd.date_range(start=str(min_deaths_year), periods=len(mortality_cols)*12, freq='M')
 
-            # Interpolate monthly mortality data to weekly so that they can be visualized together with other weekly
-            # data.
-            df_death_one = df_death_one.set_index('date').resample(rule='W').first().interpolate(limit_area='inside').\
-                reset_index()
-            # Prepend 'date' column with 4 initial week dates missing (2020-01-05, 2020-01-12, 2020-01-19,
-            # 2020-01-26), as the 1st month-date we get after resampling month dates to week dates is 2020-02-02.
-            df_death_one = df_weekly_death_index[0:4].append(df_death_one, ignore_index=True)
+            df_death_one2 = pd.DataFrame(monthly_death_index, columns=['date'], dtype='datetime64[ns]')
 
-            # TODO: Update the whole 'time_unit' column to 'monthly'?
+            # Merge all mortality_cols columns into one.
+            df_death_one2['deaths'] = pd.concat(
+                [df_death_one[c].dropna() for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
 
-        df_deaths_during_covid = df_death_one[['date']].copy()
+            # Interpolate monthly mortality data to weekly so that it can be used together with other weekly data.
+            df_death_one2 = df_death_one2.set_index('date').resample(rule='W').first().interpolate(
+                limit_area='inside').reset_index()
 
-        # Take only rows of the given year.
-        df_death_one = pd.merge(left=df_weekly_death_index, right=df_death_one, on='date', how='left')
+            # Take only rows of the given year.
+            df_death_one2_year = pd.merge(left=df_weekly_death_index, right=df_death_one2, on='date', how='left')
 
-        # deaths_during_covid = df_death_one['deaths_2020_all_ages'].dropna().append(
-        #     df_death_one['deaths_2021_all_ages'], ignore_index=True)
-        # TODO: Explain [0:-1]
-        df_deaths_during_covid['deaths_during_covid'] = df_death_one['deaths_2020_all_ages'][0:-1].append(df_death_one['deaths_2021_all_ages'], ignore_index=True)
+        elif time_unit == 'weekly':
+            # In case of weekly data we can re-use weekly timestamps already provided with the original dataset.
+            df_death_one2 = df_death_one[['date']].copy()
 
-        df_merged_one, mortality_cols, y_min, y_max = process_weekly(df_covid_one, df_death_one, df_weekly_covid_index,
-                                                                     df_deaths_during_covid, year, mortality_cols,
-                                                                     if_interpolate_week_53)
+            # Merge all mortality_cols columns into one.
+            df_death_one2['deaths'] = pd.concat(
+                [df_death_one[c].dropna() for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
+
+            # Take only rows of the given year.
+            df_death_one2_year = pd.merge(left=df_weekly_death_index, right=df_death_one2, on='date', how='left')
+
+        # Set time_unit to monthly to recognize these weekly values are actually interpolated from monthly.
+        df_death_one2_year['time_unit'] = time_unit
+
+        # Fill in country information in each new row. We'll use it and time_unit later the for patching.
+        df_death_one2_year['location'] = country
+
+        df_merged_one, y_min, y_max = \
+            process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_weekly_death_index,
+                           df_death_one2_year, year, mortality_cols, if_interpolate_week_53)
 
         plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max)
 
 
-def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_during_covid, year, mortality_cols, if_interpolate_week_53):
+def prepare_mortality_monthly():
+    pass
+
+
+def prepare_covid_stats_monthly():
+    pass
+
+
+def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_weekly_death_index, df_deaths_during_covid, year, mortality_cols, if_interpolate_week_53):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
     df_covid_one['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
@@ -142,6 +157,11 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_
     # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
     # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
     # with reset_index().
+
+    temp = df_covid_one.resample(rule='M', on='date').agg({'new_deaths': 'sum'}).resample(rule='W').first().interpolate(
+        limit_area='inside').reset_index()
+    temp = df_weekly_death_index[0:4].append(temp, ignore_index=True)
+
     df_covid_one = df_covid_one.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
          'new_cases_smoothed': 'mean',
@@ -151,6 +171,8 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_
          'people_fully_vaccinated': 'mean',
          'population': 'mean'}
     ).reset_index()
+
+    df_covid_one['new_deaths'] = temp['new_deaths']
 
     df_covid_one['positive_test_percent'] = \
         df_covid_one['new_cases_smoothed'] / df_covid_one['new_tests_smoothed'] * 100
@@ -233,10 +255,10 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_deaths_
         df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
         df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
 
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_during_covid'].sub(
+    df_merged_one['deaths_noncovid'] = df_merged_one['deaths'].sub(
         df_merged_one['new_deaths'], fill_value=None)
 
-    return df_merged_one, mortality_cols, y_min, y_max
+    return df_merged_one, y_min, y_max
 
 
 def find_yrange_weekly(df_covid_one, df_death_one):
@@ -300,7 +322,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
                        color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
-                                            'deaths_during_covid', 'deaths_noncovid'])
+                                            'deaths', 'deaths_noncovid'])
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
                        color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
