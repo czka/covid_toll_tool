@@ -120,14 +120,20 @@ def get_it_together(country, df_covid_all, df_death_all, year, mortality_cols, i
                 [df_death_one[c].dropna() for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
 
             # Take only rows of the given year.
+            # TODO: 2015 and 2020 have 53 weeks, but 2015 has only 52 records of mortality data, thus dropna() shifts
+            #  data. Replace dropna() with a selector like [0:<number_of_weeks_a_year>].
             df_death_one2_year = pd.merge(left=df_weekly_death_index, right=df_death_one2, on='date', how='left')
 
-        # Set time_unit to monthly to recognize these weekly values are actually interpolated from monthly.
+        # Set time_unit as it was in source dataset.
         df_death_one2_year['time_unit'] = time_unit
 
-        # Fill in country information in each new row. We'll use it and time_unit later the for patching.
+        # Fill in country information as it was in source dataset.
         df_death_one2_year['location'] = country
 
+        # TODO: Now that the mortality dataset is properly organized along the time axis, monthly data interpolated to
+        #  weekly and gaps in weekly filled in as well, let's split it back by years to be able to draw min, max, mean
+        #  background mortality.
+        
         df_merged_one, y_min, y_max = \
             process_weekly(df_covid_one, df_death_one, df_weekly_covid_index, df_weekly_death_index,
                            df_death_one2_year, year, mortality_cols, if_interpolate_week_53)
