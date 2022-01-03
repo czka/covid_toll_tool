@@ -71,6 +71,8 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
 
     # TODO: This could be faster if filtered on the list of column names rather than on a whole pandas.DataFrame
     mortality_cols = df_death_one.filter(regex='deaths_.*_all_ages').columns
+    # Use only the background mortality cols that are not empty in the given country's dataset.
+    bckgnd_mort_cols = sorted(set(bckgnd_mort_cols) & set(mortality_cols))
     min_deaths_year = int(mortality_cols[0].split('_')[1])
     max_deaths_year = int(mortality_cols[-1].split('_')[1])
 
@@ -108,7 +110,7 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
 
             # Merge all mortality columns into one.
             df_death_one2['deaths'] = pd.concat(
-                [df_death_one[c].dropna() for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
+                [df_death_one[c][0:12] for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
 
             # Interpolate monthly mortality data to weekly so that it can be used together with other weekly data.
             df_death_one2 = df_death_one2.set_index('date').resample(rule='W').first().interpolate(
@@ -161,6 +163,10 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
         # Fill in country information as it was in source dataset.
         df_death_one2_year['location'] = country
 
+        # TODO: drop debug
+        print('df_death_one2_year:')
+        print(df_death_one2_year)
+
         # TODO: Now that the mortality dataset is properly organized along the time axis, monthly data interpolated to
         #  weekly and gaps in weekly filled in as well, let's split it back by years to be able to draw min, max, mean
         #  background mortality.
@@ -189,9 +195,9 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_ye
     # with reset_index().
 
     if time_unit == 'monthly':
-        temp = df_covid_one.resample(rule='M', on='date').agg({'new_deaths': 'sum'}).resample(rule='W').first().\
+        temp = df_covid_one.resample(rule='M', on='date').agg({'new_deaths': 'sum'}).\
+            resample(rule='W').first().\
             interpolate(limit_area='inside').reset_index()
-        temp = df_weekly_index.append(temp, ignore_index=True)
 
     df_covid_one = df_covid_one.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
@@ -204,6 +210,7 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_ye
     ).reset_index()
 
     if time_unit == 'monthly':
+        # TODO: Better merge on 'date' to avoid any possible data shift by a couple days?
         df_covid_one['new_deaths'] = temp['new_deaths']
 
     df_covid_one['positive_test_percent'] = \
@@ -254,10 +261,10 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_ye
     # Merge both datasets now that they are aligned on their dates.
     df_merged_one = pd.merge(df_death_one, df_covid_one, how='inner')
 
-    # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
-    bckgnd_mort_cols = [col for col in bckgnd_mort_cols if df_merged_one[col].notnull().values.any()]
-    print('mortality_cols after exclude:')
-    print(bckgnd_mort_cols)
+    # # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
+    # bckgnd_mort_cols = [col for col in bckgnd_mort_cols if df_merged_one[col].notnull().values.any()]
+    # print('mortality_cols after exclude:')
+    # print(bckgnd_mort_cols)
     df_merged_one['deaths_min'] = df_merged_one[bckgnd_mort_cols].min(axis=1)
     df_merged_one['deaths_max'] = df_merged_one[bckgnd_mort_cols].max(axis=1)
     df_merged_one['deaths_mean'] = df_merged_one[bckgnd_mort_cols].mean(axis=1)
