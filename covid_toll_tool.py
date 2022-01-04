@@ -117,7 +117,7 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
                 limit_area='inside').reset_index()
 
             # Take only rows of the given year.
-            df_death_one2_year = pd.merge(left=df_weekly_index, right=df_death_one2, on='date', how='left')
+            # df_death_one2_year = pd.merge(left=df_weekly_index, right=df_death_one2, on='date', how='left')
 
         elif time_unit == 'weekly':
             # In case of weekly data we can re-use weekly timestamps already provided with the original dataset.
@@ -155,30 +155,26 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
             df_death_one2['deaths'].interpolate(limit_area='inside', inplace=True)
 
             # Take only rows of the given year.
-            df_death_one2_year = pd.merge(left=df_weekly_index, right=df_death_one2, on='date', how='left')
+            # df_death_one2_year = pd.merge(left=df_weekly_index, right=df_death_one2, on='date', how='left')
 
         # Set time_unit as it was in source dataset.
-        df_death_one2_year['time_unit'] = time_unit
+        df_death_one2['time_unit'] = time_unit
 
         # Fill in country information as it was in source dataset.
-        df_death_one2_year['location'] = country
-
-        # TODO: drop debug
-        print('df_death_one2_year:')
-        print(df_death_one2_year)
+        df_death_one2['location'] = country
 
         # TODO: Now that the mortality dataset is properly organized along the time axis, monthly data interpolated to
         #  weekly and gaps in weekly filled in as well, let's split it back by years to be able to draw min, max, mean
         #  background mortality.
 
         df_merged_one, y_min, y_max = \
-            process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_year, year, bckgnd_mort_cols,
+            process_weekly(df_covid_one, df_death_one2, df_weekly_index, year, bckgnd_mort_cols,
                            if_interpolate_week_53, time_unit)
 
         plot_weekly(df_merged_one, country, year, bckgnd_mort_cols, y_min, y_max)
 
 
-def process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_year, year, bckgnd_mort_cols,
+def process_weekly(df_covid_one, df_death_one2, df_weekly_index, year, bckgnd_mort_cols,
                    if_interpolate_week_53, time_unit):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
@@ -222,7 +218,8 @@ def process_weekly(df_covid_one, df_death_one, df_weekly_index, df_death_one2_ye
     df_covid_one['people_fully_vaccinated_percent'] = \
         df_covid_one['people_fully_vaccinated'] / df_covid_one['population'] * 100
 
-    y_min, y_max = find_yrange_weekly(df_covid_one, df_death_one)
+    # TODO: Find max, min another way, probably best within df_merged_one
+    # y_min, y_max = find_yrange_weekly(df_covid_one, df_death_one)
 
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
