@@ -90,39 +90,47 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
                             for w in range(1, ddate(year=year, month=12, day=28).isocalendar().week + 1)
                             ] + [ddatetime.fromisocalendar(year=year + 1, week=1, day=7).strftime('%Y-%m-%d')]
 
+        # From morta_year_all_min to morta_year_all_max. So that there is data overlap at year boundaries (eg. for
+        # 2015 52 -> 53 weeks interpolation).
+        # NOTE: Eg. pd.date_range(start=str(morta_year_all_min), end=str(morta_year_all_max+2), freq='W') would be
+        # simpler, but we need to start at 1st ISO week, while eg. pd.date_range(start='2010', end='2021', freq='W')
+        # returns '2010-01-03' as the 1st week of 2010, whereas per ISO-week convention (see eg.
+        # pd.date_range(start='2010', end='2011', freq='W')[0].isocalendar()) it's actually the 53rd week of 2009.
+        dates_weekly_all = []
+        for y in range(morta_year_all_min, morta_year_all_max + 2):
+            for w in range(1, ddate(year=y, month=12, day=28).isocalendar().week + 1):
+                dates_weekly_all.append(ddatetime.fromisocalendar(year=y, week=w, day=7).strftime('%Y-%m-%d'))
+
         df_dates_weekly_one = pd.DataFrame(dates_weekly_one, columns=['date'], dtype='datetime64[ns]')
 
         if time_unit == 'monthly':
             # From morta_year_all_min to morta_year_all_max. So that there is data overlap at year boundaries for
             # monthly -> weekly interpolation.
             # TODO: Replace periods=len(morta_death_cols_all)*12 with end=max_death_year?
-            dates_monthly_all = pd.date_range(start=str(morta_year_all_min), periods=len(morta_death_cols_all)*12, freq='M')
+            dates_monthly_all = pd.date_range(start=str(morta_year_all_min), periods=len(morta_death_cols_all)*12,
+                                              freq='M')
 
-            df_morta_country_all = pd.DataFrame(dates_monthly_all, columns=['date'], dtype='datetime64[ns]')
+            df_morta_country_all_monthly = pd.DataFrame(dates_monthly_all, columns=['date'], dtype='datetime64[ns]')
 
-            # Merge all mortality columns into one.
-            df_morta_country_all['deaths'] = pd.concat(
-                [df_morta_country[c][0:12] for c in df_morta_country[morta_death_cols_all]], axis='rows', ignore_index=True)
+            # Merge all morta_death_cols_all into one.
+            df_morta_country_all_monthly['deaths'] = pd.concat(
+                [df_morta_country[c][0:12] for c in df_morta_country[morta_death_cols_all]],
+                axis='rows', ignore_index=True)
 
             # Interpolate monthly mortality data to weekly so that it can be used together with other weekly data.
-            df_morta_country_all = df_morta_country_all.set_index('date').resample(rule='W').first().interpolate(
-                limit_area='inside').reset_index()
+            df_morta_country_all_monthly = df_morta_country_all_monthly.set_index('date').resample(rule='W').first().\
+                interpolate(limit_area='inside').reset_index()
+
+            # Select all weekly deaths data, prepending it with 1st 4 weeks of 2015 it's missing, due to monthly data
+            # it's been derived from start at 2015-01-31.
+            df_dates_weekly_all = pd.DataFrame(dates_weekly_all, columns=['date'], dtype='datetime64[ns]')
+            df_morta_country_all = pd.merge(left=df_dates_weekly_all, right=df_morta_country_all_monthly, on='date',
+                                            how='left')
 
             # Take only rows of the given year.
             # df_death_one2_year = pd.merge(left=df_dates_weekly_one, right=df_morta_country_all, on='date', how='left')
 
         elif time_unit == 'weekly':
-            # From morta_year_all_min to morta_year_all_max. So that there is data overlap at year boundaries (eg. for
-            # 2015 52 -> 53 weeks interpolation).
-            # NOTE: Eg. pd.date_range(start=str(morta_year_all_min), end=str(morta_year_all_max+2), freq='W') would be
-            # simpler, but we need to start at 1st ISO week, while eg. pd.date_range(start='2010', end='2021', freq='W')
-            # returns '2010-01-03' as the 1st week of 2010, whereas per ISO-week convention (see eg.
-            # pd.date_range(start='2010', end='2011', freq='W')[0].isocalendar()) it's actually the 53rd week of 2009.
-            dates_weekly_all = []
-            for y in range(morta_year_all_min, morta_year_all_max + 1):
-                for w in range(1, ddate(year=y, month=12, day=28).isocalendar().week + 1):
-                    dates_weekly_all.append(ddatetime.fromisocalendar(year=y, week=w, day=7).strftime('%Y-%m-%d'))
-
             df_morta_country_all = pd.DataFrame(dates_weekly_all, columns=['date'], dtype='datetime64[ns]')
 
             # Merge all morta_death_cols_all columns into one.
@@ -149,16 +157,36 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         #  weekly and gaps in weekly filled in as well, let's split it back by years to be able to draw min, max, mean
         #  background mortality.
 
-        # df_morta_country =
+        df_morta_country_bis = df_dates_weekly_one.copy()
+        df_morta_country_bis['location'] = country
+        df_morta_country_bis['time_unit'] = time_unit
+        df_morta_country_bis['time'] = df_morta_country_bis['date'].dt.isocalendar().week
 
-        df_merged_one, y_min, y_max = \
-            process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year, morta_death_cols_bgd,
-                           if_interpolate_week_53, time_unit)
+        df_dates_weekly_one_weeks_count = len(df_dates_weekly_one)
+        print('df_dates_weekly_one_weeks_count:', df_dates_weekly_one_weeks_count)
+        for y in range(morta_year_all_min, morta_year_all_max + 1):
+            print('y:', y)
+            col = 'deaths_{}_all_ages'.format(str(y))
+            print('col:', col)
+            date_start = ddatetime.fromisocalendar(year=y, week=1, day=7).strftime('%Y-%m-%d')
+            print('date_start:', date_start)
+            date_range = pd.date_range(start=date_start, periods=df_dates_weekly_one_weeks_count, freq='W')
+            print('date_range:', date_range)
+            # TODO: Replace to_list() with something more Pandas-y?
+            df_morta_country_bis[col] = df_morta_country_all[df_morta_country_all['date'].isin(date_range)]['deaths'].to_list()
+
+        df_merged_one = process_weekly(df_covid_country, df_morta_country_bis, df_dates_weekly_one, year,
+                                       morta_death_cols_bgd, if_interpolate_week_53, time_unit)
+
+        # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
+        # range on that country's charts in different years.
+        y_min = df_morta_country_all['deaths'].min()
+        y_max = df_morta_country_all['deaths'].max()
 
         plot_weekly(df_merged_one, country, year, morta_death_cols_bgd, y_min, y_max)
 
 
-def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year, bckgnd_mort_cols,
+def process_weekly(df_covid_country, df_morta_country_bis, df_weekly_index, year, bckgnd_mort_cols,
                    if_interpolate_week_53, time_unit):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
@@ -202,13 +230,10 @@ def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year
     df_covid_country['people_fully_vaccinated_percent'] = \
         df_covid_country['people_fully_vaccinated'] / df_covid_country['population'] * 100
 
-    # TODO: Find max, min another way, probably best within df_merged_one
-    # y_min, y_max = find_yrange_weekly(df_covid_country, df_death_one)
-
     # Pre-covid mortality counts in excess_mortality.csv (starting at 2010, 2011, 2015 or 2016 for some countries,
     # ending at 2019) are only present in the 2020's rows. So we have to always use the 2020's data, also if creating a
     # chart for e.g. 2021. If args.year was > 2020 move week dates ahead as needed.
-    df_death_one['date'] = df_death_one['date'] + pd.DateOffset(years=year - 2020)
+    df_morta_country_bis['date'] = df_morta_country_bis['date'] + pd.DateOffset(years=year - 2020)
 
     # If a DateOffset was applied, move the week's date to an *actual Sunday* of the given year. Not altering the data
     # in any way, just taking the first value (as we are resampling weekly to weekly there's *only* one, so e.g. last()
@@ -216,11 +241,11 @@ def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year
     # args.year, to update the `date` column. Does nothing if args.year == 2020. dropna() deals with weekly datasets
     # which don't follow the ISO week numbering (the only such case currently is Tunisia - capped at week 52 even in
     # 2020, see https://github.com/akarlinsky/world_mortality/issues/7 for details), or otherwise incomplete.
-    df_death_one['date'] = df_death_one.resample(rule='W', on='date').first().dropna(how='all').index
+    df_morta_country_bis['date'] = df_morta_country_bis.resample(rule='W', on='date').first().dropna(how='all').index
     # If dates changed, week numbers could use an update to compensate for 2020's 53 weeks vs e.g. 2021's 52; just for
     # the sake of it, as `df_death_one[df_death_one['date'].dt.isocalendar().year` will trim at week 52 anyway. Does
     # nothing if args.year == 2020.
-    df_death_one['time'] = df_death_one['date'].dt.isocalendar().week
+    df_morta_country_bis['time'] = df_morta_country_bis['date'].dt.isocalendar().week
 
     # Take only rows of the given year. `dt.isocalendar().year` automagically takes 52/53 weeks a year into account.
     # df_covid_country = df_covid_country[df_covid_country['date'].dt.isocalendar().year == year]
@@ -229,7 +254,7 @@ def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year
     # Take only rows of the given year.
     df_covid_country = pd.merge(left=df_weekly_index, right=df_covid_country, on='date', how='left')
     # Merge death count during covid *demics in a given year into the covid DataFrame.
-    df_covid_country = pd.merge(left=df_covid_country, right=df_death_one2_year, on='date', how='left')
+    df_covid_country = pd.merge(left=df_covid_country, right=df_morta_country_bis, on='date', how='left')
     # df_covid_country['deaths_during_covid'] = deaths_during_covid
 
     # print(df_death_one)
@@ -240,7 +265,7 @@ def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year
     df_covid_country['time'] = df_covid_country['date'].dt.isocalendar().week
 
     # Merge both datasets now that they are aligned on their dates.
-    df_merged_one = pd.merge(df_death_one, df_covid_country, how='inner')
+    df_merged_one = pd.merge(df_morta_country_bis, df_covid_country, how='inner')
 
     # # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
     # morta_death_cols_bgd = [col for col in morta_death_cols_bgd if df_merged_one[col].notnull().values.any()]
@@ -275,60 +300,10 @@ def process_weekly(df_covid_country, df_morta_country_all, df_weekly_index, year
         df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
         df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
 
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths'].sub(
+    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(str(year))].sub(
         df_merged_one['new_deaths'], fill_value=None)
 
-    return df_merged_one, y_min, y_max
-
-
-def find_yrange_weekly(df_covid_one, df_death_one):
-    """
-    Find the Y axis bottom and top value in all-time OWID's data for a given country with weekly resolution of
-    historical mortality data; to have an identical Y axis range on that country's charts in different years.
-    """
-    deaths_noncovid_mins = []
-    deaths_noncovid_maxs = []
-
-    # This loop calculates the number of non-covid deaths *for each year* covered in the OWID's data, to be able to
-    # include it when calculating the Y axis value range. For some countries the number of non-covid deaths in a given
-    # year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in previous
-    # years. For some, it's higher than the highest number of deaths in previous years - probably due to borked data,
-    # but anyway (e.g. Kyrgyzstan in 2020).
-    for y in df_covid_one['date'].dt.isocalendar().year.unique():
-        # See process_weekly comments for explanations. This is mostly a copy-paste from there.
-        df_covid_one_tmp = df_covid_one.copy()
-        df_death_one_tmp = df_death_one.copy()
-
-        df_death_one_tmp['date'] = df_death_one_tmp['date'] + pd.DateOffset(years=y - 2020)
-        df_death_one_tmp['date'] = df_death_one_tmp.resample(rule='W', on='date').first().dropna(how='all').index
-
-        df_death_one_tmp['time'] = df_death_one_tmp['date'].dt.isocalendar().week
-
-        df_covid_one_tmp = df_covid_one_tmp[df_covid_one_tmp['date'].dt.isocalendar().year == y]
-        df_death_one_tmp = df_death_one_tmp[df_death_one_tmp['date'].dt.isocalendar().year == y]
-
-        df_covid_one_tmp['time'] = df_covid_one_tmp['date'].dt.isocalendar().week
-
-        df_merged_one = pd.merge(df_death_one_tmp, df_covid_one_tmp, how='outer')
-
-        df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(y)].sub(
-            df_merged_one['new_deaths'], fill_value=None)
-
-        if df_merged_one['deaths_noncovid'].notnull().any():
-            deaths_noncovid_mins.append(df_merged_one['deaths_noncovid'].min())
-            deaths_noncovid_maxs.append(df_merged_one['deaths_noncovid'].max())
-
-    if deaths_noncovid_mins:
-        y_min = min(*deaths_noncovid_mins, df_merged_one.filter(regex='deaths_.*_all_ages').min().min())
-    else:
-        y_min = df_merged_one.filter(regex='deaths_.*_all_ages').min().min()
-
-    if deaths_noncovid_maxs:
-        y_max = max(*deaths_noncovid_maxs, df_merged_one.filter(regex='deaths_.*_all_ages').max().max())
-    else:
-        y_max = df_merged_one.filter(regex='deaths_.*_all_ages').max().max()
-
-    return y_min, y_max
+    return df_merged_one
 
 
 def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
@@ -342,7 +317,7 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
                        color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                        ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
-                                            'deaths', 'deaths_noncovid'])
+                                            'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
     df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
                        color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
@@ -473,4 +448,3 @@ if __name__ == '__main__':
 # TODO:
 #  - Add a note on charts which helps finding it online after printing.
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
-#  - Add per-million counts.
