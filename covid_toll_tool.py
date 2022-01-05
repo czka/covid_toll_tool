@@ -23,33 +23,33 @@ if sys.version_info < (3, 9):
 
 
 def main(country, year, if_list_countries, if_interpolate_week_53):
-    bckgnd_mort_cols = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages', 'deaths_2013_all_ages',
+    morta_cols_bgd = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages', 'deaths_2013_all_ages',
                       'deaths_2014_all_ages', 'deaths_2015_all_ages', 'deaths_2016_all_ages', 'deaths_2017_all_ages',
                       'deaths_2018_all_ages', 'deaths_2019_all_ages']
 
     covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
                   'people_vaccinated', 'people_fully_vaccinated', 'population']
 
-    death_cols = ['location', 'date', 'time', 'time_unit'] + bckgnd_mort_cols + \
-                 ['deaths_2020_all_ages', 'deaths_2021_all_ages']
+    morta_cols_all = ['location', 'date', 'time', 'time_unit'] + morta_cols_bgd + \
+                     ['deaths_2020_all_ages', 'deaths_2021_all_ages']
 
-    df_covid_all = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
+    df_covid = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
 
-    df_death_all = pd.read_csv("./excess_mortality.csv", parse_dates=['date'], usecols=death_cols).reindex(
-        columns=death_cols)
+    df_morta = pd.read_csv("./excess_mortality.csv", parse_dates=['date'], usecols=morta_cols_all).reindex(
+        columns=morta_cols_all)
 
-    common_countries = ['ALL'] + sorted(set(df_death_all['location']) & set(df_covid_all['location']))
+    common_countries = ['ALL'] + sorted(set(df_morta['location']) & set(df_covid['location']))
 
     if if_list_countries:
         list_countries(common_countries)
 
     elif country == 'ALL':
         for country in common_countries:
-            get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_week_53, bckgnd_mort_cols)
+            get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_cols_bgd)
 
     elif country in common_countries:
-        get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_week_53, bckgnd_mort_cols)
+        get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_cols_bgd)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -62,55 +62,52 @@ def list_countries(common_countries):
           format(len(common_countries)-1, ', '.join("'{}'".format(c) for c in common_countries)))
 
 
-def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_week_53, bckgnd_mort_cols):
+def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_cols_bgd):
     # Take only rows for the specified country.
-    df_covid_one = df_covid_all[df_covid_all['location'] == country].copy().reset_index(drop=True)
+    df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
     # dropna() here removes any empty 'deaths_<year>_all_ages' columns.
-    df_death_one = df_death_all[df_death_all['location'] == country].copy().reset_index(drop=True).dropna(
+    df_morta_country = df_morta[df_morta['location'] == country].copy().reset_index(drop=True).dropna(
         axis='columns', how='all')
 
     # TODO: This could be faster if filtered on the list of column names rather than on a whole pandas.DataFrame
-    mortality_cols = df_death_one.filter(regex='deaths_.*_all_ages').columns
-    # Use only the background mortality cols that are not empty in the given country's dataset.
-    bckgnd_mort_cols = sorted(set(bckgnd_mort_cols) & set(mortality_cols))
-    min_deaths_year = int(mortality_cols[0].split('_')[1])
-    max_deaths_year = int(mortality_cols[-1].split('_')[1])
+    morta_cols_all = df_morta_country.filter(regex='deaths_.*_all_ages').columns
+    morta_year_all_min = int(morta_cols_all[0].split('_')[1])
+    morta_year_all_max = int(morta_cols_all[-1].split('_')[1])
 
-    if df_death_one['time_unit'].nunique() == 1:
+    # Use only the background mortality cols that are not empty in the given country's dataset.
+    morta_cols_bgd = sorted(set(morta_cols_bgd) & set(morta_cols_all))
+    morta_year_bgd_max = int(morta_cols_bgd[-1].split('_')[1]) # This should always be 2019 actually...
+
+    if df_morta_country['time_unit'].nunique() == 1:
 
         # Create ISO-week date index, starting at the end (7 = Sunday) of the 1st week of a year, and ending at the end
         # of the 1st week of the following year. So that there's a 1 week overlap between charts for subsequent years -
         # (eg. a 2020 chart will also have the 1st week of 2021). By ISO specification December 28th is always in the
         # last week of the year.
-        # weekly_death_index = [ddatetime.fromisocalendar(2020, i, 7).strftime('%Y-%m-%d')
-        #                       for i in range(1, ddate(2020, 12, 28).isocalendar().week + 1)] + \
-        #                      [ddatetime.fromisocalendar(2021, 1, 7).strftime('%Y-%m-%d')]
 
-        # weekly_covid_index = [ddatetime.fromisocalendar(year, i, 7).strftime('%Y-%m-%d')
-        #                       for i in range(1, ddate(year, 12, 28).isocalendar().week + 1)] + \
-        #                      [ddatetime.fromisocalendar(year + 1, 1, 7).strftime('%Y-%m-%d')]
+        for y in bckgnd_mort_years:
+            weekly_index_{}.format(str(y)) = 1
+
 
         weekly_index = [ddatetime.fromisocalendar(year=year, week=w, day=7).strftime('%Y-%m-%d')
                         for w in range(1, ddate(year=year, month=12, day=28).isocalendar().week + 1)
                         ] + [ddatetime.fromisocalendar(year=year + 1, week=1, day=7).strftime('%Y-%m-%d')]
 
-        # df_weekly_death_index = pd.DataFrame(weekly_death_index, columns=['date'], dtype='datetime64[ns]')
-        # df_weekly_covid_index = pd.DataFrame(weekly_covid_index, columns=['date'], dtype='datetime64[ns]')
         df_weekly_index = pd.DataFrame(weekly_index, columns=['date'], dtype='datetime64[ns]')
 
-        time_unit = df_death_one['time_unit'].unique()[0]
+        time_unit = df_morta_country['time_unit'].unique()[0]
 
         if time_unit == 'monthly':
-            # From min_deaths_year to max_deaths_year. So that there is data overlap at year boundaries for monthly ->
+            # From morta_year_all_min to morta_year_all_max. So that there is data overlap at year boundaries for monthly ->
             # weekly interpolation.
-            # TODO: Replace periods=len(mortality_cols)*12 with end=max_death_year?
-            full_monthly_index = pd.date_range(start=str(min_deaths_year), periods=len(mortality_cols)*12, freq='M')
+            # TODO: Replace periods=len(morta_cols_all)*12 with end=max_death_year?
+            full_monthly_index = pd.date_range(start=str(morta_year_all_min), periods=len(morta_cols_all)*12, freq='M')
 
             df_death_one2 = pd.DataFrame(full_monthly_index, columns=['date'], dtype='datetime64[ns]')
 
             # Merge all mortality columns into one.
             df_death_one2['deaths'] = pd.concat(
-                [df_death_one[c][0:12] for c in df_death_one[mortality_cols]], axis='rows', ignore_index=True)
+                [df_morta_country[c][0:12] for c in df_morta_country[morta_cols_all]], axis='rows', ignore_index=True)
 
             # Interpolate monthly mortality data to weekly so that it can be used together with other weekly data.
             df_death_one2 = df_death_one2.set_index('date').resample(rule='W').first().interpolate(
@@ -121,32 +118,32 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
 
         elif time_unit == 'weekly':
             # In case of weekly data we can re-use weekly timestamps already provided with the original dataset.
-            # df_death_one2 = df_death_one[['date']].copy()
+            # df_death_one2 = df_morta_country[['date']].copy()
 
-            # From min_deaths_year to max_deaths_year. So that there is data overlap at year boundaries (eg. for 2015
+            # From morta_year_all_min to morta_year_all_max. So that there is data overlap at year boundaries (eg. for 2015
             # 52 -> 53 weeks interpolation).
 
-            # NOTE: Eg. pd.date_range(start=str(min_deaths_year), end=str(max_deaths_year+2), freq='W') would be
+            # NOTE: Eg. pd.date_range(start=str(morta_year_all_min), end=str(morta_year_all_max+2), freq='W') would be
             # simpler, but we need to start at 1st ISO week, while eg. pd.date_range(start='2010', end='2021', freq='W')
             # returns '2010-01-03' as the 1st week of 2010, whereas per ISO-week convention (see eg.
             # pd.date_range(start='2010', end='2011', freq='W')[0].isocalendar()) it's actually the 53rd week of 2009.
             full_weekly_index = []
-            for y in range(min_deaths_year, max_deaths_year + 1):
+            for y in range(morta_year_all_min, morta_year_all_max + 1):
                 for w in range(1, ddate(year=y, month=12, day=28).isocalendar().week + 1):
                     full_weekly_index.append(ddatetime.fromisocalendar(year=y, week=w, day=7).strftime('%Y-%m-%d'))
 
             df_death_one2 = pd.DataFrame(full_weekly_index, columns=['date'], dtype='datetime64[ns]')
 
-            # Merge all mortality_cols columns into one.
+            # Merge all morta_cols_all columns into one.
 
-            # NOTE: Eg. pd.concat([df_death_one[c].dropna() for c in df_death_one[mortality_cols]], axis='rows',
+            # NOTE: Eg. pd.concat([df_morta_country[c].dropna() for c in df_morta_country[morta_cols_all]], axis='rows',
             # ignore_index=True) would be simpler, but column 'deaths_2015_all_ages' which should have 53 records has
             # only 52, so we have to take NaN as ['deaths_2015_all_ages'][52] and interpolate it from its neighbours.
             deaths = []
-            for y in range(min_deaths_year, max_deaths_year + 1):
+            for y in range(morta_year_all_min, morta_year_all_max + 1):
                 w = ddate(year=y, month=12, day=28).isocalendar().week
                 c = 'deaths_{}_all_ages'.format(str(y))
-                deaths = deaths + df_death_one[c][0:w].to_list()
+                deaths = deaths + df_morta_country[c][0:w].to_list()
 
             df_death_one2['deaths'] = deaths
 
@@ -168,10 +165,10 @@ def get_it_together(country, df_covid_all, df_death_all, year, if_interpolate_we
         #  background mortality.
 
         df_merged_one, y_min, y_max = \
-            process_weekly(df_covid_one, df_death_one2, df_weekly_index, year, bckgnd_mort_cols,
+            process_weekly(df_covid_country, df_death_one2, df_weekly_index, year, morta_cols_bgd,
                            if_interpolate_week_53, time_unit)
 
-        plot_weekly(df_merged_one, country, year, bckgnd_mort_cols, y_min, y_max)
+        plot_weekly(df_merged_one, country, year, morta_cols_bgd, y_min, y_max)
 
 
 def process_weekly(df_covid_one, df_death_one2, df_weekly_index, year, bckgnd_mort_cols,
@@ -259,9 +256,9 @@ def process_weekly(df_covid_one, df_death_one2, df_weekly_index, year, bckgnd_mo
     df_merged_one = pd.merge(df_death_one, df_covid_one, how='inner')
 
     # # Exclude the mortality columns which have no data. E.g. many countries have data only for 2015-2019.
-    # bckgnd_mort_cols = [col for col in bckgnd_mort_cols if df_merged_one[col].notnull().values.any()]
+    # morta_cols_bgd = [col for col in morta_cols_bgd if df_merged_one[col].notnull().values.any()]
     # print('mortality_cols after exclude:')
-    # print(bckgnd_mort_cols)
+    # print(morta_cols_bgd)
     df_merged_one['deaths_min'] = df_merged_one[bckgnd_mort_cols].min(axis=1)
     df_merged_one['deaths_max'] = df_merged_one[bckgnd_mort_cols].max(axis=1)
     df_merged_one['deaths_mean'] = df_merged_one[bckgnd_mort_cols].mean(axis=1)
