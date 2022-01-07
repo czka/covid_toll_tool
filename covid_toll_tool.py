@@ -41,13 +41,15 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
     df_morta = pd.read_csv("./excess_mortality.csv", parse_dates=['date'], usecols=morta_cols).reindex(
         columns=morta_cols)
 
-    common_countries = ['ALL'] + sorted(set(df_morta['location']) & set(df_covid['location']))
+    common_countries = sorted(set(df_morta['location']) & set(df_covid['location']))
 
     if if_list_countries:
         list_countries(common_countries)
 
     elif country == 'ALL':
         for country in common_countries:
+            print(country)
+            print(common_countries)
             get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd)
 
     elif country in common_countries:
@@ -61,7 +63,7 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
 def list_countries(common_countries):
     print("Please set '--country' to one of the following {} countries present in both input datasets, or 'ALL', to "
           "process them all one by one: {}.".
-          format(len(common_countries)-1, ', '.join("'{}'".format(c) for c in common_countries)))
+          format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
 # Charts for the adjacent years (2020, 2021, 2022) overlap by one week, so that e.g. the last week of data on
@@ -77,9 +79,12 @@ def list_countries(common_countries):
 # 53rd week is interpolated linearly from 2015's 52nd week and the 1st week of 2016.
 
 def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd):
+    print(country)
     # Select only the data of a specific country.
     df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
+    print(df_covid_country)
     # dropna() below removes any empty 'deaths_<year>_all_ages' columns.
+    # TODO: Fix due to deaths_2021_all_ages not found in line 263 later on.
     df_morta_country = df_morta[df_morta['location'] == country].copy().reset_index(drop=True).dropna(
         axis='columns', how='all')
 
@@ -181,6 +186,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
 
         # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
         # range on that country's charts in different years.
+        # TODO: deaths_noncovid can be lower than any lowest mortality. Include it.
         y_min = df_morta_country_all['deaths'].min()
         y_max = df_morta_country_all['deaths'].max()
 
@@ -299,7 +305,8 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
                     min_deaths_year, max_deaths_year)],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
-
+    # TODO: There are countrie eg. Cuba, Argentina) which had lockdown stringency at 100, but 100 is not visible on the
+    #  chart. Also 0% of postive results in Ecuador (bigus as it is) is not visible.
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
                  'percent of positive results in all COVID-19 tests',
                  'percent of people vaccinated in the country\'s populace',
