@@ -67,8 +67,6 @@ def list_countries(common_countries):
           format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
-# Why this code is the way it is, although at a 1st glance it seems it could be simpler:
-#
 # Charts for the adjacent years (2020, 2021, 2022) overlap by one week, so that e.g. the last week of data on
 # the 2020's chart are a copy of the 1st week on the 2021's chart. Effectively, there are 54 weeks of data on
 # a chart of the 53-weeks long 2020, and 53 weeks of data on charts of 52 weeks-long 2021 and 2022.
@@ -90,6 +88,10 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
 
     morta_year_all_min = int(morta_death_cols_all[0].split('_')[1])
     morta_year_all_max = int(morta_death_cols_all[-1].split('_')[1])
+
+    morta_death_cols_bgd_notnull = [c for c in morta_death_cols_bgd if df_morta_country[c].notnull().any()]
+    morta_year_bgd_notnull_min = morta_death_cols_bgd_notnull[0].split('_')[1]
+    morta_year_bgd_notnull_max = morta_death_cols_bgd_notnull[-1].split('_')[1]
 
     if df_morta_country['time_unit'].nunique() == 1:
         time_unit = df_morta_country['time_unit'].unique()[0]
@@ -185,10 +187,6 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         # TODO: deaths_noncovid can be lower than any lowest mortality. Include it.
         y_min = df_morta_country_all['deaths'].min()
         y_max = df_morta_country_all['deaths'].max()
-
-        morta_death_cols_bgd_notnull = [c for c in morta_death_cols_bgd if df_morta_country[c].notnull().any()]
-        morta_year_bgd_notnull_min = morta_death_cols_bgd_notnull[0].split('_')[1]
-        morta_year_bgd_notnull_max = morta_death_cols_bgd_notnull[-1].split('_')[1]
 
         plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
 
