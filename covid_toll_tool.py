@@ -29,11 +29,12 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
                             'deaths_2016_all_ages', 'deaths_2017_all_ages', 'deaths_2018_all_ages',
                             'deaths_2019_all_ages']
 
+    morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages']
+
+    morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all
+
     covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
                   'people_vaccinated', 'people_fully_vaccinated', 'population']
-
-    morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_bgd + \
-                 ['deaths_2020_all_ages', 'deaths_2021_all_ages']
 
     df_covid = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
@@ -48,12 +49,12 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
 
     elif country == 'ALL':
         for country in common_countries:
-            print(country)
-            print(common_countries)
-            get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd)
+            get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+                            morta_death_cols_all)
 
     elif country in common_countries:
-        get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd)
+        get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+                        morta_death_cols_all)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -66,6 +67,8 @@ def list_countries(common_countries):
           format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
+# Why this code is the way it is, although at a 1st glance it seems it could be simpler:
+#
 # Charts for the adjacent years (2020, 2021, 2022) overlap by one week, so that e.g. the last week of data on
 # the 2020's chart are a copy of the 1st week on the 2021's chart. Effectively, there are 54 weeks of data on
 # a chart of the 53-weeks long 2020, and 53 weeks of data on charts of 52 weeks-long 2021 and 2022.
@@ -78,22 +81,15 @@ def list_countries(common_countries):
 # its death count data series is capped at week 52 anyway in excess_mortality.csv) death count for the missing
 # 53rd week is interpolated linearly from 2015's 52nd week and the 1st week of 2016.
 
-def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd):
-    print(country)
+def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+                    morta_death_cols_all):
+
     # Select only the data of a specific country.
     df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
-    print(df_covid_country)
-    # dropna() below removes any empty 'deaths_<year>_all_ages' columns.
-    # TODO: Fix due to deaths_2021_all_ages not found in line 263 later on.
-    df_morta_country = df_morta[df_morta['location'] == country].copy().reset_index(drop=True).dropna(
-        axis='columns', how='all')
+    df_morta_country = df_morta[df_morta['location'] == country].copy().reset_index(drop=True)
 
-    morta_death_cols_all = df_morta_country.filter(regex='deaths_.*_all_ages').columns
     morta_year_all_min = int(morta_death_cols_all[0].split('_')[1])
     morta_year_all_max = int(morta_death_cols_all[-1].split('_')[1])
-
-    # Use only the background mortality cols that are not empty in the given country's dataset.
-    morta_death_cols_bgd = sorted(set(morta_death_cols_bgd) & set(morta_death_cols_all))
 
     if df_morta_country['time_unit'].nunique() == 1:
         time_unit = df_morta_country['time_unit'].unique()[0]
@@ -136,12 +132,12 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
                 [df_morta_country[c][0:12] for c in df_morta_country[morta_death_cols_all]],
                 axis='rows', ignore_index=True)
 
-            # Interpolate monthly mortality data to weekly so that it can be used together with other weekly data.
+            # Up-sample and interpolate monthly mortality data to weekly so that it can be used with other weekly data.
             df_morta_country_all_monthly = df_morta_country_all_monthly.set_index('date').resample(rule='W').first().\
                 interpolate(limit_area='inside').reset_index()
 
-            # Select all weekly deaths data, prepending it with 1st 4 weeks of 2015 it's missing, due to monthly data
-            # it's been derived from start at 2015-01-31.
+            # Align the up-sampled weekly data with the weekly date index which fully encompasses morta_year_all_min up
+            # to morta_year_all_max.
             df_dates_weekly_all = pd.DataFrame(dates_weekly_all, columns=['date'], dtype='datetime64[ns]')
             df_morta_country_all = pd.merge(left=df_dates_weekly_all, right=df_morta_country_all_monthly, on='date',
                                             how='left')
@@ -190,10 +186,14 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         y_min = df_morta_country_all['deaths'].min()
         y_max = df_morta_country_all['deaths'].max()
 
-        plot_weekly(df_merged_one, country, year, morta_death_cols_bgd, y_min, y_max)
+        morta_death_cols_bgd_notnull = [c for c in morta_death_cols_bgd if df_morta_country[c].notnull().any()]
+        morta_year_bgd_notnull_min = morta_death_cols_bgd_notnull[0].split('_')[1]
+        morta_year_bgd_notnull_max = morta_death_cols_bgd_notnull[-1].split('_')[1]
+
+        plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
 
 
-def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, bckgnd_mort_cols,
+def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, morta_death_cols_bgd,
                    if_interpolate_week_53, time_unit):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
@@ -247,9 +247,9 @@ def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, bc
     df_merged_one = pd.merge(df_morta_country, df_covid_country, how='inner')
 
     # TODO: axis=1 -> axis='columns'?
-    df_merged_one['deaths_min'] = df_merged_one[bckgnd_mort_cols].min(axis=1)
-    df_merged_one['deaths_max'] = df_merged_one[bckgnd_mort_cols].max(axis=1)
-    df_merged_one['deaths_mean'] = df_merged_one[bckgnd_mort_cols].mean(axis=1)
+    df_merged_one['deaths_min'] = df_merged_one[morta_death_cols_bgd].min(axis=1)
+    df_merged_one['deaths_max'] = df_merged_one[morta_death_cols_bgd].max(axis=1)
+    df_merged_one['deaths_mean'] = df_merged_one[morta_death_cols_bgd].mean(axis=1)
 
     # By ISO specification the 28th of December is always in the last week of the year.
     weeks_count = ddate(year, 12, 28).isocalendar().week
@@ -266,9 +266,7 @@ def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, bc
     return df_merged_one
 
 
-def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
-    min_deaths_year = mortality_cols[0].split('_')[1]
-    max_deaths_year = mortality_cols[-1].split('_')[1]
+def plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max):
 
     fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
@@ -296,13 +294,13 @@ def plot_weekly(df_merged_one, country, year, mortality_cols, y_min, y_max):
     axs.fill_between(df_merged_one['date'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
                      color='yellowgreen')
 
-    axs.legend(['lowest death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
-                'average death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
-                'highest death count in {}-{} from all causes'.format(min_deaths_year, max_deaths_year),
+    axs.legend(['lowest death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+                'average death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+                'highest death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
                 'death count in {} from all causes'.format(year),
                 'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
                 'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    min_deaths_year, max_deaths_year)],
+                    morta_year_bgd_notnull_min, morta_year_bgd_notnull_max)],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
     # TODO: There are countrie eg. Cuba, Argentina) which had lockdown stringency at 100, but 100 is not visible on the
