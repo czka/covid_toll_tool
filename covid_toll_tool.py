@@ -114,6 +114,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         for y in range(morta_year_all_min, morta_year_all_max + 1):
             for w in range(1, ddate(year=y, month=12, day=28).isocalendar().week + 1):
                 dates_weekly_all.append(ddatetime.fromisocalendar(year=y, week=w, day=7).strftime('%Y-%m-%d'))
+
         # Append 1st 4 weeks of the following year, to make sure dates_weekly_all is long enough for
         # df_dates_weekly_one_weeks_count later on.
         for w in range(1, 5):
@@ -138,8 +139,8 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
             df_morta_country_all_monthly = df_morta_country_all_monthly.set_index('date').resample(rule='W').first().\
                 interpolate(limit_area='inside').reset_index()
 
-            # Align the up-sampled weekly data with the weekly date index which fully encompasses morta_year_all_min up
-            # to morta_year_all_max.
+            # Align the up-sampled monthly->weekly all-cause mortality data with the weekly date index which fully
+            # encompasses morta_year_all_min up to morta_year_all_max.
             df_dates_weekly_all = pd.DataFrame(dates_weekly_all, columns=['date'], dtype='datetime64[ns]')
             df_morta_country_all = pd.merge(left=df_dates_weekly_all, right=df_morta_country_all_monthly, on='date',
                                             how='left')
@@ -191,7 +192,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
 
 
-def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, morta_death_cols_bgd,
+def process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year, morta_death_cols_bgd,
                    if_interpolate_week_53, time_unit):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
@@ -213,6 +214,10 @@ def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, mo
             resample(rule='W').first().\
             interpolate(limit_area='inside').reset_index()
 
+        # Align the up-sampled daily->monthly->weekly covid mortality data with the weekly date index which fully
+        # encompasses the year specified on command line.
+        temp = pd.merge(left=df_dates_weekly_one, right=temp, on='date', how='left')
+
     df_covid_country = df_covid_country.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
          'new_cases_smoothed': 'mean',
@@ -223,9 +228,6 @@ def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, mo
          'population': 'mean'}
     ).reset_index()
 
-    if time_unit == 'monthly':
-        df_covid_country['new_deaths'] = temp['new_deaths']
-
     df_covid_country['positive_test_percent'] = \
         df_covid_country['new_cases_smoothed'] / df_covid_country['new_tests_smoothed'] * 100
 
@@ -235,13 +237,15 @@ def process_weekly(df_covid_country, df_morta_country, df_weekly_index, year, mo
     df_covid_country['people_fully_vaccinated_percent'] = \
         df_covid_country['people_fully_vaccinated'] / df_covid_country['population'] * 100
 
-    # Take only rows of the given year.
-    df_covid_country = pd.merge(left=df_weekly_index, right=df_covid_country, on='date', how='left')
+    # Take only rows of the year specified on command line.
+    df_covid_country = pd.merge(left=df_dates_weekly_one, right=df_covid_country, on='date', how='left')
 
-    # Merge death count during covid *demics in a given year into the covid DataFrame.
-    df_covid_country = pd.merge(left=df_covid_country, right=df_morta_country, on='date', how='left')
+    if time_unit == 'monthly':
+        # Replace daily->weekly covid mortality data with daily->monthly->weekly so that it matches the monthly->weekly
+        # all-cause mortality data.
+        df_covid_country['new_deaths'] = temp['new_deaths']
 
-    # Merge both datasets now that they are aligned on their dates.
+    # Merge both datasets now that they are complete and aligned on same dates.
     df_merged_one = pd.merge(df_morta_country, df_covid_country, how='inner')
 
     # TODO: axis=1 -> axis='columns'?
