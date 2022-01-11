@@ -23,7 +23,7 @@ if sys.version_info < (3, 9):
     sys.exit(1)
 
 
-def main(country, year, if_list_countries, if_interpolate_week_53):
+def main(country, year, if_list_countries):
     morta_death_cols_bgd = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages',
                             'deaths_2013_all_ages', 'deaths_2014_all_ages', 'deaths_2015_all_ages',
                             'deaths_2016_all_ages', 'deaths_2017_all_ages', 'deaths_2018_all_ages',
@@ -49,11 +49,11 @@ def main(country, year, if_list_countries, if_interpolate_week_53):
 
     elif country == 'ALL':
         for country in common_countries:
-            get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+            get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd,
                             morta_death_cols_all)
 
     elif country in common_countries:
-        get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+        get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd,
                         morta_death_cols_all)
 
     else:
@@ -79,7 +79,7 @@ def list_countries(common_countries):
 # its death count data series is capped at week 52 anyway in excess_mortality.csv) death count for the missing
 # 53rd week is interpolated linearly from 2015's 52nd week and the 1st week of 2016.
 
-def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, morta_death_cols_bgd,
+def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd,
                     morta_death_cols_all):
 
     # Select only the data of a specific country.
@@ -181,7 +181,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
                 to_list()
 
         df_merged_country_one = process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year,
-                                       morta_death_cols_bgd, if_interpolate_week_53, time_unit)
+                                               morta_death_cols_bgd, time_unit)
 
         # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
         # range on that country's charts in different years.
@@ -193,7 +193,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
 
 
 def process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year, morta_death_cols_bgd,
-                   if_interpolate_week_53, time_unit):
+                   time_unit):
     # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
     # interpolation between the 2 known closest values.
     df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
@@ -252,15 +252,6 @@ def process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year
     df_merged_country_one['deaths_min'] = df_merged_country_one[morta_death_cols_bgd].min(axis=1)
     df_merged_country_one['deaths_max'] = df_merged_country_one[morta_death_cols_bgd].max(axis=1)
     df_merged_country_one['deaths_mean'] = df_merged_country_one[morta_death_cols_bgd].mean(axis=1)
-
-    # By ISO specification the 28th of December is always in the last week of the year.
-    weeks_count = ddate(year, 12, 28).isocalendar().week
-
-    # TODO: if_interpolate_week_53 is no longer needed.
-    if if_interpolate_week_53 and weeks_count == 53:
-        df_merged_country_one.loc[52, 'deaths_min'] = (df_merged_country_one['deaths_min'][0] + df_merged_country_one['deaths_min'][51]) / 2
-        df_merged_country_one.loc[52, 'deaths_max'] = (df_merged_country_one['deaths_max'][0] + df_merged_country_one['deaths_max'][51]) / 2
-        df_merged_country_one.loc[52, 'deaths_mean'] = (df_merged_country_one['deaths_mean'][0] + df_merged_country_one['deaths_mean'][51]) / 2
 
     df_merged_country_one['deaths_noncovid'] = df_merged_country_one['deaths_{}_all_ages'.format(str(year))].sub(
         df_merged_country_one['new_deaths'], fill_value=None)
@@ -390,14 +381,14 @@ if __name__ == '__main__':
                         type=int,
                         help="Year to process - e.g. '2020'.")
 
-    parser.add_argument('--dont_interpolate_week_53',
-                        action='store_false',
-                        dest='if_interpolate_week_53',
-                        default=True,
-                        help='Don\'t interpolate the historical 2010-2019 all-cause mortality at week 53 from data of '
-                             'week 1 and 52, for 53-week years (eg. 2020). Such interpolation is enabled by default '
-                             'because the OWID\'s excess_mortality.csv has its historical 2010-2019 all-cause mortality'
-                             ' data capped at week 52.')
+    # parser.add_argument('--dont_interpolate_week_53',
+    #                     action='store_false',
+    #                     dest='if_interpolate_week_53',
+    #                     default=True,
+    #                     help='Don\'t interpolate the historical 2010-2019 all-cause mortality at week 53 from data of '
+    #                          'week 1 and 52, for 53-week years (eg. 2020). Such interpolation is enabled by default '
+    #                          'because the OWID\'s excess_mortality.csv has its historical 2010-2019 all-cause mortality'
+    #                          ' data capped at week 52.')
 
     parser.add_argument('--help', '-h',
                         action='help',
@@ -405,7 +396,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.country, args.year, args.if_list_countries, args.if_interpolate_week_53)
+    # main(args.country, args.year, args.if_list_countries, args.if_interpolate_week_53)
+    main(args.country, args.year, args.if_list_countries)
 
 # TODO:
 #  - Add a note on charts which helps finding it online after printing.
