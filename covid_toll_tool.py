@@ -180,7 +180,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
             df_morta_country[col] = df_morta_country_all[df_morta_country_all['date'].isin(date_range)]['deaths'].\
                 to_list()
 
-        df_merged_one = process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year,
+        df_merged_country_one = process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year,
                                        morta_death_cols_bgd, if_interpolate_week_53, time_unit)
 
         # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
@@ -189,7 +189,7 @@ def get_it_together(country, df_covid, df_morta, year, if_interpolate_week_53, m
         y_min = df_morta_country_all['deaths'].min()
         y_max = df_morta_country_all['deaths'].max()
 
-        plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
+        plot_weekly(df_merged_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
 
 
 def process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year, morta_death_cols_bgd,
@@ -246,44 +246,44 @@ def process_weekly(df_covid_country, df_morta_country, df_dates_weekly_one, year
         df_covid_country['new_deaths'] = temp['new_deaths']
 
     # Merge both datasets now that they are complete and aligned on same dates.
-    df_merged_one = pd.merge(df_morta_country, df_covid_country, how='inner')
+    df_merged_country_one = pd.merge(df_morta_country, df_covid_country, how='inner')
 
     # TODO: axis=1 -> axis='columns'?
-    df_merged_one['deaths_min'] = df_merged_one[morta_death_cols_bgd].min(axis=1)
-    df_merged_one['deaths_max'] = df_merged_one[morta_death_cols_bgd].max(axis=1)
-    df_merged_one['deaths_mean'] = df_merged_one[morta_death_cols_bgd].mean(axis=1)
+    df_merged_country_one['deaths_min'] = df_merged_country_one[morta_death_cols_bgd].min(axis=1)
+    df_merged_country_one['deaths_max'] = df_merged_country_one[morta_death_cols_bgd].max(axis=1)
+    df_merged_country_one['deaths_mean'] = df_merged_country_one[morta_death_cols_bgd].mean(axis=1)
 
     # By ISO specification the 28th of December is always in the last week of the year.
     weeks_count = ddate(year, 12, 28).isocalendar().week
 
     # TODO: if_interpolate_week_53 is no longer needed.
     if if_interpolate_week_53 and weeks_count == 53:
-        df_merged_one.loc[52, 'deaths_min'] = (df_merged_one['deaths_min'][0] + df_merged_one['deaths_min'][51]) / 2
-        df_merged_one.loc[52, 'deaths_max'] = (df_merged_one['deaths_max'][0] + df_merged_one['deaths_max'][51]) / 2
-        df_merged_one.loc[52, 'deaths_mean'] = (df_merged_one['deaths_mean'][0] + df_merged_one['deaths_mean'][51]) / 2
+        df_merged_country_one.loc[52, 'deaths_min'] = (df_merged_country_one['deaths_min'][0] + df_merged_country_one['deaths_min'][51]) / 2
+        df_merged_country_one.loc[52, 'deaths_max'] = (df_merged_country_one['deaths_max'][0] + df_merged_country_one['deaths_max'][51]) / 2
+        df_merged_country_one.loc[52, 'deaths_mean'] = (df_merged_country_one['deaths_mean'][0] + df_merged_country_one['deaths_mean'][51]) / 2
 
-    df_merged_one['deaths_noncovid'] = df_merged_one['deaths_{}_all_ages'.format(str(year))].sub(
-        df_merged_one['new_deaths'], fill_value=None)
+    df_merged_country_one['deaths_noncovid'] = df_merged_country_one['deaths_{}_all_ages'.format(str(year))].sub(
+        df_merged_country_one['new_deaths'], fill_value=None)
 
-    return df_merged_one
+    return df_merged_country_one
 
 
-def plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max):
+def plot_weekly(df_merged_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max):
 
     fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
     axs2 = axs.twinx()
 
     # TODO: include monthly/weekly in death count legend.
-    df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
-                       color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
-                       ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
+    df_merged_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
+                               color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
+                               ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                             'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
-    df_merged_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                       color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
-                       style=['-', '-', '--', '-'],
-                       ax=axs2, x='date', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
+    df_merged_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
+                               color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
+                               style=['-', '-', '--', '-'],
+                               ax=axs2, x='date', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
                                              'people_fully_vaccinated_percent'])
 
     # TODO: Watch out for the status of 'x_compat' above. It's not documented where it should have been [1] although
@@ -293,7 +293,7 @@ def plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_
     #  [3] https://stackoverflow.com/questions/12945971/pandas-timeseries-plot-setting-x-axis-major-and-minor-ticks-and-labels
     #  [4] https://stackoverflow.com/questions/30133280/pandas-bar-plot-changes-date-format
 
-    axs.fill_between(df_merged_one['date'], df_merged_one['deaths_min'], df_merged_one['deaths_max'], alpha=0.25,
+    axs.fill_between(df_merged_country_one['date'], df_merged_country_one['deaths_min'], df_merged_country_one['deaths_max'], alpha=0.25,
                      color='yellowgreen')
 
     axs.legend(['lowest death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
@@ -319,13 +319,13 @@ def plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_
     axs.set_xlabel(xlabel="date", loc="right")
 
     axs2.set(ylabel="percent",
-             xlim=[df_merged_one['date'].head(1), df_merged_one['date'].tail(1)],
+             xlim=[df_merged_country_one['date'].head(1), df_merged_country_one['date'].tail(1)],
              ylim=[0, 100])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
     axs.set(ylabel="number of people",
-            xlim=[df_merged_one['date'].head(1), df_merged_one['date'].tail(1)],
+            xlim=[df_merged_country_one['date'].head(1), df_merged_country_one['date'].tail(1)],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
 
     axs2.set_xlabel(xlabel="date", loc="right")
@@ -362,7 +362,7 @@ def plot_weekly(df_merged_one, country, year, morta_year_bgd_notnull_min, morta_
     fig.savefig('{}_{}.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
                 pil_kwargs={'optimize': True})
 
-    df_merged_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
+    df_merged_country_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
 if __name__ == '__main__':
