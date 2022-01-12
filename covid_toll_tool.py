@@ -111,10 +111,17 @@ def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, mor
                                                       morta_death_cols_bgd)
 
         # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
-        # range on that country's charts in different years.
-        # TODO: deaths_noncovid can be lower than any lowest mortality. Include it.
-        y_min = df_morta_country_all['deaths'].min()
-        y_max = df_morta_country_all['deaths'].max()
+        # range on that country's charts in different years. For some countries the number of non-covid deaths in a
+        # given year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in
+        # previous years. For some, it's higher than the highest number of deaths in previous years - probably due to
+        # borked data, but anyway (e.g. Kyrgyzstan in 2020 - see https://github.com/owid/covid-19-data/issues/1550).
+        y_min = min(df_morta_country_all.set_index('date')['deaths'].sub(
+            df_covid_country_all.set_index('date')['new_deaths']).min(),
+                    df_morta_country_all['deaths'].min())
+
+        y_max = max(df_morta_country_all.set_index('date')['deaths'].sub(
+            df_covid_country_all.set_index('date')['new_deaths']).max(),
+                    df_morta_country_all['deaths'].max())
 
         plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
 
@@ -210,21 +217,10 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit):
     # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
     df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
 
-    # Resample the daily covid data to match the weekly mortality data, with week date on Sunday.
-    # resample().sum() removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides"
-    # the `date` column by setting an index on it, but we are going to need this column later on, thus bringing it back
-    # with reset_index().
-
-    # TODO: Come up with something neater than this 'temp' dataframe.
-    if time_unit == 'monthly':
-        temp = df_covid_country.resample(rule='M', on='date').agg({'new_deaths': 'sum'}). \
-            resample(rule='W').first(). \
-            interpolate(limit_area='inside').reset_index()
-
-        # Align the up-sampled daily->monthly->weekly covid mortality data with the weekly date index which fully
-        # encompasses the year specified on command line.
-        temp = pd.merge(left=df_dates_weekly_one, right=temp, on='date', how='left')
-
+    # Resample the daily covid data to match the weekly mortality data, with week date on Sunday. resample().sum()
+    # removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides" the `date`
+    # column by setting an index on it, but we are going to need this column later on, thus bringing it back with
+    # reset_index().
     df_covid_country_all = df_covid_country.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
          'new_cases_smoothed': 'mean',
@@ -244,13 +240,20 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit):
     df_covid_country_all['people_fully_vaccinated_percent'] = \
         df_covid_country_all['people_fully_vaccinated'] / df_covid_country_all['population'] * 100
 
+    # If mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
+    # TODO: Come up with something neater than this 'temp' name.
+    if time_unit == 'monthly':
+        temp = df_covid_country.resample(rule='M', on='date').agg({'new_deaths': 'sum'}). \
+            resample(rule='W').first(). \
+            interpolate(limit_area='inside').reset_index()
+
+        # Align the up-sampled daily->monthly->weekly covid mortality data with the df_covid_country_all's date index,
+        # and replace 'new_deaths' there with daily->monthly->weekly data.
+        df_covid_country_all['new_deaths'] = pd.merge(
+            left=df_covid_country_all[['date']], right=temp, on='date', how='left')['new_deaths']
+
     # Take only rows of the year specified on command line.
     df_covid_country_one = pd.merge(left=df_dates_weekly_one, right=df_covid_country_all, on='date', how='left')
-
-    if time_unit == 'monthly':
-        # Replace daily->weekly covid mortality data with daily->monthly->weekly so that it matches the monthly->weekly
-        # all-cause mortality data.
-        df_covid_country_one['new_deaths'] = temp['new_deaths']
 
     return df_covid_country_all, df_covid_country_one
 
