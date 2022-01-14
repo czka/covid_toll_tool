@@ -123,7 +123,8 @@ def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, mor
             df_covid_country_all.set_index('date')['new_deaths']).max(),
                     df_morta_country_all['deaths'].max())
 
-        plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max)
+        plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max,
+                    time_unit, y_min, y_max)
 
 
 def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_death_cols_all, country):
@@ -231,6 +232,11 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit):
          'population': 'mean'}
     ).reset_index()
 
+    # TODO: Interpolate again, due to possible (though rare) time interval irregularities in the upstream data. Mean
+    #  of such non-daily records may be NaN. Eg. Portugal used to have a couple bi-weekly records of
+    #  'stringency_index' = 0 (see https://github.com/owid/covid-19-data/issues/2258).
+
+    # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
     df_covid_country_all['positive_test_percent'] = \
         df_covid_country_all['new_cases_smoothed'] / df_covid_country_all['new_tests_smoothed'] * 100
 
@@ -279,38 +285,42 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
 # [2]https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html
 # [3]https://stackoverflow.com/questions/12945971/pandas-timeseries-plot-setting-x-axis-major-and-minor-ticks-and-labels
 # [4]https://stackoverflow.com/questions/30133280/pandas-bar-plot-changes-date-format
-def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, y_min, y_max):
+def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, time_unit,
+                y_min, y_max):
 
     fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
     axs2 = axs.twinx()
 
-    # TODO: include monthly/weekly in death count legend.
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
-                               color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
-                               ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
-                                            'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
+                              color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
+                              ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
+                                                   'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                               color=['fuchsia', 'mediumslateblue', 'mediumspringgreen', 'mediumspringgreen'],
-                               style=['-', '-', '--', '-'],
-                               ax=axs2, x='date', y=['stringency_index', 'positive_test_percent', 'people_vaccinated_percent',
-                                             'people_fully_vaccinated_percent'])
+                              color=['fuchsia', 'cornflowerblue', 'mediumspringgreen', 'mediumspringgreen'],
+                              style=['-', '-', '--', '-'],
+                              ax=axs2, x='date', y=['stringency_index', 'positive_test_percent',
+                                                    'people_vaccinated_percent', 'people_fully_vaccinated_percent'])
 
-    axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'], df_merge_country_one['deaths_max'], alpha=0.25,
-                     color='yellowgreen')
+    axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'],
+                     df_merge_country_one['deaths_max'], alpha=0.25, color='yellowgreen')
 
-    axs.legend(['lowest death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                'average death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                'highest death count in {}-{} from all causes'.format(morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                'death count in {} from all causes'.format(year),
-                'death count in {} from all causes MINUS the number of deaths attributed to COVID-19'.format(year),
-                'range between the highest and the lowest death count from all causes in {}-{}'.format(
-                    morta_year_bgd_notnull_min, morta_year_bgd_notnull_max)],
+    axs.legend(['{} lowest death count in {}-{} from all causes'.format(
+                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+                '{} average death count in {}-{} from all causes'.format(
+                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+                '{} highest death count in {}-{} from all causes'.format(
+                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+                '{} death count in {} from all causes'.format(
+                    time_unit, year),
+                '{} death count in {} from all causes EXCLUDING deaths attributed to COVID-19'.format(
+                    time_unit, year),
+                'range between highest and lowest {} death count from all causes in {}-{}'.format(
+                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max)],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
-    # TODO: There are countrie eg. Cuba, Argentina) which had lockdown stringency at 100, but 100 is not visible on the
-    #  chart. Also 0% of postive results in Ecuador (bigus as it is) is not visible.
+
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
                  'percent of positive results in all COVID-19 tests',
                  'percent of people vaccinated in the country\'s populace',
@@ -324,7 +334,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs2.set(ylabel="percent",
              xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
-             ylim=[0, 100])
+             ylim=[-0.25, 100.5])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
@@ -394,6 +404,8 @@ if __name__ == '__main__':
                         type=int,
                         help="Year to process - e.g. '2020'.")
 
+    # TODO: Consider adding a similar interpolation toggle, which would decide if to interpolate upstream data gaps in
+    #  df_covid_country or not.
     # parser.add_argument('--dont_interpolate_week_53',
     #                     action='store_false',
     #                     dest='if_interpolate_week_53',
