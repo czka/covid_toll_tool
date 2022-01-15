@@ -51,7 +51,7 @@ https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=t
 The only information `covid_toll_tool.py`'s charts show that you won't find in the original OWID's data directly, is the
 death count from all causes **excluding** deaths attributed to COVID-19 (black dashed line). It's derived as the
 all-cause mortality minus the COVID-19 death toll. Viewed together with the all-cause mortality (black solid line) it
-allows to assess the actual contribution of COVID-19 to the overall mortality in a given period.
+allows to assess the actual contribution of COVID-19 to country's overall mortality in a given period.
 
 OWID obtain their data from official sources like government healthcare agencies and academic institutions. For more
 information on particular datasets please visit the following resources:
