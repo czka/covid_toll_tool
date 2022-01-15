@@ -23,7 +23,7 @@ if sys.version_info < (3, 9):
     sys.exit(1)
 
 
-def main(country, year, if_list_countries):
+def main(country, year, if_list_countries, if_interpolate):
     morta_death_cols_bgd = ['deaths_2010_all_ages', 'deaths_2011_all_ages', 'deaths_2012_all_ages',
                             'deaths_2013_all_ages', 'deaths_2014_all_ages', 'deaths_2015_all_ages',
                             'deaths_2016_all_ages', 'deaths_2017_all_ages', 'deaths_2018_all_ages',
@@ -49,12 +49,12 @@ def main(country, year, if_list_countries):
 
     elif country == 'ALL':
         for country in common_countries:
-            get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd,
-                            morta_death_cols_all)
+            get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all,
+                            if_interpolate)
 
     elif country in common_countries:
-        get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd,
-                        morta_death_cols_all)
+        get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all,
+                        if_interpolate)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -79,7 +79,7 @@ def list_countries(common_countries):
 # its death count data series is capped at week 52 anyway in excess_mortality.csv) death count for the missing
 # 53rd week is interpolated linearly from 2015's 52nd week and the 1st week of 2016.
 
-def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all):
+def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate):
 
     # Select only the data of a specific country.
     df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
@@ -105,10 +105,11 @@ def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, mor
         df_morta_country_all, df_morta_country_one = process_morta_df(df_morta_country, df_dates_weekly_one, time_unit,
                                                                       morta_death_cols_all, country)
 
-        df_covid_country_all, df_covid_country_one = process_covid_df(df_covid_country, df_dates_weekly_one, time_unit)
+        df_covid_country_all, df_covid_country_one = process_covid_df(df_covid_country, df_dates_weekly_one, time_unit,
+                                                                      if_interpolate)
 
         df_merge_country_one = merge_covid_morta_dfs(df_covid_country_one, df_morta_country_one, year,
-                                                      morta_death_cols_bgd)
+                                                     morta_death_cols_bgd)
 
         # Find the Y axis bottom and top value in all-time death counts for a given country; to have an identical Y axis
         # range on that country's charts in different years. For some countries the number of non-covid deaths in a
@@ -208,15 +209,18 @@ def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_dea
     return df_morta_country_all, df_morta_country_one
 
 
-def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit):
-    # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
-    # interpolation between the 2 known closest values.
-    df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
-    df_covid_country['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interpolate):
 
-    # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
-    # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
-    df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
+    if if_interpolate:
+        # TODO: Interpolate 'new_cases_smoothed', 'new_tests_smoothed'. Due to e.g. Mongolia 2021
+        # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
+        # interpolation between the 2 known closest values.
+        df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+
+        # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
+        # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
+        df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
 
     # Resample the daily covid data to match the weekly mortality data, with week date on Sunday. resample().sum()
     # removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides" the `date`
@@ -268,10 +272,9 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
     # Merge both datasets now that they are complete and aligned on same dates.
     df_merge_country_one = pd.merge(df_morta_country, df_covid_country_one, how='inner')
 
-    # TODO: axis=1 -> axis='columns'?
-    df_merge_country_one['deaths_min'] = df_merge_country_one[morta_death_cols_bgd].min(axis=1)
-    df_merge_country_one['deaths_max'] = df_merge_country_one[morta_death_cols_bgd].max(axis=1)
-    df_merge_country_one['deaths_mean'] = df_merge_country_one[morta_death_cols_bgd].mean(axis=1)
+    df_merge_country_one['deaths_min'] = df_merge_country_one[morta_death_cols_bgd].min(axis='columns')
+    df_merge_country_one['deaths_max'] = df_merge_country_one[morta_death_cols_bgd].max(axis='columns')
+    df_merge_country_one['deaths_mean'] = df_merge_country_one[morta_death_cols_bgd].mean(axis='columns')
 
     df_merge_country_one['deaths_noncovid'] = df_merge_country_one['deaths_{}_all_ages'.format(str(year))].sub(
         df_merge_country_one['new_deaths'], fill_value=None)
@@ -322,7 +325,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                bbox_to_anchor=(-0.0845, 1.3752))
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
-                 'percent of positive results in all COVID-19 tests',
+                 'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
                  'percent of people vaccinated in the country\'s populace',
                  'percent of people vaccinated fully in the country\'s populace'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
@@ -338,14 +341,14 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
-    axs.set(ylabel="number of people",
+    axs.set(ylabel="count",
             xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
 
     axs2.set_xlabel(xlabel="date", loc="right")
 
     # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
-    # For more details see https://github.com/matplotlib/matplotlib/issues/3706.
+    # See https://github.com/matplotlib/matplotlib/issues/3706.
     legend = axs.get_legend()
     axs.get_legend().remove()
     axs2.add_artist(legend)
@@ -355,21 +358,11 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
 
     mpyplot.figtext(0.065, 0,
-                    'Data sources, via Our World in Data (https://ourworldindata.org, '
-                    'https://github.com/owid/covid-19-data):\n'
-                    '- All-cause mortality: Human Mortality Database Short-term Mortality Fluctuations project. '
-                    'https://www.mortality.org and World Mortality Dataset. '
-                    'https://github.com/akarlinsky/world_mortality\n'
-                    '- COVID-19 mortality: Center for Systems Science and Engineering at Johns Hopkins University. '
-                    'https://github.com/CSSEGISandData/COVID-19\n'
-                    '- Lockdown stringency index: Hale, T. et al. A global panel database of pandemic policies (Oxford '
-                    'COVID-19 Government Response Tracker). Nature Human Behaviour (2021). '
-                    'https://doi.org/10.1038/s41562-021-01079-8\n'
-                    '- Vaccinations: Mathieu, E. et al. A global database of COVID-19 vaccinations. Nature Human '
-                    'Behaviour (2021). https://doi.org/10.1038/s41562-021-01122-8\n'
-                    '- Testing: Hasell, J., Mathieu, E., Beltekian, D. et al. A cross-country database of COVID-19 '
-                    'testing. Sci Data 7, 345 (2020). https://doi.org/10.1038/s41597-020-00688-8',
-                    fontsize=6.5, va="bottom", ha="left", fontstretch="extra-condensed")
+                    "This chart was downloaded from https://github.com/czka/covid_toll_tool.\n"
+                    "Chart's data source is OWID (Our World in Data), https://github.com/owid/covid-19-data.\n"
+                    "For more information about the data presented on this chart please see "
+                    "https://github.com/czka/covid_toll_tool/blob/main/README.md.",
+                    fontsize=9, va="bottom", ha="left", linespacing=1.5, fontstyle='italic')
 
     # mpyplot.tight_layout(pad=1)
 
@@ -404,16 +397,14 @@ if __name__ == '__main__':
                         type=int,
                         help="Year to process - e.g. '2020'.")
 
-    # TODO: Consider adding a similar interpolation toggle, which would decide if to interpolate upstream data gaps in
-    #  df_covid_country or not.
-    # parser.add_argument('--dont_interpolate_week_53',
-    #                     action='store_false',
-    #                     dest='if_interpolate_week_53',
-    #                     default=True,
-    #                     help='Don\'t interpolate the historical 2010-2019 all-cause mortality at week 53 from data of '
-    #                          'week 1 and 52, for 53-week years (eg. 2020). Such interpolation is enabled by default '
-    #                          'because the OWID\'s excess_mortality.csv has its historical 2010-2019 all-cause mortality'
-    #                          ' data capped at week 52.')
+    parser.add_argument('--interpolate',
+                        action='store_true',
+                        dest='if_interpolate',
+                        default=False,
+                        help='Interpolate data gaps present in the columns the script reads from the input '
+                             'owid-covid-data.csv, linearly from the missing data\'s nearest neighbours. For the sake '
+                             'of a more complete chart, but at a cost of a less accurate representation of some of the '
+                             'input data. By default interpolation is disabled.')
 
     parser.add_argument('--help', '-h',
                         action='help',
@@ -421,8 +412,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # main(args.country, args.year, args.if_list_countries, args.if_interpolate_week_53)
-    main(args.country, args.year, args.if_list_countries)
+    main(args.country, args.year, args.if_list_countries, args.if_interpolate)
 
 # TODO:
 #  - Add a note on charts which helps finding it online after printing.

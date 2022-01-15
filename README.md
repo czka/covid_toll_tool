@@ -4,13 +4,13 @@ This repository contains a Python script along with PNG charts and CSV datasets 
 compared to COVID-19 mortality, for a given country and year, in the context of lockdown stringency, vaccinations count,
 virus testing, and the country's all-cause mortality in preceding years.
 
-## How to use this:
+## How to use this
 
-### Browse recent charts and datasets:
+### Browse charts and their datasets, updated once in few weeks:
 
 - To see all charts on a single page: Click on [CHARTS.md](CHARTS.md).
 
-- To see a single chart, or its source dataset:
+- To see a single chart, or its dataset:
 
   - Enter directory [covid_toll_ALL](covid_toll_ALL) which contains charts (in PNG format) and data (in CSV format) for
     countries which have had their data in both the
