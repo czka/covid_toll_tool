@@ -8,7 +8,8 @@ virus testing, and the country's all-cause mortality in preceding years.
 
 ### Browse charts and their datasets, updated once in few weeks:
 
-- To see all charts on a single page click this [CHARTS.md](CHARTS.md) link. Here's a sample for just 3 countries:
+- To see all charts on a single page click this [CHARTS.md](CHARTS.md) link. Here's a sample of just 3 countries from
+  that file:
 
 - To see only a single chart or dataset for a given country and year:
 
