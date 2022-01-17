@@ -49,12 +49,10 @@ def main(country, year, if_list_countries, if_interpolate):
 
     elif country == 'ALL':
         for country in common_countries:
-            get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all,
-                            if_interpolate)
+            orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate)
 
     elif country in common_countries:
-        get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all,
-                        if_interpolate)
+        orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -67,19 +65,18 @@ def list_countries(common_countries):
           format(len(common_countries), ', '.join("'{}'".format(c) for c in common_countries)))
 
 
-# Charts for the adjacent years (2020, 2021, 2022) overlap by one week, so that e.g. the last week of data on
-# the 2020's chart are a copy of the 1st week on the 2021's chart. Effectively, there are 54 weeks of data on
-# a chart of the 53-weeks long 2020, and 53 weeks of data on charts of 52 weeks-long 2021 and 2022.
+# Charts for the adjacent years (2020, 2021, 2022) overlap by one week, so that e.g. the last week of data on the 2020's
+# chart is a copy of the 1st week on the 2021's chart. Effectively, there are 54 weeks of data on a chart of the
+# 53-weeks long 2020, and 53 weeks of data on charts of 52 weeks-long 2021 and 2022.
 #
-# All-cause mortality weekly data series in OWID's excess_mortality.csv for 2010-2019 are all 52 weeks-long. To
-# be able to derive and draw 54 weeks of min, max and mean historical 2010-2019 mortality for a 2020 chart, I
-# append each such year's death count series with a following year's 1st 2 weeks - e.g. death count 2010's
-# series is appended with the 1st 2 weeks of 2011, 2011's series with the 1st 2 weeks of 2012 etc. For 2021 and
-# 2022 charts, which are 53 weeks-long, only one such week is appended. In case of 2015 (which has 53 weeks, but
-# its death count data series is capped at week 52 anyway in excess_mortality.csv) death count for the missing
-# 53rd week is interpolated linearly from 2015's 52nd week and the 1st week of 2016.
-
-def get_it_together(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate):
+# All-cause mortality weekly data series in OWID's excess_mortality.csv for 2010-2019 are all 52 weeks-long. To derive
+# and draw 54 weeks of min, max and mean historical 2010-2019 mortality for a 2020 chart, I append each such year's
+# death count series with a following year's 1st 2 weeks - e.g. death count 2010's series is appended with the 1st 2
+# weeks of 2011, 2011's series with the 1st 2 weeks of 2012 etc. For 2021 and 2022 charts, which are 53 weeks-long, only
+# one such week is appended. In case of 2015 (which has 53 weeks, but its death count data series is capped at week 52
+# anyway in excess_mortality.csv) death count for the missing 53rd week is interpolated linearly from 2015's 52nd week
+# and the 1st week of 2016.
+def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate):
 
     # Select only the data of a specific country.
     df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
@@ -212,15 +209,15 @@ def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_dea
 def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interpolate):
 
     if if_interpolate:
-        # TODO: Interpolate 'new_cases_smoothed', 'new_tests_smoothed'. Due to e.g. Mongolia 2021
-        # For some reason the vaccinated counts are missing for a number of dates. Filling them in with a linear
-        # interpolation between the 2 known closest values.
+        # Fill any NaN values with interpolation between the 2 known closest values. Zeros are treated as real data and
+        # left intact. Eg. vaccination counts and stringency index data are notoriously missing, Mexico and Ecuador had
+        # single missing records of 'new_deaths' at d2e597487d etc.
         df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
-
-        # Gaps happen in lockdown stringency data, too. OWID only take them from the OxCGRT project as they are (see eg.
-        # https://github.com/owid/covid-19-data/issues/1961#issuecomment-918357447).
         df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['new_deaths'].interpolate(limit_area='inside', inplace=True)
 
     # Resample the daily covid data to match the weekly mortality data, with week date on Sunday. resample().sum()
     # removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides" the `date`
@@ -236,9 +233,20 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
          'population': 'mean'}
     ).reset_index()
 
-    # TODO: Interpolate again, due to possible (though rare) time interval irregularities in the upstream data. Mean
-    #  of such non-daily records may be NaN. Eg. Portugal used to have a couple bi-weekly records of
-    #  'stringency_index' = 0 (see https://github.com/owid/covid-19-data/issues/2258).
+    if if_interpolate:
+        # Interpolate again - now between the weekly values. Due to possible (although very rare) time interval
+        # irregularities in the OWID's data, which may cause weekly mean of such non-daily records to be NaN. Eg.
+        # Portugal used to have a couple bi-weekly records of 'stringency_index' (see
+        # https://github.com/owid/covid-19-data/issues/2258). There was a similar problem with Estonia, Greece and
+        # Latvia at that time. I haven't actually observed such issues with data series other than 'stringency index',
+        # but let's interpolate them away as well, just in case. This won't do harm - if they don't have NaN records,
+        # interpolation will just leave them intact.
+        df_covid_country_all['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['stringency_index'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['new_deaths'].interpolate(limit_area='inside', inplace=True)
 
     # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
     df_covid_country_all['positive_test_percent'] = \
@@ -250,7 +258,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
     df_covid_country_all['people_fully_vaccinated_percent'] = \
         df_covid_country_all['people_fully_vaccinated'] / df_covid_country_all['population'] * 100
 
-    # If mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
+    # If all-cause mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
     # TODO: Come up with something neater than this 'temp' name.
     if time_unit == 'monthly':
         temp = df_covid_country.resample(rule='M', on='date').agg({'new_deaths': 'sum'}). \
@@ -415,5 +423,4 @@ if __name__ == '__main__':
     main(args.country, args.year, args.if_list_countries, args.if_interpolate)
 
 # TODO:
-#  - Add a note on charts which helps finding it online after printing.
 #  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
