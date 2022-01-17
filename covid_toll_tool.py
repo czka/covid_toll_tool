@@ -421,6 +421,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args.country, args.year, args.if_list_countries, args.if_interpolate)
-
-# TODO:
-#  - Link few PNG charts in the README. Poland, US, Sweden, Belarus, Japan?
