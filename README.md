@@ -59,11 +59,11 @@ all-cause mortality minus the number of deaths attributed to COVID-19. Viewed to
 (black solid line) it allows to assess the actual contribution of COVID-19 to country's total mortality in a given
 period. This metric should be taken with a grain of salt however, as deaths are commonly attributed to COVID-19
 according to COVID-19 test results alone, while the count of positive COVID-19 test results is an artifact of the total
-number of tests conducted, which fluctuates in time a lot: [The more tests, the more test results](
+number of tests conducted, which fluctuates in time a lot: [The more tests - the more test results](
 https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases%2C+tests%2C+positive+and+reproduction+rate&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL),
-[the more test results, the more positive test results (aka "cases")](
+[the more test results - the more positive test results (aka "cases")](
 https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases%2C+tests%2C+positive+and+reproduction+rate&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL),
-[the more positive test results ("cases"), the more deaths attributed to covid](
+[the more positive test results ("cases") - the more deaths attributed to covid](
 https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases+and+deaths&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL).
 
 - Percent of people vaccinated in country's populace - partially, fully and booster doses.
