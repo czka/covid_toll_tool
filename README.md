@@ -12,7 +12,7 @@ virus testing, and the country's all-cause mortality in preceding years.
   are few sample charts from that file:
 |Poland 2020|Israel 2021|
 |-|-|
-![Poland 2020](./covid_toll_ALL/Poland_2020.png)|![Israel 2021](./covid_toll_ALL/Israel_2021.png)|
+|![Poland 2020](./covid_toll_ALL/Poland_2020.png)|![Israel 2021](./covid_toll_ALL/Israel_2021.png)|
 
 - To see only a single chart or dataset for a given country and year:
 
