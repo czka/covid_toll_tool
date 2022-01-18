@@ -1,3 +1,8 @@
+These charts show all-cause mortality compared to COVID-19 mortality for a given country and year, in the context of
+lockdown stringency, vaccinations count, virus testing, and the country's all-cause mortality in preceding years. They
+were rendered with [covid_toll_tool.py](covid_toll_tool.py) script from data provided by the [Our World in Data (OWID)](
+https://ourworldindata.org/) project. See [README.md](README.md) for more details.
+
 |2020|2021|
 |-|-|
 |Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|
