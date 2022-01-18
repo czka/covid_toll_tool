@@ -6,7 +6,7 @@ virus testing, and the country's all-cause mortality in preceding years.
 
 ## How to use this
 
-### Browse charts and their datasets, updated once in few weeks:
+### Browse charts and their datasets:
 
 - To see all charts on a single page click this [CHARTS.md](CHARTS.md) link. I update them every couple of weeks. Here
   are few sample charts from that file:
@@ -26,6 +26,10 @@ virus testing, and the country's all-cause mortality in preceding years.
   - Click on any file. E.g. on the [covid_toll_ALL/Poland_2021.png](covid_toll_ALL/Poland_2021.png) to see the chart for
     Poland in 2021, or the [covid_toll_ALL/Poland_2021.csv](covid_toll_ALL/Poland_2021.csv) to see the chart's input
     data.
+
+Charts are rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. By default, this
+interpolation is disabled - please see the script's code and `--help` output for more details. Updated charts are
+uploaded every few weeks when [I](https://github.com/czka) decide enough new data are available.
 
 ### Render most up-to-date charts and datasets yourself:
 
@@ -73,7 +77,7 @@ https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=t
 - Percent of people vaccinated in country's populace - partially, fully and booster doses.
 
 OWID obtains their data from official sources like government healthcare agencies and academic institutions. For more
-information, please visit their [README on the excess mortality data](
+information, please visit their [README on the mortality data](
 https://github.com/owid/covid-19-data/tree/master/public/data/excess_mortality), [README about the data on COVID-19](
 https://github.com/owid/covid-19-data/tree/master/public/data) and the following resources those READMEs refer to:
 
