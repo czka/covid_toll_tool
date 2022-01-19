@@ -29,7 +29,8 @@ def main(country, year, if_list_countries, if_interpolate):
                             'deaths_2016_all_ages', 'deaths_2017_all_ages', 'deaths_2018_all_ages',
                             'deaths_2019_all_ages']
 
-    morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages']
+    morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages',
+                                                   'deaths_2022_all_ages']
 
     morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all
 
