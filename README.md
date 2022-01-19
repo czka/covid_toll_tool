@@ -29,7 +29,7 @@ virus testing, and the country's all-cause mortality in preceding years.
 
 Charts are rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. By default, this
 interpolation is disabled - please see the script's code and `--help` output for more details. Updated charts are
-uploaded every few weeks when [I](https://github.com/czka) decide enough new data are available.
+uploaded every few days when [I](https://github.com/czka) decide enough new data are available.
 
 ### Render most up-to-date charts and datasets yourself:
 
