@@ -352,7 +352,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
 
     # TODO: Indicate it's an iso-week date at Sun.
-    axs.set_xlabel(xlabel="date", loc="right")
+    axs.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
     axs2.set(ylabel="percent",
              xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
@@ -364,7 +364,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
             xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
 
-    axs2.set_xlabel(xlabel="date", loc="right")
+    axs2.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
     # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
     # See https://github.com/matplotlib/matplotlib/issues/3706.
