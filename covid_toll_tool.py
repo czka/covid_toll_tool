@@ -396,7 +396,7 @@ if __name__ == '__main__':
     mutually_exclusive.add_argument('--list_countries',
                                     action='store_true',
                                     dest='if_list_countries',
-                                    help='List countries available in both input CSV.')
+                                    help='List countries available in both input CSV files.')
 
     mutually_exclusive.add_argument('--country',
                                     help="Country to process - e.g. 'Poland'. Use 'ALL' to process all countries one by"
