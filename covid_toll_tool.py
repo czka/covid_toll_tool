@@ -35,7 +35,7 @@ def main(country, year, if_list_countries, if_interpolate):
     morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all
 
     covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
-                  'people_vaccinated', 'people_fully_vaccinated', 'population']
+                  'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'population']
 
     df_covid = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
@@ -215,6 +215,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         # single missing records of 'new_deaths' at d2e597487d etc.
         df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['total_boosters'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
@@ -231,6 +232,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
+         'total_boosters': 'mean',
          'population': 'mean'}
     ).reset_index()
 
@@ -244,6 +246,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         # interpolation will just leave them intact.
         df_covid_country_all['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['total_boosters'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['stringency_index'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
@@ -258,6 +261,9 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
 
     df_covid_country_all['people_fully_vaccinated_percent'] = \
         df_covid_country_all['people_fully_vaccinated'] / df_covid_country_all['population'] * 100
+
+    df_covid_country_all['total_boosters_percent'] = \
+        df_covid_country_all['total_boosters'] / df_covid_country_all['population'] * 100
 
     # If all-cause mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
     # TODO: Come up with something neater than this 'temp' name.
@@ -310,10 +316,12 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                                                    'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                              color=['fuchsia', 'cornflowerblue', 'mediumspringgreen', 'mediumspringgreen'],
-                              style=['-', '-', '--', '-'],
+                              color=['fuchsia', 'cornflowerblue', 'mediumspringgreen', 'mediumspringgreen',
+                                     'mediumspringgreen'],
+                              style=['-', '-', '--', '-', '-.'],
                               ax=axs2, x='date', y=['stringency_index', 'positive_test_percent',
-                                                    'people_vaccinated_percent', 'people_fully_vaccinated_percent'])
+                                                    'people_vaccinated_percent', 'people_fully_vaccinated_percent',
+                                                    'total_boosters_percent'])
 
     axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'],
                      df_merge_country_one['deaths_max'], alpha=0.25, color='yellowgreen')
@@ -335,8 +343,9 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
                  'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
-                 'percent of people vaccinated in the country\'s populace',
-                 'percent of people vaccinated fully in the country\'s populace'],
+                 'percent of the country\'s populace who received at least 1 vaccine dose',
+                 'percent of the country\'s populace who received all doses according to vaccination protocol',
+                 'total booster doses administered, counted as the country\'s populace percent'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
