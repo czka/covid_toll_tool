@@ -8,8 +8,8 @@ virus testing, and the country's all-cause mortality in preceding years.
 
 ### Browse charts and their datasets:
 
-- To see all charts on a single page click this [CHARTS.md](CHARTS.md) link. I update them every couple of weeks. Here
-  are few sample charts from that file:
+- To see all charts on a single page click this [CHARTS.md](CHARTS.md) link. Updates are uploaded every few days when
+[I](https://github.com/czka) decide enough new data are available. Here are few example charts:
 
 |Poland 2020|Israel 2021|Sweden 2021|Australia 2020|Latvia 2021|
 |-|-|-|-|-|
@@ -28,8 +28,7 @@ virus testing, and the country's all-cause mortality in preceding years.
     data.
 
 Charts are rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. By default, this
-interpolation is disabled - please see the script's code and `--help` output for more details. Updated charts are
-uploaded every few days when [I](https://github.com/czka) decide enough new data are available.
+interpolation is disabled - please see `covid_toll_tool.py --help` and code for more details.
 
 ### Render most up-to-date charts and datasets yourself:
 
