@@ -227,8 +227,8 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
     # reset_index().
     df_covid_country_all = df_covid_country.resample(rule='W', on='date').agg(
         {'new_deaths': 'sum',
-         'new_cases_smoothed': 'mean',
-         'new_tests_smoothed': 'mean',
+         'new_cases_smoothed': 'sum',
+         'new_tests_smoothed': 'sum',
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
