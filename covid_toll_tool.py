@@ -221,6 +221,19 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_deaths'].interpolate(limit_area='inside', inplace=True)
 
+    # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
+    df_covid_country['positive_test_percent'] = \
+        df_covid_country['new_cases_smoothed'] / df_covid_country['new_tests_smoothed'] * 100
+
+    df_covid_country['people_vaccinated_percent'] = \
+        df_covid_country['people_vaccinated'] / df_covid_country['population'] * 100
+
+    df_covid_country['people_fully_vaccinated_percent'] = \
+        df_covid_country['people_fully_vaccinated'] / df_covid_country['population'] * 100
+
+    df_covid_country['total_boosters_percent'] = \
+        df_covid_country['total_boosters'] / df_covid_country['population'] * 100
+
     # Resample the daily covid data to match the weekly mortality data, with week date on Sunday. resample().sum()
     # removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides" the `date`
     # column by setting an index on it, but we are going to need this column later on, thus bringing it back with
@@ -229,10 +242,14 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         {'new_deaths': 'sum',
          'new_cases_smoothed': 'sum',
          'new_tests_smoothed': 'sum',
+         'positive_test_percent': 'mean',
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
          'total_boosters': 'mean',
+         'people_vaccinated_percent': 'mean',
+         'people_fully_vaccinated_percent': 'mean',
+         'total_boosters_percent': 'mean',
          'population': 'mean'}
     ).reset_index()
 
@@ -247,23 +264,14 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country_all['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['total_boosters'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['people_vaccinated_percent'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['people_fully_vaccinated_percent'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['total_boosters_percent'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['stringency_index'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['positive_test_percent'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_deaths'].interpolate(limit_area='inside', inplace=True)
-
-    # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
-    df_covid_country_all['positive_test_percent'] = \
-        df_covid_country_all['new_cases_smoothed'] / df_covid_country_all['new_tests_smoothed'] * 100
-
-    df_covid_country_all['people_vaccinated_percent'] = \
-        df_covid_country_all['people_vaccinated'] / df_covid_country_all['population'] * 100
-
-    df_covid_country_all['people_fully_vaccinated_percent'] = \
-        df_covid_country_all['people_fully_vaccinated'] / df_covid_country_all['population'] * 100
-
-    df_covid_country_all['total_boosters_percent'] = \
-        df_covid_country_all['total_boosters'] / df_covid_country_all['population'] * 100
 
     # If all-cause mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
     # TODO: Come up with something neater than this 'temp' name.
