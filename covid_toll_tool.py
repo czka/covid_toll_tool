@@ -319,7 +319,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     axs2 = axs.twinx()
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
-                              color=['royalblue', 'grey', 'red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
+                              color=['deepskyblue', 'dimgrey', 'tab:red', 'black', 'black'], style=[':', ':', ':', '-', '--'],
                               ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                                    'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
@@ -332,7 +332,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                                                     'total_boosters_percent'])
 
     axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'],
-                     df_merge_country_one['deaths_max'], alpha=0.25, color='yellowgreen')
+                     df_merge_country_one['deaths_max'], alpha=0.25, color='silver')
 
     axs.legend(['{} lowest death count in {}-{} from all causes'.format(
                     time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
