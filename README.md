@@ -27,7 +27,7 @@ virus testing, and the country's all-cause mortality in preceding years.
     Poland in 2021, or the [covid_toll_ALL/Poland_2021.csv](covid_toll_ALL/Poland_2021.csv) to see the chart's input
     data.
 
-Charts are rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. By default, this
+Charts were rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. By default, this
 interpolation is disabled - please see `covid_toll_tool.py --help` and code for more details.
 
 ### Render most up-to-date charts and datasets yourself:
@@ -58,8 +58,8 @@ identity of my charts' data against the original OWID's data using their [Data e
 https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases%2C+tests%2C+positive+and+reproduction+rate&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL).
 
 The only data presented on `covid_toll_tool.py`'s charts that you won't find directly in OWID's [Data explorer](
-https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases%2C+tests%2C+positive+and+reproduction+rate&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL)
-, but which were derived from those nevertheless, are:
+https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&uniformYAxis=0&pickerSort=asc&pickerMetric=location&Metric=Cases%2C+tests%2C+positive+and+reproduction+rate&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=~POL),
+but which were derived from those nevertheless, are:
 
 - Death count from all causes **excluding** deaths attributed to COVID-19 (black dashed line). It's calculated as the
 all-cause mortality minus the number of deaths attributed to COVID-19. Viewed together with the all-cause mortality
