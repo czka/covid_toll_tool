@@ -4,113 +4,113 @@ They were rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interp
 https://github.com/czka) update them every few days when enough new data are available in [Our World in Data (OWID)](
 https://ourworldindata.org/) project's GitHub repository. Please see [README.md](README.md) for more details.
 
-|2020|2021|
-|-|-|
-|Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|
-|Andorra 2020![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)|Andorra 2021![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)|
-|Antigua and Barbuda 2020![Antigua and Barbuda 2020](./covid_toll_ALL/Antigua_and_Barbuda_2020.png)|Antigua and Barbuda 2021![Antigua and Barbuda 2021](./covid_toll_ALL/Antigua_and_Barbuda_2021.png)|
-|Argentina 2020![Argentina 2020](./covid_toll_ALL/Argentina_2020.png)|Argentina 2021![Argentina 2021](./covid_toll_ALL/Argentina_2021.png)|
-|Armenia 2020![Armenia 2020](./covid_toll_ALL/Armenia_2020.png)|Armenia 2021![Armenia 2021](./covid_toll_ALL/Armenia_2021.png)|
-|Aruba 2020![Aruba 2020](./covid_toll_ALL/Aruba_2020.png)|Aruba 2021![Aruba 2021](./covid_toll_ALL/Aruba_2021.png)|
-|Australia 2020![Australia 2020](./covid_toll_ALL/Australia_2020.png)|Australia 2021![Australia 2021](./covid_toll_ALL/Australia_2021.png)|
-|Austria 2020![Austria 2020](./covid_toll_ALL/Austria_2020.png)|Austria 2021![Austria 2021](./covid_toll_ALL/Austria_2021.png)|
-|Azerbaijan 2020![Azerbaijan 2020](./covid_toll_ALL/Azerbaijan_2020.png)|Azerbaijan 2021![Azerbaijan 2021](./covid_toll_ALL/Azerbaijan_2021.png)|
-|Barbados 2020![Barbados 2020](./covid_toll_ALL/Barbados_2020.png)|Barbados 2021![Barbados 2021](./covid_toll_ALL/Barbados_2021.png)|
-|Belarus 2020![Belarus 2020](./covid_toll_ALL/Belarus_2020.png)|Belarus 2021![Belarus 2021](./covid_toll_ALL/Belarus_2021.png)|
-|Belgium 2020![Belgium 2020](./covid_toll_ALL/Belgium_2020.png)|Belgium 2021![Belgium 2021](./covid_toll_ALL/Belgium_2021.png)|
-|Belize 2020![Belize 2020](./covid_toll_ALL/Belize_2020.png)|Belize 2021![Belize 2021](./covid_toll_ALL/Belize_2021.png)|
-|Bermuda 2020![Bermuda 2020](./covid_toll_ALL/Bermuda_2020.png)|Bermuda 2021![Bermuda 2021](./covid_toll_ALL/Bermuda_2021.png)|
-|Bolivia 2020![Bolivia 2020](./covid_toll_ALL/Bolivia_2020.png)|Bolivia 2021![Bolivia 2021](./covid_toll_ALL/Bolivia_2021.png)|
-|Bosnia and Herzegovina 2020![Bosnia and Herzegovina 2020](./covid_toll_ALL/Bosnia_and_Herzegovina_2020.png)|Bosnia and Herzegovina 2021![Bosnia and Herzegovina 2021](./covid_toll_ALL/Bosnia_and_Herzegovina_2021.png)|
-|Brazil 2020![Brazil 2020](./covid_toll_ALL/Brazil_2020.png)|Brazil 2021![Brazil 2021](./covid_toll_ALL/Brazil_2021.png)|
-|Brunei 2020![Brunei 2020](./covid_toll_ALL/Brunei_2020.png)|Brunei 2021![Brunei 2021](./covid_toll_ALL/Brunei_2021.png)|
-|Bulgaria 2020![Bulgaria 2020](./covid_toll_ALL/Bulgaria_2020.png)|Bulgaria 2021![Bulgaria 2021](./covid_toll_ALL/Bulgaria_2021.png)|
-|Canada 2020![Canada 2020](./covid_toll_ALL/Canada_2020.png)|Canada 2021![Canada 2021](./covid_toll_ALL/Canada_2021.png)|
-|Chile 2020![Chile 2020](./covid_toll_ALL/Chile_2020.png)|Chile 2021![Chile 2021](./covid_toll_ALL/Chile_2021.png)|
-|Colombia 2020![Colombia 2020](./covid_toll_ALL/Colombia_2020.png)|Colombia 2021![Colombia 2021](./covid_toll_ALL/Colombia_2021.png)|
-|Costa Rica 2020![Costa Rica 2020](./covid_toll_ALL/Costa_Rica_2020.png)|Costa Rica 2021![Costa Rica 2021](./covid_toll_ALL/Costa_Rica_2021.png)|
-|Croatia 2020![Croatia 2020](./covid_toll_ALL/Croatia_2020.png)|Croatia 2021![Croatia 2021](./covid_toll_ALL/Croatia_2021.png)|
-|Cuba 2020![Cuba 2020](./covid_toll_ALL/Cuba_2020.png)|Cuba 2021![Cuba 2021](./covid_toll_ALL/Cuba_2021.png)|
-|Cyprus 2020![Cyprus 2020](./covid_toll_ALL/Cyprus_2020.png)|Cyprus 2021![Cyprus 2021](./covid_toll_ALL/Cyprus_2021.png)|
-|Czechia 2020![Czechia 2020](./covid_toll_ALL/Czechia_2020.png)|Czechia 2021![Czechia 2021](./covid_toll_ALL/Czechia_2021.png)|
-|Denmark 2020![Denmark 2020](./covid_toll_ALL/Denmark_2020.png)|Denmark 2021![Denmark 2021](./covid_toll_ALL/Denmark_2021.png)|
-|Dominican Republic 2020![Dominican Republic 2020](./covid_toll_ALL/Dominican_Republic_2020.png)|Dominican Republic 2021![Dominican Republic 2021](./covid_toll_ALL/Dominican_Republic_2021.png)|
-|Ecuador 2020![Ecuador 2020](./covid_toll_ALL/Ecuador_2020.png)|Ecuador 2021![Ecuador 2021](./covid_toll_ALL/Ecuador_2021.png)|
-|Egypt 2020![Egypt 2020](./covid_toll_ALL/Egypt_2020.png)|Egypt 2021![Egypt 2021](./covid_toll_ALL/Egypt_2021.png)|
-|El Salvador 2020![El Salvador 2020](./covid_toll_ALL/El_Salvador_2020.png)|El Salvador 2021![El Salvador 2021](./covid_toll_ALL/El_Salvador_2021.png)|
-|Estonia 2020![Estonia 2020](./covid_toll_ALL/Estonia_2020.png)|Estonia 2021![Estonia 2021](./covid_toll_ALL/Estonia_2021.png)|
-|Faeroe Islands 2020![Faeroe Islands 2020](./covid_toll_ALL/Faeroe_Islands_2020.png)|Faeroe Islands 2021![Faeroe Islands 2021](./covid_toll_ALL/Faeroe_Islands_2021.png)|
-|Finland 2020![Finland 2020](./covid_toll_ALL/Finland_2020.png)|Finland 2021![Finland 2021](./covid_toll_ALL/Finland_2021.png)|
-|France 2020![France 2020](./covid_toll_ALL/France_2020.png)|France 2021![France 2021](./covid_toll_ALL/France_2021.png)|
-|French Polynesia 2020![French Polynesia 2020](./covid_toll_ALL/French_Polynesia_2020.png)|French Polynesia 2021![French Polynesia 2021](./covid_toll_ALL/French_Polynesia_2021.png)|
-|Georgia 2020![Georgia 2020](./covid_toll_ALL/Georgia_2020.png)|Georgia 2021![Georgia 2021](./covid_toll_ALL/Georgia_2021.png)|
-|Germany 2020![Germany 2020](./covid_toll_ALL/Germany_2020.png)|Germany 2021![Germany 2021](./covid_toll_ALL/Germany_2021.png)|
-|Gibraltar 2020![Gibraltar 2020](./covid_toll_ALL/Gibraltar_2020.png)|Gibraltar 2021![Gibraltar 2021](./covid_toll_ALL/Gibraltar_2021.png)|
-|Greece 2020![Greece 2020](./covid_toll_ALL/Greece_2020.png)|Greece 2021![Greece 2021](./covid_toll_ALL/Greece_2021.png)|
-|Greenland 2020![Greenland 2020](./covid_toll_ALL/Greenland_2020.png)|Greenland 2021![Greenland 2021](./covid_toll_ALL/Greenland_2021.png)|
-|Guatemala 2020![Guatemala 2020](./covid_toll_ALL/Guatemala_2020.png)|Guatemala 2021![Guatemala 2021](./covid_toll_ALL/Guatemala_2021.png)|
-|Hong Kong 2020![Hong Kong 2020](./covid_toll_ALL/Hong_Kong_2020.png)|Hong Kong 2021![Hong Kong 2021](./covid_toll_ALL/Hong_Kong_2021.png)|
-|Hungary 2020![Hungary 2020](./covid_toll_ALL/Hungary_2020.png)|Hungary 2021![Hungary 2021](./covid_toll_ALL/Hungary_2021.png)|
-|Iceland 2020![Iceland 2020](./covid_toll_ALL/Iceland_2020.png)|Iceland 2021![Iceland 2021](./covid_toll_ALL/Iceland_2021.png)|
-|Iran 2020![Iran 2020](./covid_toll_ALL/Iran_2020.png)|Iran 2021![Iran 2021](./covid_toll_ALL/Iran_2021.png)|
-|Ireland 2020![Ireland 2020](./covid_toll_ALL/Ireland_2020.png)|Ireland 2021![Ireland 2021](./covid_toll_ALL/Ireland_2021.png)|
-|Israel 2020![Israel 2020](./covid_toll_ALL/Israel_2020.png)|Israel 2021![Israel 2021](./covid_toll_ALL/Israel_2021.png)|
-|Italy 2020![Italy 2020](./covid_toll_ALL/Italy_2020.png)|Italy 2021![Italy 2021](./covid_toll_ALL/Italy_2021.png)|
-|Jamaica 2020![Jamaica 2020](./covid_toll_ALL/Jamaica_2020.png)|Jamaica 2021![Jamaica 2021](./covid_toll_ALL/Jamaica_2021.png)|
-|Japan 2020![Japan 2020](./covid_toll_ALL/Japan_2020.png)|Japan 2021![Japan 2021](./covid_toll_ALL/Japan_2021.png)|
-|Jordan 2020![Jordan 2020](./covid_toll_ALL/Jordan_2020.png)|Jordan 2021![Jordan 2021](./covid_toll_ALL/Jordan_2021.png)|
-|Kazakhstan 2020![Kazakhstan 2020](./covid_toll_ALL/Kazakhstan_2020.png)|Kazakhstan 2021![Kazakhstan 2021](./covid_toll_ALL/Kazakhstan_2021.png)|
-|Kosovo 2020![Kosovo 2020](./covid_toll_ALL/Kosovo_2020.png)|Kosovo 2021![Kosovo 2021](./covid_toll_ALL/Kosovo_2021.png)|
-|Kuwait 2020![Kuwait 2020](./covid_toll_ALL/Kuwait_2020.png)|Kuwait 2021![Kuwait 2021](./covid_toll_ALL/Kuwait_2021.png)|
-|Kyrgyzstan 2020![Kyrgyzstan 2020](./covid_toll_ALL/Kyrgyzstan_2020.png)|Kyrgyzstan 2021![Kyrgyzstan 2021](./covid_toll_ALL/Kyrgyzstan_2021.png)|
-|Latvia 2020![Latvia 2020](./covid_toll_ALL/Latvia_2020.png)|Latvia 2021![Latvia 2021](./covid_toll_ALL/Latvia_2021.png)|
-|Lebanon 2020![Lebanon 2020](./covid_toll_ALL/Lebanon_2020.png)|Lebanon 2021![Lebanon 2021](./covid_toll_ALL/Lebanon_2021.png)|
-|Liechtenstein 2020![Liechtenstein 2020](./covid_toll_ALL/Liechtenstein_2020.png)|Liechtenstein 2021![Liechtenstein 2021](./covid_toll_ALL/Liechtenstein_2021.png)|
-|Lithuania 2020![Lithuania 2020](./covid_toll_ALL/Lithuania_2020.png)|Lithuania 2021![Lithuania 2021](./covid_toll_ALL/Lithuania_2021.png)|
-|Luxembourg 2020![Luxembourg 2020](./covid_toll_ALL/Luxembourg_2020.png)|Luxembourg 2021![Luxembourg 2021](./covid_toll_ALL/Luxembourg_2021.png)|
-|Macao 2020![Macao 2020](./covid_toll_ALL/Macao_2020.png)|Macao 2021![Macao 2021](./covid_toll_ALL/Macao_2021.png)|
-|Malaysia 2020![Malaysia 2020](./covid_toll_ALL/Malaysia_2020.png)|Malaysia 2021![Malaysia 2021](./covid_toll_ALL/Malaysia_2021.png)|
-|Maldives 2020![Maldives 2020](./covid_toll_ALL/Maldives_2020.png)|Maldives 2021![Maldives 2021](./covid_toll_ALL/Maldives_2021.png)|
-|Malta 2020![Malta 2020](./covid_toll_ALL/Malta_2020.png)|Malta 2021![Malta 2021](./covid_toll_ALL/Malta_2021.png)|
-|Mauritius 2020![Mauritius 2020](./covid_toll_ALL/Mauritius_2020.png)|Mauritius 2021![Mauritius 2021](./covid_toll_ALL/Mauritius_2021.png)|
-|Mexico 2020![Mexico 2020](./covid_toll_ALL/Mexico_2020.png)|Mexico 2021![Mexico 2021](./covid_toll_ALL/Mexico_2021.png)|
-|Moldova 2020![Moldova 2020](./covid_toll_ALL/Moldova_2020.png)|Moldova 2021![Moldova 2021](./covid_toll_ALL/Moldova_2021.png)|
-|Monaco 2020![Monaco 2020](./covid_toll_ALL/Monaco_2020.png)|Monaco 2021![Monaco 2021](./covid_toll_ALL/Monaco_2021.png)|
-|Mongolia 2020![Mongolia 2020](./covid_toll_ALL/Mongolia_2020.png)|Mongolia 2021![Mongolia 2021](./covid_toll_ALL/Mongolia_2021.png)|
-|Montenegro 2020![Montenegro 2020](./covid_toll_ALL/Montenegro_2020.png)|Montenegro 2021![Montenegro 2021](./covid_toll_ALL/Montenegro_2021.png)|
-|Netherlands 2020![Netherlands 2020](./covid_toll_ALL/Netherlands_2020.png)|Netherlands 2021![Netherlands 2021](./covid_toll_ALL/Netherlands_2021.png)|
-|New Caledonia 2020![New Caledonia 2020](./covid_toll_ALL/New_Caledonia_2020.png)|New Caledonia 2021![New Caledonia 2021](./covid_toll_ALL/New_Caledonia_2021.png)|
-|New Zealand 2020![New Zealand 2020](./covid_toll_ALL/New_Zealand_2020.png)|New Zealand 2021![New Zealand 2021](./covid_toll_ALL/New_Zealand_2021.png)|
-|Nicaragua 2020![Nicaragua 2020](./covid_toll_ALL/Nicaragua_2020.png)|Nicaragua 2021![Nicaragua 2021](./covid_toll_ALL/Nicaragua_2021.png)|
-|North Macedonia 2020![North Macedonia 2020](./covid_toll_ALL/North_Macedonia_2020.png)|North Macedonia 2021![North Macedonia 2021](./covid_toll_ALL/North_Macedonia_2021.png)|
-|Norway 2020![Norway 2020](./covid_toll_ALL/Norway_2020.png)|Norway 2021![Norway 2021](./covid_toll_ALL/Norway_2021.png)|
-|Oman 2020![Oman 2020](./covid_toll_ALL/Oman_2020.png)|Oman 2021![Oman 2021](./covid_toll_ALL/Oman_2021.png)|
-|Palestine 2020![Palestine 2020](./covid_toll_ALL/Palestine_2020.png)|Palestine 2021![Palestine 2021](./covid_toll_ALL/Palestine_2021.png)|
-|Panama 2020![Panama 2020](./covid_toll_ALL/Panama_2020.png)|Panama 2021![Panama 2021](./covid_toll_ALL/Panama_2021.png)|
-|Paraguay 2020![Paraguay 2020](./covid_toll_ALL/Paraguay_2020.png)|Paraguay 2021![Paraguay 2021](./covid_toll_ALL/Paraguay_2021.png)|
-|Peru 2020![Peru 2020](./covid_toll_ALL/Peru_2020.png)|Peru 2021![Peru 2021](./covid_toll_ALL/Peru_2021.png)|
-|Philippines 2020![Philippines 2020](./covid_toll_ALL/Philippines_2020.png)|Philippines 2021![Philippines 2021](./covid_toll_ALL/Philippines_2021.png)|
-|Poland 2020![Poland 2020](./covid_toll_ALL/Poland_2020.png)|Poland 2021![Poland 2021](./covid_toll_ALL/Poland_2021.png)|
-|Portugal 2020![Portugal 2020](./covid_toll_ALL/Portugal_2020.png)|Portugal 2021![Portugal 2021](./covid_toll_ALL/Portugal_2021.png)|
-|Qatar 2020![Qatar 2020](./covid_toll_ALL/Qatar_2020.png)|Qatar 2021![Qatar 2021](./covid_toll_ALL/Qatar_2021.png)|
-|Romania 2020![Romania 2020](./covid_toll_ALL/Romania_2020.png)|Romania 2021![Romania 2021](./covid_toll_ALL/Romania_2021.png)|
-|Russia 2020![Russia 2020](./covid_toll_ALL/Russia_2020.png)|Russia 2021![Russia 2021](./covid_toll_ALL/Russia_2021.png)|
-|San Marino 2020![San Marino 2020](./covid_toll_ALL/San_Marino_2020.png)|San Marino 2021![San Marino 2021](./covid_toll_ALL/San_Marino_2021.png)|
-|Serbia 2020![Serbia 2020](./covid_toll_ALL/Serbia_2020.png)|Serbia 2021![Serbia 2021](./covid_toll_ALL/Serbia_2021.png)|
-|Seychelles 2020![Seychelles 2020](./covid_toll_ALL/Seychelles_2020.png)|Seychelles 2021![Seychelles 2021](./covid_toll_ALL/Seychelles_2021.png)|
-|Singapore 2020![Singapore 2020](./covid_toll_ALL/Singapore_2020.png)|Singapore 2021![Singapore 2021](./covid_toll_ALL/Singapore_2021.png)|
-|Slovakia 2020![Slovakia 2020](./covid_toll_ALL/Slovakia_2020.png)|Slovakia 2021![Slovakia 2021](./covid_toll_ALL/Slovakia_2021.png)|
-|Slovenia 2020![Slovenia 2020](./covid_toll_ALL/Slovenia_2020.png)|Slovenia 2021![Slovenia 2021](./covid_toll_ALL/Slovenia_2021.png)|
-|South Africa 2020![South Africa 2020](./covid_toll_ALL/South_Africa_2020.png)|South Africa 2021![South Africa 2021](./covid_toll_ALL/South_Africa_2021.png)|
-|South Korea 2020![South Korea 2020](./covid_toll_ALL/South_Korea_2020.png)|South Korea 2021![South Korea 2021](./covid_toll_ALL/South_Korea_2021.png)|
-|Spain 2020![Spain 2020](./covid_toll_ALL/Spain_2020.png)|Spain 2021![Spain 2021](./covid_toll_ALL/Spain_2021.png)|
-|Sweden 2020![Sweden 2020](./covid_toll_ALL/Sweden_2020.png)|Sweden 2021![Sweden 2021](./covid_toll_ALL/Sweden_2021.png)|
-|Switzerland 2020![Switzerland 2020](./covid_toll_ALL/Switzerland_2020.png)|Switzerland 2021![Switzerland 2021](./covid_toll_ALL/Switzerland_2021.png)|
-|Taiwan 2020![Taiwan 2020](./covid_toll_ALL/Taiwan_2020.png)|Taiwan 2021![Taiwan 2021](./covid_toll_ALL/Taiwan_2021.png)|
-|Thailand 2020![Thailand 2020](./covid_toll_ALL/Thailand_2020.png)|Thailand 2021![Thailand 2021](./covid_toll_ALL/Thailand_2021.png)|
-|Tunisia 2020![Tunisia 2020](./covid_toll_ALL/Tunisia_2020.png)|Tunisia 2021![Tunisia 2021](./covid_toll_ALL/Tunisia_2021.png)|
-|Ukraine 2020![Ukraine 2020](./covid_toll_ALL/Ukraine_2020.png)|Ukraine 2021![Ukraine 2021](./covid_toll_ALL/Ukraine_2021.png)|
-|United Kingdom 2020![United Kingdom 2020](./covid_toll_ALL/United_Kingdom_2020.png)|United Kingdom 2021![United Kingdom 2021](./covid_toll_ALL/United_Kingdom_2021.png)|
-|United States 2020![United States 2020](./covid_toll_ALL/United_States_2020.png)|United States 2021![United States 2021](./covid_toll_ALL/United_States_2021.png)|
-|Uruguay 2020![Uruguay 2020](./covid_toll_ALL/Uruguay_2020.png)|Uruguay 2021![Uruguay 2021](./covid_toll_ALL/Uruguay_2021.png)|
-|Uzbekistan 2020![Uzbekistan 2020](./covid_toll_ALL/Uzbekistan_2020.png)|Uzbekistan 2021![Uzbekistan 2021](./covid_toll_ALL/Uzbekistan_2021.png)|
+|2020|2021|2022|
+|-|-|-|
+|Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|Albania 2022![Albania 2022](./covid_toll_ALL/Albania_2022.png)|
+|Andorra 2020![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)|Andorra 2021![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)|Andorra 2022![Andorra 2022](./covid_toll_ALL/Andorra_2022.png)|
+|Antigua and Barbuda 2020![Antigua and Barbuda 2020](./covid_toll_ALL/Antigua_and_Barbuda_2020.png)|Antigua and Barbuda 2021![Antigua and Barbuda 2021](./covid_toll_ALL/Antigua_and_Barbuda_2021.png)|Antigua and Barbuda 2022![Antigua and Barbuda 2022](./covid_toll_ALL/Antigua_and_Barbuda_2022.png)|
+|Argentina 2020![Argentina 2020](./covid_toll_ALL/Argentina_2020.png)|Argentina 2021![Argentina 2021](./covid_toll_ALL/Argentina_2021.png)|Argentina 2022![Argentina 2022](./covid_toll_ALL/Argentina_2022.png)|
+|Armenia 2020![Armenia 2020](./covid_toll_ALL/Armenia_2020.png)|Armenia 2021![Armenia 2021](./covid_toll_ALL/Armenia_2021.png)|Armenia 2022![Armenia 2022](./covid_toll_ALL/Armenia_2022.png)|
+|Aruba 2020![Aruba 2020](./covid_toll_ALL/Aruba_2020.png)|Aruba 2021![Aruba 2021](./covid_toll_ALL/Aruba_2021.png)|Aruba 2022![Aruba 2022](./covid_toll_ALL/Aruba_2022.png)|
+|Australia 2020![Australia 2020](./covid_toll_ALL/Australia_2020.png)|Australia 2021![Australia 2021](./covid_toll_ALL/Australia_2021.png)|Australia 2022![Australia 2022](./covid_toll_ALL/Australia_2022.png)|
+|Austria 2020![Austria 2020](./covid_toll_ALL/Austria_2020.png)|Austria 2021![Austria 2021](./covid_toll_ALL/Austria_2021.png)|Austria 2022![Austria 2022](./covid_toll_ALL/Austria_2022.png)|
+|Azerbaijan 2020![Azerbaijan 2020](./covid_toll_ALL/Azerbaijan_2020.png)|Azerbaijan 2021![Azerbaijan 2021](./covid_toll_ALL/Azerbaijan_2021.png)|Azerbaijan 2022![Azerbaijan 2022](./covid_toll_ALL/Azerbaijan_2022.png)|
+|Barbados 2020![Barbados 2020](./covid_toll_ALL/Barbados_2020.png)|Barbados 2021![Barbados 2021](./covid_toll_ALL/Barbados_2021.png)|Barbados 2022![Barbados 2022](./covid_toll_ALL/Barbados_2022.png)|
+|Belarus 2020![Belarus 2020](./covid_toll_ALL/Belarus_2020.png)|Belarus 2021![Belarus 2021](./covid_toll_ALL/Belarus_2021.png)|Belarus 2022![Belarus 2022](./covid_toll_ALL/Belarus_2022.png)|
+|Belgium 2020![Belgium 2020](./covid_toll_ALL/Belgium_2020.png)|Belgium 2021![Belgium 2021](./covid_toll_ALL/Belgium_2021.png)|Belgium 2022![Belgium 2022](./covid_toll_ALL/Belgium_2022.png)|
+|Belize 2020![Belize 2020](./covid_toll_ALL/Belize_2020.png)|Belize 2021![Belize 2021](./covid_toll_ALL/Belize_2021.png)|Belize 2022![Belize 2022](./covid_toll_ALL/Belize_2022.png)|
+|Bermuda 2020![Bermuda 2020](./covid_toll_ALL/Bermuda_2020.png)|Bermuda 2021![Bermuda 2021](./covid_toll_ALL/Bermuda_2021.png)|Bermuda 2022![Bermuda 2022](./covid_toll_ALL/Bermuda_2022.png)|
+|Bolivia 2020![Bolivia 2020](./covid_toll_ALL/Bolivia_2020.png)|Bolivia 2021![Bolivia 2021](./covid_toll_ALL/Bolivia_2021.png)|Bolivia 2022![Bolivia 2022](./covid_toll_ALL/Bolivia_2022.png)|
+|Bosnia and Herzegovina 2020![Bosnia and Herzegovina 2020](./covid_toll_ALL/Bosnia_and_Herzegovina_2020.png)|Bosnia and Herzegovina 2021![Bosnia and Herzegovina 2021](./covid_toll_ALL/Bosnia_and_Herzegovina_2021.png)|Bosnia and Herzegovina 2022![Bosnia and Herzegovina 2022](./covid_toll_ALL/Bosnia_and_Herzegovina_2022.png)|
+|Brazil 2020![Brazil 2020](./covid_toll_ALL/Brazil_2020.png)|Brazil 2021![Brazil 2021](./covid_toll_ALL/Brazil_2021.png)|Brazil 2022![Brazil 2022](./covid_toll_ALL/Brazil_2022.png)|
+|Brunei 2020![Brunei 2020](./covid_toll_ALL/Brunei_2020.png)|Brunei 2021![Brunei 2021](./covid_toll_ALL/Brunei_2021.png)|Brunei 2022![Brunei 2022](./covid_toll_ALL/Brunei_2022.png)|
+|Bulgaria 2020![Bulgaria 2020](./covid_toll_ALL/Bulgaria_2020.png)|Bulgaria 2021![Bulgaria 2021](./covid_toll_ALL/Bulgaria_2021.png)|Bulgaria 2022![Bulgaria 2022](./covid_toll_ALL/Bulgaria_2022.png)|
+|Canada 2020![Canada 2020](./covid_toll_ALL/Canada_2020.png)|Canada 2021![Canada 2021](./covid_toll_ALL/Canada_2021.png)|Canada 2022![Canada 2022](./covid_toll_ALL/Canada_2022.png)|
+|Chile 2020![Chile 2020](./covid_toll_ALL/Chile_2020.png)|Chile 2021![Chile 2021](./covid_toll_ALL/Chile_2021.png)|Chile 2022![Chile 2022](./covid_toll_ALL/Chile_2022.png)|
+|Colombia 2020![Colombia 2020](./covid_toll_ALL/Colombia_2020.png)|Colombia 2021![Colombia 2021](./covid_toll_ALL/Colombia_2021.png)|Colombia 2022![Colombia 2022](./covid_toll_ALL/Colombia_2022.png)|
+|Costa Rica 2020![Costa Rica 2020](./covid_toll_ALL/Costa_Rica_2020.png)|Costa Rica 2021![Costa Rica 2021](./covid_toll_ALL/Costa_Rica_2021.png)|Costa Rica 2022![Costa Rica 2022](./covid_toll_ALL/Costa_Rica_2022.png)|
+|Croatia 2020![Croatia 2020](./covid_toll_ALL/Croatia_2020.png)|Croatia 2021![Croatia 2021](./covid_toll_ALL/Croatia_2021.png)|Croatia 2022![Croatia 2022](./covid_toll_ALL/Croatia_2022.png)|
+|Cuba 2020![Cuba 2020](./covid_toll_ALL/Cuba_2020.png)|Cuba 2021![Cuba 2021](./covid_toll_ALL/Cuba_2021.png)|Cuba 2022![Cuba 2022](./covid_toll_ALL/Cuba_2022.png)|
+|Cyprus 2020![Cyprus 2020](./covid_toll_ALL/Cyprus_2020.png)|Cyprus 2021![Cyprus 2021](./covid_toll_ALL/Cyprus_2021.png)|Cyprus 2022![Cyprus 2022](./covid_toll_ALL/Cyprus_2022.png)|
+|Czechia 2020![Czechia 2020](./covid_toll_ALL/Czechia_2020.png)|Czechia 2021![Czechia 2021](./covid_toll_ALL/Czechia_2021.png)|Czechia 2022![Czechia 2022](./covid_toll_ALL/Czechia_2022.png)|
+|Denmark 2020![Denmark 2020](./covid_toll_ALL/Denmark_2020.png)|Denmark 2021![Denmark 2021](./covid_toll_ALL/Denmark_2021.png)|Denmark 2022![Denmark 2022](./covid_toll_ALL/Denmark_2022.png)|
+|Dominican Republic 2020![Dominican Republic 2020](./covid_toll_ALL/Dominican_Republic_2020.png)|Dominican Republic 2021![Dominican Republic 2021](./covid_toll_ALL/Dominican_Republic_2021.png)|Dominican Republic 2022![Dominican Republic 2022](./covid_toll_ALL/Dominican_Republic_2022.png)|
+|Ecuador 2020![Ecuador 2020](./covid_toll_ALL/Ecuador_2020.png)|Ecuador 2021![Ecuador 2021](./covid_toll_ALL/Ecuador_2021.png)|Ecuador 2022![Ecuador 2022](./covid_toll_ALL/Ecuador_2022.png)|
+|Egypt 2020![Egypt 2020](./covid_toll_ALL/Egypt_2020.png)|Egypt 2021![Egypt 2021](./covid_toll_ALL/Egypt_2021.png)|Egypt 2022![Egypt 2022](./covid_toll_ALL/Egypt_2022.png)|
+|El Salvador 2020![El Salvador 2020](./covid_toll_ALL/El_Salvador_2020.png)|El Salvador 2021![El Salvador 2021](./covid_toll_ALL/El_Salvador_2021.png)|El Salvador 2022![El Salvador 2022](./covid_toll_ALL/El_Salvador_2022.png)|
+|Estonia 2020![Estonia 2020](./covid_toll_ALL/Estonia_2020.png)|Estonia 2021![Estonia 2021](./covid_toll_ALL/Estonia_2021.png)|Estonia 2022![Estonia 2022](./covid_toll_ALL/Estonia_2022.png)|
+|Faeroe Islands 2020![Faeroe Islands 2020](./covid_toll_ALL/Faeroe_Islands_2020.png)|Faeroe Islands 2021![Faeroe Islands 2021](./covid_toll_ALL/Faeroe_Islands_2021.png)|Faeroe Islands 2022![Faeroe Islands 2022](./covid_toll_ALL/Faeroe_Islands_2022.png)|
+|Finland 2020![Finland 2020](./covid_toll_ALL/Finland_2020.png)|Finland 2021![Finland 2021](./covid_toll_ALL/Finland_2021.png)|Finland 2022![Finland 2022](./covid_toll_ALL/Finland_2022.png)|
+|France 2020![France 2020](./covid_toll_ALL/France_2020.png)|France 2021![France 2021](./covid_toll_ALL/France_2021.png)|France 2022![France 2022](./covid_toll_ALL/France_2022.png)|
+|French Polynesia 2020![French Polynesia 2020](./covid_toll_ALL/French_Polynesia_2020.png)|French Polynesia 2021![French Polynesia 2021](./covid_toll_ALL/French_Polynesia_2021.png)|French Polynesia 2022![French Polynesia 2022](./covid_toll_ALL/French_Polynesia_2022.png)|
+|Georgia 2020![Georgia 2020](./covid_toll_ALL/Georgia_2020.png)|Georgia 2021![Georgia 2021](./covid_toll_ALL/Georgia_2021.png)|Georgia 2022![Georgia 2022](./covid_toll_ALL/Georgia_2022.png)|
+|Germany 2020![Germany 2020](./covid_toll_ALL/Germany_2020.png)|Germany 2021![Germany 2021](./covid_toll_ALL/Germany_2021.png)|Germany 2022![Germany 2022](./covid_toll_ALL/Germany_2022.png)|
+|Gibraltar 2020![Gibraltar 2020](./covid_toll_ALL/Gibraltar_2020.png)|Gibraltar 2021![Gibraltar 2021](./covid_toll_ALL/Gibraltar_2021.png)|Gibraltar 2022![Gibraltar 2022](./covid_toll_ALL/Gibraltar_2022.png)|
+|Greece 2020![Greece 2020](./covid_toll_ALL/Greece_2020.png)|Greece 2021![Greece 2021](./covid_toll_ALL/Greece_2021.png)|Greece 2022![Greece 2022](./covid_toll_ALL/Greece_2022.png)|
+|Greenland 2020![Greenland 2020](./covid_toll_ALL/Greenland_2020.png)|Greenland 2021![Greenland 2021](./covid_toll_ALL/Greenland_2021.png)|Greenland 2022![Greenland 2022](./covid_toll_ALL/Greenland_2022.png)|
+|Guatemala 2020![Guatemala 2020](./covid_toll_ALL/Guatemala_2020.png)|Guatemala 2021![Guatemala 2021](./covid_toll_ALL/Guatemala_2021.png)|Guatemala 2022![Guatemala 2022](./covid_toll_ALL/Guatemala_2022.png)|
+|Hong Kong 2020![Hong Kong 2020](./covid_toll_ALL/Hong_Kong_2020.png)|Hong Kong 2021![Hong Kong 2021](./covid_toll_ALL/Hong_Kong_2021.png)|Hong Kong 2022![Hong Kong 2022](./covid_toll_ALL/Hong_Kong_2022.png)|
+|Hungary 2020![Hungary 2020](./covid_toll_ALL/Hungary_2020.png)|Hungary 2021![Hungary 2021](./covid_toll_ALL/Hungary_2021.png)|Hungary 2022![Hungary 2022](./covid_toll_ALL/Hungary_2022.png)|
+|Iceland 2020![Iceland 2020](./covid_toll_ALL/Iceland_2020.png)|Iceland 2021![Iceland 2021](./covid_toll_ALL/Iceland_2021.png)|Iceland 2022![Iceland 2022](./covid_toll_ALL/Iceland_2022.png)|
+|Iran 2020![Iran 2020](./covid_toll_ALL/Iran_2020.png)|Iran 2021![Iran 2021](./covid_toll_ALL/Iran_2021.png)|Iran 2022![Iran 2022](./covid_toll_ALL/Iran_2022.png)|
+|Ireland 2020![Ireland 2020](./covid_toll_ALL/Ireland_2020.png)|Ireland 2021![Ireland 2021](./covid_toll_ALL/Ireland_2021.png)|Ireland 2022![Ireland 2022](./covid_toll_ALL/Ireland_2022.png)|
+|Israel 2020![Israel 2020](./covid_toll_ALL/Israel_2020.png)|Israel 2021![Israel 2021](./covid_toll_ALL/Israel_2021.png)|Israel 2022![Israel 2022](./covid_toll_ALL/Israel_2022.png)|
+|Italy 2020![Italy 2020](./covid_toll_ALL/Italy_2020.png)|Italy 2021![Italy 2021](./covid_toll_ALL/Italy_2021.png)|Italy 2022![Italy 2022](./covid_toll_ALL/Italy_2022.png)|
+|Jamaica 2020![Jamaica 2020](./covid_toll_ALL/Jamaica_2020.png)|Jamaica 2021![Jamaica 2021](./covid_toll_ALL/Jamaica_2021.png)|Jamaica 2022![Jamaica 2022](./covid_toll_ALL/Jamaica_2022.png)|
+|Japan 2020![Japan 2020](./covid_toll_ALL/Japan_2020.png)|Japan 2021![Japan 2021](./covid_toll_ALL/Japan_2021.png)|Japan 2022![Japan 2022](./covid_toll_ALL/Japan_2022.png)|
+|Jordan 2020![Jordan 2020](./covid_toll_ALL/Jordan_2020.png)|Jordan 2021![Jordan 2021](./covid_toll_ALL/Jordan_2021.png)|Jordan 2022![Jordan 2022](./covid_toll_ALL/Jordan_2022.png)|
+|Kazakhstan 2020![Kazakhstan 2020](./covid_toll_ALL/Kazakhstan_2020.png)|Kazakhstan 2021![Kazakhstan 2021](./covid_toll_ALL/Kazakhstan_2021.png)|Kazakhstan 2022![Kazakhstan 2022](./covid_toll_ALL/Kazakhstan_2022.png)|
+|Kosovo 2020![Kosovo 2020](./covid_toll_ALL/Kosovo_2020.png)|Kosovo 2021![Kosovo 2021](./covid_toll_ALL/Kosovo_2021.png)|Kosovo 2022![Kosovo 2022](./covid_toll_ALL/Kosovo_2022.png)|
+|Kuwait 2020![Kuwait 2020](./covid_toll_ALL/Kuwait_2020.png)|Kuwait 2021![Kuwait 2021](./covid_toll_ALL/Kuwait_2021.png)|Kuwait 2022![Kuwait 2022](./covid_toll_ALL/Kuwait_2022.png)|
+|Kyrgyzstan 2020![Kyrgyzstan 2020](./covid_toll_ALL/Kyrgyzstan_2020.png)|Kyrgyzstan 2021![Kyrgyzstan 2021](./covid_toll_ALL/Kyrgyzstan_2021.png)|Kyrgyzstan 2022![Kyrgyzstan 2022](./covid_toll_ALL/Kyrgyzstan_2022.png)|
+|Latvia 2020![Latvia 2020](./covid_toll_ALL/Latvia_2020.png)|Latvia 2021![Latvia 2021](./covid_toll_ALL/Latvia_2021.png)|Latvia 2022![Latvia 2022](./covid_toll_ALL/Latvia_2022.png)|
+|Lebanon 2020![Lebanon 2020](./covid_toll_ALL/Lebanon_2020.png)|Lebanon 2021![Lebanon 2021](./covid_toll_ALL/Lebanon_2021.png)|Lebanon 2022![Lebanon 2022](./covid_toll_ALL/Lebanon_2022.png)|
+|Liechtenstein 2020![Liechtenstein 2020](./covid_toll_ALL/Liechtenstein_2020.png)|Liechtenstein 2021![Liechtenstein 2021](./covid_toll_ALL/Liechtenstein_2021.png)|Liechtenstein 2022![Liechtenstein 2022](./covid_toll_ALL/Liechtenstein_2022.png)|
+|Lithuania 2020![Lithuania 2020](./covid_toll_ALL/Lithuania_2020.png)|Lithuania 2021![Lithuania 2021](./covid_toll_ALL/Lithuania_2021.png)|Lithuania 2022![Lithuania 2022](./covid_toll_ALL/Lithuania_2022.png)|
+|Luxembourg 2020![Luxembourg 2020](./covid_toll_ALL/Luxembourg_2020.png)|Luxembourg 2021![Luxembourg 2021](./covid_toll_ALL/Luxembourg_2021.png)|Luxembourg 2022![Luxembourg 2022](./covid_toll_ALL/Luxembourg_2022.png)|
+|Macao 2020![Macao 2020](./covid_toll_ALL/Macao_2020.png)|Macao 2021![Macao 2021](./covid_toll_ALL/Macao_2021.png)|Macao 2022![Macao 2022](./covid_toll_ALL/Macao_2022.png)|
+|Malaysia 2020![Malaysia 2020](./covid_toll_ALL/Malaysia_2020.png)|Malaysia 2021![Malaysia 2021](./covid_toll_ALL/Malaysia_2021.png)|Malaysia 2022![Malaysia 2022](./covid_toll_ALL/Malaysia_2022.png)|
+|Maldives 2020![Maldives 2020](./covid_toll_ALL/Maldives_2020.png)|Maldives 2021![Maldives 2021](./covid_toll_ALL/Maldives_2021.png)|Maldives 2022![Maldives 2022](./covid_toll_ALL/Maldives_2022.png)|
+|Malta 2020![Malta 2020](./covid_toll_ALL/Malta_2020.png)|Malta 2021![Malta 2021](./covid_toll_ALL/Malta_2021.png)|Malta 2022![Malta 2022](./covid_toll_ALL/Malta_2022.png)|
+|Mauritius 2020![Mauritius 2020](./covid_toll_ALL/Mauritius_2020.png)|Mauritius 2021![Mauritius 2021](./covid_toll_ALL/Mauritius_2021.png)|Mauritius 2022![Mauritius 2022](./covid_toll_ALL/Mauritius_2022.png)|
+|Mexico 2020![Mexico 2020](./covid_toll_ALL/Mexico_2020.png)|Mexico 2021![Mexico 2021](./covid_toll_ALL/Mexico_2021.png)|Mexico 2022![Mexico 2022](./covid_toll_ALL/Mexico_2022.png)|
+|Moldova 2020![Moldova 2020](./covid_toll_ALL/Moldova_2020.png)|Moldova 2021![Moldova 2021](./covid_toll_ALL/Moldova_2021.png)|Moldova 2022![Moldova 2022](./covid_toll_ALL/Moldova_2022.png)|
+|Monaco 2020![Monaco 2020](./covid_toll_ALL/Monaco_2020.png)|Monaco 2021![Monaco 2021](./covid_toll_ALL/Monaco_2021.png)|Monaco 2022![Monaco 2022](./covid_toll_ALL/Monaco_2022.png)|
+|Mongolia 2020![Mongolia 2020](./covid_toll_ALL/Mongolia_2020.png)|Mongolia 2021![Mongolia 2021](./covid_toll_ALL/Mongolia_2021.png)|Mongolia 2022![Mongolia 2022](./covid_toll_ALL/Mongolia_2022.png)|
+|Montenegro 2020![Montenegro 2020](./covid_toll_ALL/Montenegro_2020.png)|Montenegro 2021![Montenegro 2021](./covid_toll_ALL/Montenegro_2021.png)|Montenegro 2022![Montenegro 2022](./covid_toll_ALL/Montenegro_2022.png)|
+|Netherlands 2020![Netherlands 2020](./covid_toll_ALL/Netherlands_2020.png)|Netherlands 2021![Netherlands 2021](./covid_toll_ALL/Netherlands_2021.png)|Netherlands 2022![Netherlands 2022](./covid_toll_ALL/Netherlands_2022.png)|
+|New Caledonia 2020![New Caledonia 2020](./covid_toll_ALL/New_Caledonia_2020.png)|New Caledonia 2021![New Caledonia 2021](./covid_toll_ALL/New_Caledonia_2021.png)|New Caledonia 2022![New Caledonia 2022](./covid_toll_ALL/New_Caledonia_2022.png)|
+|New Zealand 2020![New Zealand 2020](./covid_toll_ALL/New_Zealand_2020.png)|New Zealand 2021![New Zealand 2021](./covid_toll_ALL/New_Zealand_2021.png)|New Zealand 2022![New Zealand 2022](./covid_toll_ALL/New_Zealand_2022.png)|
+|Nicaragua 2020![Nicaragua 2020](./covid_toll_ALL/Nicaragua_2020.png)|Nicaragua 2021![Nicaragua 2021](./covid_toll_ALL/Nicaragua_2021.png)|Nicaragua 2022![Nicaragua 2022](./covid_toll_ALL/Nicaragua_2022.png)|
+|North Macedonia 2020![North Macedonia 2020](./covid_toll_ALL/North_Macedonia_2020.png)|North Macedonia 2021![North Macedonia 2021](./covid_toll_ALL/North_Macedonia_2021.png)|North Macedonia 2022![North Macedonia 2022](./covid_toll_ALL/North_Macedonia_2022.png)|
+|Norway 2020![Norway 2020](./covid_toll_ALL/Norway_2020.png)|Norway 2021![Norway 2021](./covid_toll_ALL/Norway_2021.png)|Norway 2022![Norway 2022](./covid_toll_ALL/Norway_2022.png)|
+|Oman 2020![Oman 2020](./covid_toll_ALL/Oman_2020.png)|Oman 2021![Oman 2021](./covid_toll_ALL/Oman_2021.png)|Oman 2022![Oman 2022](./covid_toll_ALL/Oman_2022.png)|
+|Palestine 2020![Palestine 2020](./covid_toll_ALL/Palestine_2020.png)|Palestine 2021![Palestine 2021](./covid_toll_ALL/Palestine_2021.png)|Palestine 2022![Palestine 2022](./covid_toll_ALL/Palestine_2022.png)|
+|Panama 2020![Panama 2020](./covid_toll_ALL/Panama_2020.png)|Panama 2021![Panama 2021](./covid_toll_ALL/Panama_2021.png)|Panama 2022![Panama 2022](./covid_toll_ALL/Panama_2022.png)|
+|Paraguay 2020![Paraguay 2020](./covid_toll_ALL/Paraguay_2020.png)|Paraguay 2021![Paraguay 2021](./covid_toll_ALL/Paraguay_2021.png)|Paraguay 2022![Paraguay 2022](./covid_toll_ALL/Paraguay_2022.png)|
+|Peru 2020![Peru 2020](./covid_toll_ALL/Peru_2020.png)|Peru 2021![Peru 2021](./covid_toll_ALL/Peru_2021.png)|Peru 2022![Peru 2022](./covid_toll_ALL/Peru_2022.png)|
+|Philippines 2020![Philippines 2020](./covid_toll_ALL/Philippines_2020.png)|Philippines 2021![Philippines 2021](./covid_toll_ALL/Philippines_2021.png)|Philippines 2022![Philippines 2022](./covid_toll_ALL/Philippines_2022.png)|
+|Poland 2020![Poland 2020](./covid_toll_ALL/Poland_2020.png)|Poland 2021![Poland 2021](./covid_toll_ALL/Poland_2021.png)|Poland 2022![Poland 2022](./covid_toll_ALL/Poland_2022.png)|
+|Portugal 2020![Portugal 2020](./covid_toll_ALL/Portugal_2020.png)|Portugal 2021![Portugal 2021](./covid_toll_ALL/Portugal_2021.png)|Portugal 2022![Portugal 2022](./covid_toll_ALL/Portugal_2022.png)|
+|Qatar 2020![Qatar 2020](./covid_toll_ALL/Qatar_2020.png)|Qatar 2021![Qatar 2021](./covid_toll_ALL/Qatar_2021.png)|Qatar 2022![Qatar 2022](./covid_toll_ALL/Qatar_2022.png)|
+|Romania 2020![Romania 2020](./covid_toll_ALL/Romania_2020.png)|Romania 2021![Romania 2021](./covid_toll_ALL/Romania_2021.png)|Romania 2022![Romania 2022](./covid_toll_ALL/Romania_2022.png)|
+|Russia 2020![Russia 2020](./covid_toll_ALL/Russia_2020.png)|Russia 2021![Russia 2021](./covid_toll_ALL/Russia_2021.png)|Russia 2022![Russia 2022](./covid_toll_ALL/Russia_2022.png)|
+|San Marino 2020![San Marino 2020](./covid_toll_ALL/San_Marino_2020.png)|San Marino 2021![San Marino 2021](./covid_toll_ALL/San_Marino_2021.png)|San Marino 2022![San Marino 2022](./covid_toll_ALL/San_Marino_2022.png)|
+|Serbia 2020![Serbia 2020](./covid_toll_ALL/Serbia_2020.png)|Serbia 2021![Serbia 2021](./covid_toll_ALL/Serbia_2021.png)|Serbia 2022![Serbia 2022](./covid_toll_ALL/Serbia_2022.png)|
+|Seychelles 2020![Seychelles 2020](./covid_toll_ALL/Seychelles_2020.png)|Seychelles 2021![Seychelles 2021](./covid_toll_ALL/Seychelles_2021.png)|Seychelles 2022![Seychelles 2022](./covid_toll_ALL/Seychelles_2022.png)|
+|Singapore 2020![Singapore 2020](./covid_toll_ALL/Singapore_2020.png)|Singapore 2021![Singapore 2021](./covid_toll_ALL/Singapore_2021.png)|Singapore 2022![Singapore 2022](./covid_toll_ALL/Singapore_2022.png)|
+|Slovakia 2020![Slovakia 2020](./covid_toll_ALL/Slovakia_2020.png)|Slovakia 2021![Slovakia 2021](./covid_toll_ALL/Slovakia_2021.png)|Slovakia 2022![Slovakia 2022](./covid_toll_ALL/Slovakia_2022.png)|
+|Slovenia 2020![Slovenia 2020](./covid_toll_ALL/Slovenia_2020.png)|Slovenia 2021![Slovenia 2021](./covid_toll_ALL/Slovenia_2021.png)|Slovenia 2022![Slovenia 2022](./covid_toll_ALL/Slovenia_2022.png)|
+|South Africa 2020![South Africa 2020](./covid_toll_ALL/South_Africa_2020.png)|South Africa 2021![South Africa 2021](./covid_toll_ALL/South_Africa_2021.png)|South Africa 2022![South Africa 2022](./covid_toll_ALL/South_Africa_2022.png)|
+|South Korea 2020![South Korea 2020](./covid_toll_ALL/South_Korea_2020.png)|South Korea 2021![South Korea 2021](./covid_toll_ALL/South_Korea_2021.png)|South Korea 2022![South Korea 2022](./covid_toll_ALL/South_Korea_2022.png)|
+|Spain 2020![Spain 2020](./covid_toll_ALL/Spain_2020.png)|Spain 2021![Spain 2021](./covid_toll_ALL/Spain_2021.png)|Spain 2022![Spain 2022](./covid_toll_ALL/Spain_2022.png)|
+|Sweden 2020![Sweden 2020](./covid_toll_ALL/Sweden_2020.png)|Sweden 2021![Sweden 2021](./covid_toll_ALL/Sweden_2021.png)|Sweden 2022![Sweden 2022](./covid_toll_ALL/Sweden_2022.png)|
+|Switzerland 2020![Switzerland 2020](./covid_toll_ALL/Switzerland_2020.png)|Switzerland 2021![Switzerland 2021](./covid_toll_ALL/Switzerland_2021.png)|Switzerland 2022![Switzerland 2022](./covid_toll_ALL/Switzerland_2022.png)|
+|Taiwan 2020![Taiwan 2020](./covid_toll_ALL/Taiwan_2020.png)|Taiwan 2021![Taiwan 2021](./covid_toll_ALL/Taiwan_2021.png)|Taiwan 2022![Taiwan 2022](./covid_toll_ALL/Taiwan_2022.png)|
+|Thailand 2020![Thailand 2020](./covid_toll_ALL/Thailand_2020.png)|Thailand 2021![Thailand 2021](./covid_toll_ALL/Thailand_2021.png)|Thailand 2022![Thailand 2022](./covid_toll_ALL/Thailand_2022.png)|
+|Tunisia 2020![Tunisia 2020](./covid_toll_ALL/Tunisia_2020.png)|Tunisia 2021![Tunisia 2021](./covid_toll_ALL/Tunisia_2021.png)|Tunisia 2022![Tunisia 2022](./covid_toll_ALL/Tunisia_2022.png)|
+|Ukraine 2020![Ukraine 2020](./covid_toll_ALL/Ukraine_2020.png)|Ukraine 2021![Ukraine 2021](./covid_toll_ALL/Ukraine_2021.png)|Ukraine 2022![Ukraine 2022](./covid_toll_ALL/Ukraine_2022.png)|
+|United Kingdom 2020![United Kingdom 2020](./covid_toll_ALL/United_Kingdom_2020.png)|United Kingdom 2021![United Kingdom 2021](./covid_toll_ALL/United_Kingdom_2021.png)|United Kingdom 2022![United Kingdom 2022](./covid_toll_ALL/United_Kingdom_2022.png)|
+|United States 2020![United States 2020](./covid_toll_ALL/United_States_2020.png)|United States 2021![United States 2021](./covid_toll_ALL/United_States_2021.png)|United States 2022![United States 2022](./covid_toll_ALL/United_States_2022.png)|
+|Uruguay 2020![Uruguay 2020](./covid_toll_ALL/Uruguay_2020.png)|Uruguay 2021![Uruguay 2021](./covid_toll_ALL/Uruguay_2021.png)|Uruguay 2022![Uruguay 2022](./covid_toll_ALL/Uruguay_2022.png)|
+|Uzbekistan 2020![Uzbekistan 2020](./covid_toll_ALL/Uzbekistan_2020.png)|Uzbekistan 2021![Uzbekistan 2021](./covid_toll_ALL/Uzbekistan_2021.png)|Uzbekistan 2022![Uzbekistan 2022](./covid_toll_ALL/Uzbekistan_2022.png)|
