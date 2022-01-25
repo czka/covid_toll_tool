@@ -359,7 +359,6 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
 
-    # TODO: Indicate it's an iso-week date at Sun.
     axs.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
     axs2.set(ylabel="percent",
