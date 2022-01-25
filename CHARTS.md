@@ -1,6 +1,6 @@
 These charts show all-cause mortality compared to COVID-19 mortality for a given country and year, in the context of
-lockdown stringency, vaccinations count, virus testing, and the country's all-cause mortality in preceding years. They
-are rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. [I](
+restrictions stringency, vaccinations count, virus testing, and the country's all-cause mortality in preceding years.
+They were rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. [I](
 https://github.com/czka) update them every few days when enough new data are available in [Our World in Data (OWID)](
 https://ourworldindata.org/) project's GitHub repository. Please see [README.md](README.md) for more details.
 

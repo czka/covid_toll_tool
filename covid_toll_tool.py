@@ -2,8 +2,8 @@
 
 """
 Use OWID's data to create PNG charts and CSV datasets of all-cause mortality compared to COVID-19 mortality, for a given
-country and year, in the context of vaccinations count, virus testing, lockdown stringency and the country's all-cause
-mortality in preceding years.
+country and year, in the context of vaccinations count, virus testing, restrictions stringency and the country's
+all-cause mortality in preceding years.
 """
 
 __author__ = "Maciej Sieczka <msieczka@sieczka.org>"
@@ -349,7 +349,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
 
-    axs2.legend(['lockdown stringency: 0 ~ none, 100 ~ full',
+    axs2.legend(['restrictions stringency: 0 ~ none, 100 ~ full lockdown',
                  'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
                  'percent of the country\'s populace who received at least 1 vaccine dose',
                  'percent of the country\'s populace who received all doses according to vaccination protocol',

@@ -1,8 +1,8 @@
 ## About the repository
 
 This repository contains a Python script along with PNG charts and CSV datasets it creates, showing all-cause mortality
-compared to COVID-19 mortality for a given country and year, in the context of lockdown stringency, vaccinations count,
-virus testing, and the country's all-cause mortality in preceding years.
+compared to COVID-19 mortality for a given country and year, in the context of restrictions stringency, vaccinations
+count, virus testing, and the country's all-cause mortality in preceding years.
 
 ## How to use this
 
@@ -85,7 +85,7 @@ https://github.com/owid/covid-19-data/tree/master/public/data) and the following
    - [World Mortality Dataset](https://github.com/akarlinsky/world_mortality)
 2. COVID-19 mortality:
    - [Center for Systems Science and Engineering at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
-3. Lockdown stringency index:
+3. Restrictions stringency index:
    - Hale, T. et al. A global panel database of pandemic policies (Oxford COVID-19 Government Response Tracker). Nature
      Human Behaviour (2021). https://doi.org/10.1038/s41562-021-01079-8
 4. Vaccinations:
