@@ -35,7 +35,7 @@ def main(country, year, if_list_countries, if_interpolate):
     morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all
 
     covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
-                  'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'population']
+                  'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'population', 'positive_rate']
 
     df_covid = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
@@ -220,6 +220,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_deaths'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['positive_rate'].interpolate(limit_area='inside', inplace=True)
 
     # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
     df_covid_country['positive_test_percent'] = \
@@ -233,6 +234,9 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
 
     df_covid_country['total_boosters_percent'] = \
         df_covid_country['total_boosters'] / df_covid_country['population'] * 100
+
+    df_covid_country['positive_rate'] = \
+        df_covid_country['positive_rate'] * 100
 
     # Resample the daily covid data to match the weekly mortality data, with week date on Sunday. resample().sum()
     # removes any input non-numeric columns, ie. `location` here, but we don't need it. It also "hides" the `date`
@@ -250,7 +254,8 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
          'people_vaccinated_percent': 'mean',
          'people_fully_vaccinated_percent': 'mean',
          'total_boosters_percent': 'mean',
-         'population': 'mean'}
+         'population': 'mean',
+         'positive_rate': 'mean'}
     ).reset_index()
 
     if if_interpolate:
@@ -272,6 +277,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country_all['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['positive_test_percent'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_deaths'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['positive_rate'].interpolate(limit_area='inside', inplace=True)
 
     # If all-cause mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
     # TODO: Come up with something neater than this 'temp' name.
@@ -319,42 +325,53 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     axs2 = axs.twinx()
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
-                              color=['deepskyblue', 'dimgrey', 'tab:red', 'black', 'black'],
+                              color=['None'],
                               style=[':', ':', ':', '-', '--'],
                               ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                                    'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                              color=['fuchsia', 'cornflowerblue', 'mediumspringgreen', 'mediumspringgreen',
-                                     'mediumspringgreen'],
-                              style=['-', '-', '--', '-', '-.'],
-                              ax=axs2, x='date', y=['stringency_index', 'positive_test_percent',
-                                                    'people_vaccinated_percent', 'people_fully_vaccinated_percent',
-                                                    'total_boosters_percent'])
+                              color=['cornflowerblue'],
+                              style=['-'],
+                              ax=axs2, x='date', y=['positive_test_percent'])
 
-    axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'],
-                     df_merge_country_one['deaths_max'], alpha=0.25, color='silver')
+    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
+                              color=['orange'],
+                              linestyle=(0, (5, 5)),
+                              ax=axs2, x='date', y=['positive_rate'])
 
-    axs.legend(['{} lowest death count in {}-{} from all causes'.format(
-                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                '{} average death count in {}-{} from all causes'.format(
-                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                '{} highest death count in {}-{} from all causes'.format(
-                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
-                '{} death count in {} from all causes'.format(
-                    time_unit, year),
-                '{} death count in {} from all causes EXCLUDING deaths attributed to COVID-19'.format(
-                    time_unit, year),
-                'range between highest and lowest {} death count from all causes in {}-{}'.format(
-                    time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max)],
+    # axs.fill_between(df_merge_country_one['date'], df_merge_country_one['deaths_min'],
+    #                  df_merge_country_one['deaths_max'], alpha=0.25, color='silver')
+
+    # axs.legend(['{} lowest death count in {}-{} from all causes'.format(
+    #                 time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+    #             '{} average death count in {}-{} from all causes'.format(
+    #                 time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+    #             '{} highest death count in {}-{} from all causes'.format(
+    #                 time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max),
+    #             '{} death count in {} from all causes'.format(
+    #                 time_unit, year),
+    #             '{} death count in {} from all causes EXCLUDING deaths attributed to COVID-19'.format(
+    #                 time_unit, year),
+    #             'range between highest and lowest {} death count from all causes in {}-{}'.format(
+    #                 time_unit, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max)],
+    #            title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
+    #            bbox_to_anchor=(-0.0845, 1.3752))
+
+    axs.legend([''],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
 
-    axs2.legend(['restrictions stringency: 0 ~ none, 100 ~ full lockdown',
-                 'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
-                 'percent of the country\'s populace who received at least 1 vaccine dose',
-                 'percent of the country\'s populace who received all doses according to vaccination protocol',
-                 'total booster doses administered, counted as the country\'s populace percent'],
+    # axs2.legend(['restrictions stringency: 0 ~ none, 100 ~ full lockdown',
+    #              'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
+    #              'percent of the country\'s populace who received at least 1 vaccine dose',
+    #              'percent of the country\'s populace who received all doses according to vaccination protocol',
+    #              'total booster doses administered, counted as the country\'s populace percent'],
+    #             title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
+    #             bbox_to_anchor=(1.057, 1.375))
+
+    axs2.legend(['percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
+                 "OWID's positive_rate*100"],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
