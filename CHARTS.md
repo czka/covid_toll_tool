@@ -7,6 +7,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |2020|2021|2022|
 |-|-|-|
 |Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|Albania 2022![Albania 2022](./covid_toll_ALL/Albania_2022.png)|
+|Algeria 2020![Algeria 2020](./covid_toll_ALL/Algeria_2020.png)|Algeria 2021![Algeria 2021](./covid_toll_ALL/Algeria_2021.png)|Algeria 2022![Algeria 2022](./covid_toll_ALL/Algeria_2022.png)|
 |Andorra 2020![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)|Andorra 2021![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)|Andorra 2022![Andorra 2022](./covid_toll_ALL/Andorra_2022.png)|
 |Antigua and Barbuda 2020![Antigua and Barbuda 2020](./covid_toll_ALL/Antigua_and_Barbuda_2020.png)|Antigua and Barbuda 2021![Antigua and Barbuda 2021](./covid_toll_ALL/Antigua_and_Barbuda_2021.png)|Antigua and Barbuda 2022![Antigua and Barbuda 2022](./covid_toll_ALL/Antigua_and_Barbuda_2022.png)|
 |Argentina 2020![Argentina 2020](./covid_toll_ALL/Argentina_2020.png)|Argentina 2021![Argentina 2021](./covid_toll_ALL/Argentina_2021.png)|Argentina 2022![Argentina 2022](./covid_toll_ALL/Argentina_2022.png)|
@@ -107,6 +108,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |Sweden 2020![Sweden 2020](./covid_toll_ALL/Sweden_2020.png)|Sweden 2021![Sweden 2021](./covid_toll_ALL/Sweden_2021.png)|Sweden 2022![Sweden 2022](./covid_toll_ALL/Sweden_2022.png)|
 |Switzerland 2020![Switzerland 2020](./covid_toll_ALL/Switzerland_2020.png)|Switzerland 2021![Switzerland 2021](./covid_toll_ALL/Switzerland_2021.png)|Switzerland 2022![Switzerland 2022](./covid_toll_ALL/Switzerland_2022.png)|
 |Taiwan 2020![Taiwan 2020](./covid_toll_ALL/Taiwan_2020.png)|Taiwan 2021![Taiwan 2021](./covid_toll_ALL/Taiwan_2021.png)|Taiwan 2022![Taiwan 2022](./covid_toll_ALL/Taiwan_2022.png)|
+|Tajikistan 2020![Tajikistan 2020](./covid_toll_ALL/Tajikistan_2020.png)|Tajikistan 2021![Tajikistan 2021](./covid_toll_ALL/Tajikistan_2021.png)|Tajikistan 2022![Tajikistan 2022](./covid_toll_ALL/Tajikistan_2022.png)|
 |Thailand 2020![Thailand 2020](./covid_toll_ALL/Thailand_2020.png)|Thailand 2021![Thailand 2021](./covid_toll_ALL/Thailand_2021.png)|Thailand 2022![Thailand 2022](./covid_toll_ALL/Thailand_2022.png)|
 |Tunisia 2020![Tunisia 2020](./covid_toll_ALL/Tunisia_2020.png)|Tunisia 2021![Tunisia 2021](./covid_toll_ALL/Tunisia_2021.png)|Tunisia 2022![Tunisia 2022](./covid_toll_ALL/Tunisia_2022.png)|
 |Ukraine 2020![Ukraine 2020](./covid_toll_ALL/Ukraine_2020.png)|Ukraine 2021![Ukraine 2021](./covid_toll_ALL/Ukraine_2021.png)|Ukraine 2022![Ukraine 2022](./covid_toll_ALL/Ukraine_2022.png)|
