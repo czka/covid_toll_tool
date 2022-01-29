@@ -186,7 +186,7 @@ def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_dea
         df_morta_country_all = pd.concat([df_morta_country_all, pd.DataFrame(deaths, columns=['deaths'])],
                                          axis='columns')
 
-        # Interpolate NaNs from nearest neighbours. One such record for sure is 2016-01-03 in all countries data
+        # Interpolate NaNs from nearest neighbours. One such record for sure is 2016-01-03 in all countries' data
         # (53rd week of 2015), but maybe some countries have more. So interpolating it all away, just in case.
         df_morta_country_all['deaths'].interpolate(limit_area='inside', inplace=True)
 
