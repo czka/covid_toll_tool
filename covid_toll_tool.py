@@ -221,7 +221,13 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_deaths'].interpolate(limit_area='inside', inplace=True)
 
-    # TODO: Report countries where OWID's 'positive_rate' and my 'positive_test_percent' don't match.
+    # NOTE: OWID's positive_rate multiplied by 100 usually equals my positive_test_percent. However, there are
+    # countries for which OWID derive positive_rate in a different way than "JHU cases divided by OWID tests". As of
+    # writing, this applies to 17 of those 110 countries my script covers at present. For more information see OWID's
+    # team replies in https://github.com/owid/covid-19-data/issues/2333.
+    #  TODO: Decide whether to use OWID's `positive_rate * 100`, or to stick with `new_cases_smoothed /
+    #   new_tests_smoothed * 100`. For now I'll go with the latter, as it allows me to easily spot countries whose cases
+    #   or tests count are weird - like Brazil.
     df_covid_country['positive_test_percent'] = \
         df_covid_country['new_cases_smoothed'] / df_covid_country['new_tests_smoothed'] * 100
 
