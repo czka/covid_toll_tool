@@ -311,7 +311,7 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
     return df_merge_country_one
 
 
-# TODO: Watch out for the status of 'x_compat'. It's not documented where it should have been [1] although mentioned few
+# TODO: Watch out for the status of 'x_compat'. It's not documented where I'd expect to be [1] although mentioned few
 #  times in [2]. If it's going to be depreciated, a workaround will be needed as e.g. per [3], [4].
 # [1]https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html
 # [2]https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html
