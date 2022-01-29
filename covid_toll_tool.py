@@ -354,7 +354,7 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                  'percent of positive results, aka "cases", in all COVID-19 tests conducted that week',
                  'percent of the country\'s populace who received at least 1 vaccine dose',
                  'percent of the country\'s populace who received all doses according to vaccination protocol',
-                 'total booster doses administered, counted as the country\'s populace percent'],
+                 'total booster doses administered, counted as the country\'s populace percentage'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
