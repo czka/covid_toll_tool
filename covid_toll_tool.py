@@ -305,6 +305,8 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
     df_merge_country_one['deaths_max'] = df_merge_country_one[morta_death_cols_bgd].max(axis='columns')
     df_merge_country_one['deaths_mean'] = df_merge_country_one[morta_death_cols_bgd].mean(axis='columns')
 
+    # NOTE: At certain dates, for some countries, one-off upstream corrections in covid mortality counts sometimes
+    # happen, leading to over- or under-shoots in deaths_noncovid - https://github.com/owid/covid-19-data/issues/1550.
     df_merge_country_one['deaths_noncovid'] = df_merge_country_one['deaths_{}_all_ages'.format(str(year))].sub(
         df_merge_country_one['new_deaths'], fill_value=None)
 
