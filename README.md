@@ -76,7 +76,7 @@ https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=t
 - Percent of people vaccinated in country's populace - partially, fully and booster doses.
 
 OWID obtains their data from official sources like government healthcare agencies and academic institutions. For more
-information, please visit their [README on the mortality data](
+information, please visit their [README on the all-cause mortality data](
 https://github.com/owid/covid-19-data/tree/master/public/data/excess_mortality), [README about the data on COVID-19](
 https://github.com/owid/covid-19-data/tree/master/public/data) and the following resources those READMEs refer to:
 
