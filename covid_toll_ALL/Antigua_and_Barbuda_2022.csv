@@ -1,9 +1,9 @@
 date,location,time_unit,time,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,deaths_2022_all_ages,new_deaths,new_cases_smoothed,new_tests_smoothed,positive_test_percent,stringency_index,people_vaccinated,people_fully_vaccinated,total_boosters,people_vaccinated_percent,people_fully_vaccinated_percent,total_boosters_percent,population,deaths_min,deaths_max,deaths_mean,deaths_noncovid
 2022-01-09,Antigua and Barbuda,monthly,1,,,,,,,33.25,44.4,46.6,43.0,54.0,,,3.2,382.572,0.0,,,62399.41836734694,59084.719387755096,,63.20336517233909,59.84595999894164,,98728.0,33.25,46.6,41.8125,
-2022-01-16,Antigua and Barbuda,monthly,2,,,,,,,32.5,43.8,44.2,48.0,53.0,,,4.4,549.285,0.0,,,62661.142857142855,59382.42857142857,,63.468461689837596,60.1475048329031,,98728.0,32.5,48.0,42.125,
-2022-01-23,Antigua and Barbuda,monthly,3,,,,,,,31.75,43.2,41.8,53.0,52.0,,,5.6,484.858,0.0,,,,,,,,,98728.0,31.75,53.0,42.4375,
-2022-01-30,Antigua and Barbuda,monthly,4,,,,,,,31.0,42.6,39.4,58.0,51.0,,,6.8,409.0,0.0,,,,,,,,,98728.0,31.0,58.0,42.75,
-2022-02-06,Antigua and Barbuda,monthly,5,,,,,,36.0,34.6,42.0,37.0,63.0,50.0,,,,,,,,,,,,,,,34.6,63.0,42.519999999999996,
+2022-01-16,Antigua and Barbuda,monthly,2,,,,,,,32.5,43.8,44.2,48.0,53.0,,,4.4,549.285,0.0,,,62726.15855572999,59479.2339089482,,63.53431504307794,60.245557399064296,,98728.0,32.5,48.0,42.125,
+2022-01-23,Antigua and Barbuda,monthly,3,,,,,,,31.75,43.2,41.8,53.0,52.0,,,5.6,484.858,0.0,,,62987.46153846154,59949.07692307692,,63.798984622864374,60.7214538156115,,98728.0,31.75,53.0,42.4375,
+2022-01-30,Antigua and Barbuda,monthly,4,,,,,,,31.0,42.6,39.4,58.0,51.0,,,6.8,694.285,0.0,,,63162.076923076915,60289.846153846156,,63.975849731663686,61.066613477277116,,98728.0,31.0,58.0,42.75,
+2022-02-06,Antigua and Barbuda,monthly,5,,,,,,36.0,34.6,42.0,37.0,63.0,50.0,,,8.0,214.001,0.0,,,,,,,,,98728.0,34.6,63.0,42.519999999999996,
 2022-02-13,Antigua and Barbuda,monthly,6,,,,,,40.25,38.2,43.75,37.75,62.5,49.25,,,,,,,,,,,,,,,37.75,62.5,44.489999999999995,
 2022-02-20,Antigua and Barbuda,monthly,7,,,,,,44.5,41.8,45.5,38.5,62.0,48.5,,,,,,,,,,,,,,,38.5,62.0,46.46,
 2022-02-27,Antigua and Barbuda,monthly,8,,,,,,48.75,45.4,47.25,39.25,61.5,47.75,,,,,,,,,,,,,,,39.25,61.5,48.43,
