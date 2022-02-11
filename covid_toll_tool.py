@@ -136,6 +136,8 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
         plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max,
                     time_unit, y_min, y_max)
 
+        plot_vax_vs_deaths(df_merge_country_one, country, year)
+
 
 def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_death_cols_all, morta_pscore_cols,
                      country):
@@ -423,6 +425,71 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
                 pil_kwargs={'optimize': True})
 
     df_merge_country_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
+
+
+def plot_vax_vs_deaths(df_merge_country_one, country, year):
+
+    fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
+
+    axs2 = axs.twinx()
+
+    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
+                              color=['mediumspringgreen'],
+                              style=['-'],
+                              ax=axs, x='date', y=['new_vaccinations_smoothed'])
+
+    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
+                              color=['gold', 'darkorange', 'red', 'maroon'],
+                              style=['-'],
+                              ax=axs2, x='date', y=['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74',
+                                                    'p_scores_75_84'],
+                              linewidth=1)
+
+    axs.legend(['new vaccinations per week'],
+               title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
+               bbox_to_anchor=(-0.0845, 1.3752))
+
+    axs2.legend(['p-score 0-14',
+                 'p-score 15-64',
+                 'p-score 65-74',
+                 'p-score 75-84'],
+                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
+                bbox_to_anchor=(1.057, 1.375))
+
+    axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
+
+    axs.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
+
+    axs2.set(ylabel="percent",
+             xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
+             ylim=[-50.25, 50.5])
+
+    axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
+
+    axs.set(ylabel="count",
+            xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)])
+
+    axs2.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
+
+    # Put the axs2 (the right Y axis) below the legend boxes. By default it would overlap the axs'es (left) legend box.
+    # See https://github.com/matplotlib/matplotlib/issues/3706.
+    legend = axs.get_legend()
+    axs.get_legend().remove()
+    axs2.add_artist(legend)
+
+    axs.xaxis.set_major_formatter(mdates.DateFormatter('%d.%m'))
+
+    mpyplot.title("{}, {}".format(country, year), fontweight="bold", loc='right')
+
+    mpyplot.figtext(0.065, 0,
+                    "This chart was downloaded from https://github.com/czka/covid_toll_tool.\n"
+                    "Chart's data source is OWID (Our World in Data), https://github.com/owid/covid-19-data.\n"
+                    "For more information about the data presented on this chart please see "
+                    "https://github.com/czka/covid_toll_tool/blob/main/README.md.",
+                    fontsize=9, va="bottom", ha="left", linespacing=1.5, fontstyle='italic')
+
+    fig.savefig('{}_{}_vax_vs_deaths.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
+                pil_kwargs={'optimize': True})
 
 
 if __name__ == '__main__':
