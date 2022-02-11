@@ -32,10 +32,13 @@ def main(country, year, if_list_countries, if_interpolate):
     morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages',
                                                    'deaths_2022_all_ages']
 
-    morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all
+    morta_pscore_cols = ['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74', 'p_scores_75_84']
+
+    morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all + morta_pscore_cols
 
     covid_cols = ['location', 'date', 'new_cases_smoothed', 'new_tests_smoothed', 'new_deaths', 'stringency_index',
-                  'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'population']
+                  'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'new_vaccinations_smoothed',
+                  'population']
 
     df_covid = pd.read_csv("./owid-covid-data.csv", parse_dates=['date'], usecols=covid_cols).reindex(
         columns=covid_cols)
@@ -50,10 +53,12 @@ def main(country, year, if_list_countries, if_interpolate):
 
     elif country == 'ALL':
         for country in common_countries:
-            orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate)
+            orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all,
+                        morta_pscore_cols, if_interpolate)
 
     elif country in common_countries:
-        orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate)
+        orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, morta_pscore_cols,
+                    if_interpolate)
 
     else:
         print("Country '{}' is not present in both input datasets.\n".format(country))
@@ -77,7 +82,8 @@ def list_countries(common_countries):
 # one such week is appended. In case of 2015 (which has 53 weeks, but its death count data series is capped at week 52
 # anyway in excess_mortality.csv) death count for the missing 53rd week is interpolated linearly from 2015's 52nd week
 # and the 1st week of 2016.
-def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, if_interpolate):
+def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_death_cols_all, morta_pscore_cols,
+                if_interpolate):
 
     # Select only the data of a specific country.
     df_covid_country = df_covid[df_covid['location'] == country].copy().reset_index(drop=True)
@@ -101,7 +107,7 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
         df_dates_weekly_one = pd.DataFrame(dates_weekly_one, columns=['date'], dtype='datetime64[ns]')
 
         df_morta_country_all, df_morta_country_one = process_morta_df(df_morta_country, df_dates_weekly_one, time_unit,
-                                                                      morta_death_cols_all, country)
+                                                                      morta_death_cols_all, morta_pscore_cols, country)
 
         df_covid_country_all, df_covid_country_one = process_covid_df(df_covid_country, df_dates_weekly_one, time_unit,
                                                                       if_interpolate)
@@ -131,7 +137,8 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
                     time_unit, y_min, y_max)
 
 
-def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_death_cols_all, country):
+def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_death_cols_all, morta_pscore_cols,
+                     country):
     morta_year_all_min = int(morta_death_cols_all[0].split('_')[1])
     morta_year_all_max = int(morta_death_cols_all[-1].split('_')[1])
 
@@ -209,6 +216,9 @@ def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_dea
         df_morta_country_one[col] = df_morta_country_all[df_morta_country_all['date'].isin(date_range)]['deaths']. \
             to_list()
 
+    df_morta_country_one = pd.merge(left=df_morta_country_one, right=df_morta_country[['date', *morta_pscore_cols]],
+                                    on='date', how='left')
+
     return df_morta_country_all, df_morta_country_one
 
 
@@ -220,6 +230,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         # single missing records of 'new_deaths' at d2e597487d etc.
         df_covid_country['people_vaccinated'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['people_fully_vaccinated'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country['new_vaccinations_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['total_boosters'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['stringency_index'].interpolate(limit_area='inside', inplace=True)
         df_covid_country['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
@@ -257,6 +268,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
+         'new_vaccinations_smoothed': 'sum',
          'total_boosters': 'mean',
          'people_vaccinated_percent': 'mean',
          'people_fully_vaccinated_percent': 'mean',
@@ -278,6 +290,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
         df_covid_country_all['people_vaccinated_percent'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['people_fully_vaccinated_percent'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['total_boosters_percent'].interpolate(limit_area='inside', inplace=True)
+        df_covid_country_all['new_vaccinations_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['stringency_index'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_cases_smoothed'].interpolate(limit_area='inside', inplace=True)
         df_covid_country_all['new_tests_smoothed'].interpolate(limit_area='inside', inplace=True)
