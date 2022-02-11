@@ -32,7 +32,7 @@ def main(country, year, if_list_countries, if_interpolate):
     morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages',
                                                    'deaths_2022_all_ages']
 
-    morta_pscore_cols = ['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74', 'p_scores_75_84']
+    morta_pscore_cols = ['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74', 'p_scores_75_84', 'p_scores_all_ages']
 
     morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all + morta_pscore_cols
 
@@ -439,11 +439,12 @@ def plot_vax_vs_deaths(df_merge_country_one, country, year):
                               ax=axs, x='date', y=['new_vaccinations_smoothed'])
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                              color=['gold', 'darkorange', 'red', 'maroon'],
-                              style=['-'],
+                              color=['gold', 'darkorange', 'red', 'maroon', 'black'],
+                              style=['-', '-', '-', '-', '--'],
                               ax=axs2, x='date', y=['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74',
-                                                    'p_scores_75_84'],
-                              linewidth=1)
+                                                    'p_scores_75_84', 'p_scores_all_ages'])
+
+    mpyplot.axhline(y=0, color='grey', linestyle=':')
 
     axs.legend(['new vaccinations per week'],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
@@ -452,7 +453,8 @@ def plot_vax_vs_deaths(df_merge_country_one, country, year):
     axs2.legend(['p-score 0-14',
                  'p-score 15-64',
                  'p-score 65-74',
-                 'p-score 75-84'],
+                 'p-score 75-84',
+                 'p-score all'],
                 title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
