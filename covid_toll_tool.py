@@ -127,14 +127,14 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
         # have any covid deaths until 2021-12-27, and its all-cause mortality ended in Sep 2021, as of
         # excess_mortality.csv at d4dfef79a8.
         if deaths_noncovid_all.isnull().all():
-            y_min = df_morta_country_all['deaths'].min()
-            y_max = df_morta_country_all['deaths'].max()
+            y_min_morta = df_morta_country_all['deaths'].min()
+            y_max_morta = df_morta_country_all['deaths'].max()
         else:
-            y_min = min(deaths_noncovid_all.min(), df_morta_country_all['deaths'].min())
-            y_max = max(deaths_noncovid_all.max(), df_morta_country_all['deaths'].max())
+            y_min_morta = min(deaths_noncovid_all.min(), df_morta_country_all['deaths'].min())
+            y_max_morta = max(deaths_noncovid_all.max(), df_morta_country_all['deaths'].max())
 
         plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max,
-                    time_unit, y_min, y_max)
+                    time_unit, y_min_morta, y_max_morta)
 
         plot_vax_vs_deaths(df_merge_country_one, country, year)
 
@@ -340,7 +340,7 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
 # [3]https://stackoverflow.com/questions/12945971/pandas-timeseries-plot-setting-x-axis-major-and-minor-ticks-and-labels
 # [4]https://stackoverflow.com/questions/30133280/pandas-bar-plot-changes-date-format
 def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max, time_unit,
-                y_min, y_max):
+                y_min_morta, y_max_morta):
 
     fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
@@ -398,7 +398,8 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs.set(ylabel="count",
             xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
-            ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
+            ylim=[y_min_morta - (abs(y_max_morta) - abs(y_min_morta)) * 0.05,
+                  y_max_morta + (abs(y_max_morta) - abs(y_min_morta)) * 0.05])
 
     axs2.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
