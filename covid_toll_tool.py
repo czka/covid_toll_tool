@@ -32,7 +32,7 @@ def main(country, year, if_list_countries, if_interpolate):
     morta_death_cols_all = morta_death_cols_bgd + ['deaths_2020_all_ages', 'deaths_2021_all_ages',
                                                    'deaths_2022_all_ages']
 
-    morta_pscore_cols = ['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74', 'p_scores_75_84', 'p_scores_all_ages']
+    morta_pscore_cols = ['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74', 'p_scores_75_84', 'p_scores_85plus']
 
     morta_cols = ['location', 'date', 'time', 'time_unit'] + morta_death_cols_all + morta_pscore_cols
 
@@ -133,10 +133,17 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
             y_min_morta = min(deaths_noncovid_all.min(), df_morta_country_all['deaths'].min())
             y_max_morta = max(deaths_noncovid_all.max(), df_morta_country_all['deaths'].max())
 
+        y_min_vacc = df_covid_country_all['new_vaccinations_smoothed'].min()
+        y_max_vacc = df_covid_country_all['new_vaccinations_smoothed'].max()
+
+        y_min_pscore = df_morta_country[morta_pscore_cols].min().min()
+        y_max_pscore = df_morta_country[morta_pscore_cols].max().max()
+
         plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max,
                     time_unit, y_min_morta, y_max_morta)
 
-        plot_vax_vs_deaths(df_merge_country_one, country, year)
+        plot_vaccination_vs_pscores(df_merge_country_one, country, year, time_unit, y_min_vacc, y_max_vacc,
+                                    y_min_pscore, y_max_pscore)
 
 
 def process_morta_df(df_morta_country, df_dates_weekly_one, time_unit, morta_death_cols_all, morta_pscore_cols,
@@ -270,7 +277,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
          'people_fully_vaccinated': 'mean',
-         'new_vaccinations_smoothed': 'sum',
+         'new_vaccinations_smoothed': lambda x: x.sum(min_count=1),
          'total_boosters': 'mean',
          'people_vaccinated_percent': 'mean',
          'people_fully_vaccinated_percent': 'mean',
@@ -428,7 +435,8 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     df_merge_country_one.to_csv('{}_{}.csv'.format(country.replace(' ', '_'), year), index=False)
 
 
-def plot_vax_vs_deaths(df_merge_country_one, country, year):
+def plot_vaccination_vs_pscores(df_merge_country_one, country, year, time_unit, y_min_vacc, y_max_vacc, y_min_pscore,
+                       y_max_pscore):
 
     fig, axs = mpyplot.subplots(figsize=(13.55, 5.75))  # Create an empty matplotlib figure and axes.
 
@@ -440,23 +448,27 @@ def plot_vax_vs_deaths(df_merge_country_one, country, year):
                               ax=axs, x='date', y=['new_vaccinations_smoothed'])
 
     df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
-                              color=['gold', 'darkorange', 'red', 'maroon', 'black'],
-                              style=['-', '-', '-', '-', '--'],
+                              color=['tan', 'orange', 'tab:red', 'saddlebrown', 'black'],
+                              style=['-', '-', '-', '-', '-'],
                               ax=axs2, x='date', y=['p_scores_0_14', 'p_scores_15_64', 'p_scores_65_74',
-                                                    'p_scores_75_84', 'p_scores_all_ages'])
+                                                    'p_scores_75_84', 'p_scores_85plus'])
 
-    mpyplot.axhline(y=0, color='grey', linestyle=':')
+    mpyplot.axhline(y=0, color='black', linestyle=(0, (5, 10)), linewidth=0.5)
 
-    axs.legend(['new vaccinations per week'],
+    axs.legend(['new COVID-19 vaccine doses administered weekly'],
                title='left Y axis:', fontsize='small', handlelength=1.6, loc='upper left',
                bbox_to_anchor=(-0.0845, 1.3752))
 
-    axs2.legend(['p-score 0-14',
-                 'p-score 15-64',
-                 'p-score 65-74',
-                 'p-score 75-84',
-                 'p-score all'],
-                title='right Y axis:', fontsize='small', handlelength=1.6, loc='upper right',
+    axs2.legend(['p-score for the 0-14 age group',
+                 'p-score for the 15-64 age group',
+                 'p-score for the 65-74 age group',
+                 'p-score for the 75-84 age group',
+                 'p-score for the age group of 85 and over'],
+                ncol=2,
+                title='right Y axis: difference between the number of {} deaths in 2020-2022 and\n'
+                      '                    the average number of deaths in the same period of 2015-2019'.format(
+                    time_unit),
+                fontsize='small', handlelength=1.6, loc='upper right',
                 bbox_to_anchor=(1.057, 1.375))
 
     axs.xaxis.set_major_locator(mdates.WeekdayLocator(interval=1, byweekday=6))
@@ -465,12 +477,15 @@ def plot_vax_vs_deaths(df_merge_country_one, country, year):
 
     axs2.set(ylabel="percent",
              xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
-             ylim=[-50.25, 50.5])
+             ylim=[y_min_pscore - (abs(y_max_pscore) - abs(y_min_pscore)) * 0.5,
+                   y_max_pscore + (abs(y_max_pscore) - abs(y_min_pscore)) * 0.5])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
     axs.set(ylabel="count",
-            xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)])
+            xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
+            ylim=[y_min_vacc - (abs(y_max_vacc) - abs(y_min_vacc)) * 0.05,
+                  y_max_vacc + (abs(y_max_vacc) - abs(y_min_vacc)) * 0.05])
 
     axs2.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
@@ -491,8 +506,8 @@ def plot_vax_vs_deaths(df_merge_country_one, country, year):
                     "https://github.com/czka/covid_toll_tool/blob/main/README.md.",
                     fontsize=9, va="bottom", ha="left", linespacing=1.5, fontstyle='italic')
 
-    fig.savefig('{}_{}_vax_vs_deaths.png'.format(country.replace(' ', '_'), year), bbox_inches="tight", pad_inches=0.05,
-                pil_kwargs={'optimize': True})
+    fig.savefig('{}_{}_vaccination_vs_pscores.png'.format(country.replace(' ', '_'), year), bbox_inches="tight",
+                pad_inches=0.05, pil_kwargs={'optimize': True})
 
 
 if __name__ == '__main__':
