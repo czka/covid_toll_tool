@@ -114,13 +114,18 @@ def orchestrate(country, df_covid, df_morta, year, morta_death_cols_bgd, morta_d
         # given year (e.g. Belgium in 2020) happens to be lower than the lowest number of deaths from all causes in
         # previous years. For some, it's higher than the highest number of deaths in previous years - probably due to
         # borked data, but anyway (e.g. Kyrgyzstan in 2020 - see https://github.com/owid/covid-19-data/issues/1550).
-        y_min = min(df_morta_country_all.set_index('date')['deaths'].sub(
-            df_covid_country_all.set_index('date')['new_deaths']).min(),
-                    df_morta_country_all['deaths'].min())
+        deaths_noncovid_all = df_morta_country_all.set_index('date')['deaths'].sub(
+            df_covid_country_all.set_index('date')['new_deaths'])
 
-        y_max = max(df_morta_country_all.set_index('date')['deaths'].sub(
-            df_covid_country_all.set_index('date')['new_deaths']).max(),
-                    df_morta_country_all['deaths'].max())
+        # This conditional is due to `deaths_noncovid_all` being all NaN under certain conditions. E.g. Greenland didn't
+        # have any covid deaths until 2021-12-27, and its all-cause mortality ended in Sep 2021, as of
+        # excess_mortality.csv at d4dfef79a8.
+        if deaths_noncovid_all.isnull().all():
+            y_min = df_morta_country_all['deaths'].min()
+            y_max = df_morta_country_all['deaths'].max()
+        else:
+            y_min = min(deaths_noncovid_all.min(), df_morta_country_all['deaths'].min())
+            y_max = max(deaths_noncovid_all.max(), df_morta_country_all['deaths'].max())
 
         plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min, morta_year_bgd_notnull_max,
                     time_unit, y_min, y_max)
@@ -245,9 +250,9 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
     # column by setting an index on it, but we are going to need this column later on, thus bringing it back with
     # reset_index().
     df_covid_country_all = df_covid_country.resample(rule='W', on='date').agg(
-        {'new_deaths': 'sum',
-         'new_cases_smoothed': 'sum',
-         'new_tests_smoothed': 'sum',
+        {'new_deaths': lambda x: x.sum(min_count=1),
+         'new_cases_smoothed': lambda x: x.sum(min_count=1),
+         'new_tests_smoothed': lambda x: x.sum(min_count=1),
          'positive_test_percent': 'mean',
          'stringency_index': 'mean',
          'people_vaccinated': 'mean',
@@ -282,7 +287,7 @@ def process_covid_df(df_covid_country, df_dates_weekly_one, time_unit, if_interp
     # If all-cause mortality data resolution is monthly, we need to adjust daily covid mortality data accordingly.
     # TODO: Come up with something neater than this 'temp' name.
     if time_unit == 'monthly':
-        temp = df_covid_country.resample(rule='M', on='date').agg({'new_deaths': 'sum'}). \
+        temp = df_covid_country.resample(rule='M', on='date').agg({'new_deaths': lambda x: x.sum(min_count=1)}). \
             resample(rule='W').first(). \
             interpolate(limit_area='inside').reset_index()
 
