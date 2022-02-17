@@ -315,7 +315,7 @@ def merge_covid_morta_dfs(df_covid_country_one, df_morta_country, year, morta_de
     df_merge_country_one['deaths_noncovid'] = df_merge_country_one['deaths_{}_all_ages'.format(str(year))].sub(
         df_merge_country_one['new_deaths'], fill_value=None)
 
-    return df_merge_country_one
+    return df_merge_country_one.round(decimals=3)
 
 
 # TODO: Watch out for the status of 'x_compat'. It's not documented where I'd expect to be [1] although mentioned few
