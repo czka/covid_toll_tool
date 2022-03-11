@@ -1,6 +1,6 @@
 date,location,time_unit,time,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,deaths_2022_all_ages,new_deaths,new_cases_smoothed,new_tests_smoothed,positive_test_percent,stringency_index,people_vaccinated,people_fully_vaccinated,total_boosters,people_vaccinated_percent,people_fully_vaccinated_percent,total_boosters_percent,population,deaths_min,deaths_max,deaths_mean,deaths_noncovid
-2021-01-10,Greenland,monthly,1,,,,,,,48.75,54.8,43.2,34.0,46.0,55.5,,,1.43,,,37.04,,,,,,,56868.0,34.0,54.8,45.188,
-2021-01-17,Greenland,monthly,2,,,,,,,44.5,53.6,44.4,37.0,44.0,53.0,,,1.43,,,37.04,,,,,,,56868.0,37.0,53.6,44.875,
+2021-01-10,Greenland,monthly,1,,,,,,,48.75,54.8,43.2,34.0,46.0,55.5,,,1.502,,,37.04,,,,,,,56868.0,34.0,54.8,45.188,
+2021-01-17,Greenland,monthly,2,,,,,,,44.5,53.6,44.4,37.0,44.0,53.0,,,1.93,,,37.04,,,,,,,56868.0,37.0,53.6,44.875,
 2021-01-24,Greenland,monthly,3,,,,,,,40.25,52.4,45.6,40.0,42.0,50.5,,,0.429,,,37.04,,,,,,,56868.0,40.0,52.4,44.562,
 2021-01-31,Greenland,monthly,4,,,,,,,36.0,51.2,46.8,43.0,40.0,48.0,,,0.0,,,37.04,2665.394,,,4.687,,,56868.0,36.0,51.2,44.25,
 2021-02-07,Greenland,monthly,5,,,,,,44.0,37.6,50.0,48.0,46.0,38.0,49.25,,,0.0,,,37.04,2909.576,,,5.116,,,56868.0,37.6,50.0,45.12,

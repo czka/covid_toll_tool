@@ -1,7 +1,7 @@
 date,location,time_unit,time,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,deaths_2022_all_ages,new_deaths,new_cases_smoothed,new_tests_smoothed,positive_test_percent,stringency_index,people_vaccinated,people_fully_vaccinated,total_boosters,people_vaccinated_percent,people_fully_vaccinated_percent,total_boosters_percent,population,deaths_min,deaths_max,deaths_mean,deaths_noncovid
 2021-01-10,Seychelles,monthly,1,,,,,,,57.25,61.8,55.2,69.0,76.0,65.25,,,144.714,,,48.81,250.0,,,0.253,,,98910.0,55.2,69.0,60.812,
 2021-01-17,Seychelles,monthly,2,,,,,,,55.5,61.6,57.4,71.75,73.25,66.5,,,217.857,,,51.453,3832.19,,,3.874,,,98910.0,55.5,71.75,61.562,
-2021-01-24,Seychelles,monthly,3,,,,,,,53.75,61.4,59.6,74.5,70.5,67.75,,,240.145,,,68.387,14740.024,,,14.902,,,98910.0,53.75,74.5,62.312,
+2021-01-24,Seychelles,monthly,3,,,,,,,53.75,61.4,59.6,74.5,70.5,67.75,,,266.0,,,68.387,14740.024,,,14.902,,,98910.0,53.75,74.5,62.312,
 2021-01-31,Seychelles,monthly,4,,,,,,,52.0,61.2,61.8,77.25,67.75,69.0,,3.0,272.857,,,79.63,27681.143,,,27.986,,,98910.0,52.0,77.25,63.062,66.0
 2021-02-07,Seychelles,monthly,5,,,,,,52.0,52.8,61.0,64.0,80.0,65.0,70.25,,4.25,163.287,,,79.63,36909.5,1193.0,,37.316,1.206,,98910.0,52.0,80.0,61.96,66.0
 2021-02-14,Seychelles,monthly,6,,,,,,51.5,53.6,62.0,62.5,76.75,64.0,71.5,,5.5,397.572,,,79.63,39227.571,11199.714,,39.66,11.323,,98910.0,51.5,76.75,61.27,66.0
