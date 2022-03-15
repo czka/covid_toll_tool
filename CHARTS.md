@@ -96,6 +96,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |Qatar 2020![Qatar 2020](./covid_toll_ALL/Qatar_2020.png)|Qatar 2021![Qatar 2021](./covid_toll_ALL/Qatar_2021.png)|Qatar 2022![Qatar 2022](./covid_toll_ALL/Qatar_2022.png)|
 |Romania 2020![Romania 2020](./covid_toll_ALL/Romania_2020.png)|Romania 2021![Romania 2021](./covid_toll_ALL/Romania_2021.png)|Romania 2022![Romania 2022](./covid_toll_ALL/Romania_2022.png)|
 |Russia 2020![Russia 2020](./covid_toll_ALL/Russia_2020.png)|Russia 2021![Russia 2021](./covid_toll_ALL/Russia_2021.png)|Russia 2022![Russia 2022](./covid_toll_ALL/Russia_2022.png)|
+|Saint Kitts and Nevis 2020![Saint Kitts and Nevis 2020](./covid_toll_ALL/Saint_Kitts_and_Nevis_2020.png)|Saint Kitts and Nevis 2021![Saint Kitts and Nevis 2021](./covid_toll_ALL/Saint_Kitts_and_Nevis_2021.png)|Saint Kitts and Nevis 2022![Saint Kitts and Nevis 2022](./covid_toll_ALL/Saint_Kitts_and_Nevis_2022.png)|
 |San Marino 2020![San Marino 2020](./covid_toll_ALL/San_Marino_2020.png)|San Marino 2021![San Marino 2021](./covid_toll_ALL/San_Marino_2021.png)|San Marino 2022![San Marino 2022](./covid_toll_ALL/San_Marino_2022.png)|
 |Serbia 2020![Serbia 2020](./covid_toll_ALL/Serbia_2020.png)|Serbia 2021![Serbia 2021](./covid_toll_ALL/Serbia_2021.png)|Serbia 2022![Serbia 2022](./covid_toll_ALL/Serbia_2022.png)|
 |Seychelles 2020![Seychelles 2020](./covid_toll_ALL/Seychelles_2020.png)|Seychelles 2021![Seychelles 2021](./covid_toll_ALL/Seychelles_2021.png)|Seychelles 2022![Seychelles 2022](./covid_toll_ALL/Seychelles_2022.png)|
