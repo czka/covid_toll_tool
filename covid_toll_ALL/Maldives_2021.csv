@@ -1,6 +1,6 @@
 date,location,time_unit,time,deaths_2010_all_ages,deaths_2011_all_ages,deaths_2012_all_ages,deaths_2013_all_ages,deaths_2014_all_ages,deaths_2015_all_ages,deaths_2016_all_ages,deaths_2017_all_ages,deaths_2018_all_ages,deaths_2019_all_ages,deaths_2020_all_ages,deaths_2021_all_ages,deaths_2022_all_ages,new_deaths,new_cases_smoothed,new_tests_smoothed,positive_test_percent,stringency_index,people_vaccinated,people_fully_vaccinated,total_boosters,people_vaccinated_percent,people_fully_vaccinated_percent,total_boosters_percent,population,deaths_min,deaths_max,deaths_mean,deaths_noncovid
-2021-01-10,Maldives,monthly,1,,,,,,,104.0,100.2,116.4,112.0,58.0,,,2.5,234.428,17322.0,1.354,,,,,,,,543620.0,100.2,116.4,108.15,
-2021-01-17,Maldives,monthly,2,,,,,,,110.0,99.4,115.8,111.5,72.0,,,3.0,328.714,17789.0,1.841,,,,,,,,543620.0,99.4,115.8,109.175,
+2021-01-10,Maldives,monthly,1,,,,,,,104.0,100.2,116.4,112.0,58.0,,,2.5,234.428,17607.0,1.334,,,,,,,,543620.0,100.2,116.4,108.15,
+2021-01-17,Maldives,monthly,2,,,,,,,110.0,99.4,115.8,111.5,72.0,,,3.0,328.714,21062.0,1.556,,,,,,,,543620.0,99.4,115.8,109.175,
 2021-01-24,Maldives,monthly,3,,,,,,,116.0,98.6,115.2,111.0,86.0,,,3.5,443.857,21970.0,2.024,,,,,,,,543620.0,98.6,116.0,110.2,
 2021-01-31,Maldives,monthly,4,,,,,,,122.0,97.8,114.6,110.5,100.0,,,4.0,718.0,23657.0,3.025,,,,,,,,543620.0,97.8,122.0,111.225,
 2021-02-07,Maldives,monthly,5,,,,,,94.0,121.8,97.0,114.0,110.0,114.0,,,5.5,922.428,23604.0,3.908,,4422.833,,,0.814,,,543620.0,94.0,121.8,107.36,

@@ -106,6 +106,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |South Africa 2020![South Africa 2020](./covid_toll_ALL/South_Africa_2020.png)|South Africa 2021![South Africa 2021](./covid_toll_ALL/South_Africa_2021.png)|South Africa 2022![South Africa 2022](./covid_toll_ALL/South_Africa_2022.png)|
 |South Korea 2020![South Korea 2020](./covid_toll_ALL/South_Korea_2020.png)|South Korea 2021![South Korea 2021](./covid_toll_ALL/South_Korea_2021.png)|South Korea 2022![South Korea 2022](./covid_toll_ALL/South_Korea_2022.png)|
 |Spain 2020![Spain 2020](./covid_toll_ALL/Spain_2020.png)|Spain 2021![Spain 2021](./covid_toll_ALL/Spain_2021.png)|Spain 2022![Spain 2022](./covid_toll_ALL/Spain_2022.png)|
+|Suriname 2020![Suriname 2020](./covid_toll_ALL/Suriname_2020.png)|Suriname 2021![Suriname 2021](./covid_toll_ALL/Suriname_2021.png)|Suriname 2022![Suriname 2022](./covid_toll_ALL/Suriname_2022.png)|
 |Sweden 2020![Sweden 2020](./covid_toll_ALL/Sweden_2020.png)|Sweden 2021![Sweden 2021](./covid_toll_ALL/Sweden_2021.png)|Sweden 2022![Sweden 2022](./covid_toll_ALL/Sweden_2022.png)|
 |Switzerland 2020![Switzerland 2020](./covid_toll_ALL/Switzerland_2020.png)|Switzerland 2021![Switzerland 2021](./covid_toll_ALL/Switzerland_2021.png)|Switzerland 2022![Switzerland 2022](./covid_toll_ALL/Switzerland_2022.png)|
 |Taiwan 2020![Taiwan 2020](./covid_toll_ALL/Taiwan_2020.png)|Taiwan 2021![Taiwan 2021](./covid_toll_ALL/Taiwan_2021.png)|Taiwan 2022![Taiwan 2022](./covid_toll_ALL/Taiwan_2022.png)|
