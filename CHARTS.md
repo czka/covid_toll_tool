@@ -1,3 +1,11 @@
+These charts show all-cause mortality compared to COVID-19 mortality for a given country and year, in the context of
+restrictions stringency, vaccinations count, virus testing, and the country's all-cause mortality in preceding years.
+They were rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. [I](
+https://github.com/czka) update them every few days when enough new data are available in [Our World in Data (OWID)](
+https://ourworldindata.org/) project's GitHub repository. Please see [README.md](README.md) for more details.
+
+|2020|2021|2022|
+|-|-|-|
 |Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|Albania 2022![Albania 2022](./covid_toll_ALL/Albania_2022.png)|
 |Algeria 2020![Algeria 2020](./covid_toll_ALL/Algeria_2020.png)|Algeria 2021![Algeria 2021](./covid_toll_ALL/Algeria_2021.png)|Algeria 2022![Algeria 2022](./covid_toll_ALL/Algeria_2022.png)|
 |Andorra 2020![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)|Andorra 2021![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)|Andorra 2022![Andorra 2022](./covid_toll_ALL/Andorra_2022.png)|
