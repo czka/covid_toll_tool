@@ -1,11 +1,3 @@
-These charts show all-cause mortality compared to COVID-19 mortality for a given country and year, in the context of
-restrictions stringency, vaccinations count, virus testing, and the country's all-cause mortality in preceding years.
-They were rendered using [covid_toll_tool.py](covid_toll_tool.py) with `--interpolate` switch set on. [I](
-https://github.com/czka) update them every few days when enough new data are available in [Our World in Data (OWID)](
-https://ourworldindata.org/) project's GitHub repository. Please see [README.md](README.md) for more details.
-
-|2020|2021|2022|
-|-|-|-|
 |Albania 2020![Albania 2020](./covid_toll_ALL/Albania_2020.png)|Albania 2021![Albania 2021](./covid_toll_ALL/Albania_2021.png)|Albania 2022![Albania 2022](./covid_toll_ALL/Albania_2022.png)|
 |Algeria 2020![Algeria 2020](./covid_toll_ALL/Algeria_2020.png)|Algeria 2021![Algeria 2021](./covid_toll_ALL/Algeria_2021.png)|Algeria 2022![Algeria 2022](./covid_toll_ALL/Algeria_2022.png)|
 |Andorra 2020![Andorra 2020](./covid_toll_ALL/Andorra_2020.png)|Andorra 2021![Andorra 2021](./covid_toll_ALL/Andorra_2021.png)|Andorra 2022![Andorra 2022](./covid_toll_ALL/Andorra_2022.png)|
@@ -93,6 +85,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |Philippines 2020![Philippines 2020](./covid_toll_ALL/Philippines_2020.png)|Philippines 2021![Philippines 2021](./covid_toll_ALL/Philippines_2021.png)|Philippines 2022![Philippines 2022](./covid_toll_ALL/Philippines_2022.png)|
 |Poland 2020![Poland 2020](./covid_toll_ALL/Poland_2020.png)|Poland 2021![Poland 2021](./covid_toll_ALL/Poland_2021.png)|Poland 2022![Poland 2022](./covid_toll_ALL/Poland_2022.png)|
 |Portugal 2020![Portugal 2020](./covid_toll_ALL/Portugal_2020.png)|Portugal 2021![Portugal 2021](./covid_toll_ALL/Portugal_2021.png)|Portugal 2022![Portugal 2022](./covid_toll_ALL/Portugal_2022.png)|
+|Puerto Rico 2020![Puerto Rico 2020](./covid_toll_ALL/Puerto_Rico_2020.png)|Puerto Rico 2021![Puerto Rico 2021](./covid_toll_ALL/Puerto_Rico_2021.png)|Puerto Rico 2022![Puerto Rico 2022](./covid_toll_ALL/Puerto_Rico_2022.png)|
 |Qatar 2020![Qatar 2020](./covid_toll_ALL/Qatar_2020.png)|Qatar 2021![Qatar 2021](./covid_toll_ALL/Qatar_2021.png)|Qatar 2022![Qatar 2022](./covid_toll_ALL/Qatar_2022.png)|
 |Romania 2020![Romania 2020](./covid_toll_ALL/Romania_2020.png)|Romania 2021![Romania 2021](./covid_toll_ALL/Romania_2021.png)|Romania 2022![Romania 2022](./covid_toll_ALL/Romania_2022.png)|
 |Russia 2020![Russia 2020](./covid_toll_ALL/Russia_2020.png)|Russia 2021![Russia 2021](./covid_toll_ALL/Russia_2021.png)|Russia 2022![Russia 2022](./covid_toll_ALL/Russia_2022.png)|
