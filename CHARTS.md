@@ -27,6 +27,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |Brunei 2020![Brunei 2020](./covid_toll_ALL/Brunei_2020.png)|Brunei 2021![Brunei 2021](./covid_toll_ALL/Brunei_2021.png)|Brunei 2022![Brunei 2022](./covid_toll_ALL/Brunei_2022.png)|
 |Bulgaria 2020![Bulgaria 2020](./covid_toll_ALL/Bulgaria_2020.png)|Bulgaria 2021![Bulgaria 2021](./covid_toll_ALL/Bulgaria_2021.png)|Bulgaria 2022![Bulgaria 2022](./covid_toll_ALL/Bulgaria_2022.png)|
 |Canada 2020![Canada 2020](./covid_toll_ALL/Canada_2020.png)|Canada 2021![Canada 2021](./covid_toll_ALL/Canada_2021.png)|Canada 2022![Canada 2022](./covid_toll_ALL/Canada_2022.png)|
+|Cape Verde 2020![Cape Verde 2020](./covid_toll_ALL/Cape_Verde_2020.png)|Cape Verde 2021![Cape Verde 2021](./covid_toll_ALL/Cape_Verde_2021.png)|Cape Verde 2022![Cape Verde 2022](./covid_toll_ALL/Cape_Verde_2022.png)|
 |Chile 2020![Chile 2020](./covid_toll_ALL/Chile_2020.png)|Chile 2021![Chile 2021](./covid_toll_ALL/Chile_2021.png)|Chile 2022![Chile 2022](./covid_toll_ALL/Chile_2022.png)|
 |Colombia 2020![Colombia 2020](./covid_toll_ALL/Colombia_2020.png)|Colombia 2021![Colombia 2021](./covid_toll_ALL/Colombia_2021.png)|Colombia 2022![Colombia 2022](./covid_toll_ALL/Colombia_2022.png)|
 |Costa Rica 2020![Costa Rica 2020](./covid_toll_ALL/Costa_Rica_2020.png)|Costa Rica 2021![Costa Rica 2021](./covid_toll_ALL/Costa_Rica_2021.png)|Costa Rica 2022![Costa Rica 2022](./covid_toll_ALL/Costa_Rica_2022.png)|
