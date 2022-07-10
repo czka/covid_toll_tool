@@ -1,0 +1,71 @@
+off significantly:
+Argentina, Belgium, Colombia, Costa Rica, Mexico, Peru
+
+slightly off:
+Czechia, Finland, France, Germany, Hong Kong, Liechtenstein, Lithuania, Slovakia, Slovenia, Spain, Switzerland
+
+off a bit at some dates:
+Luxembourg, Palestine
+
+missing:
+Iceland, Lebanon, Quatar
+
+special cases:
+Austria - missing 2020 and beginning of 2021
+Brazil - missing in all years, but it probably makes sense given the absurd test & case count for Brazil
+Ecuador - misisng for 1st half of 2020, but probably siomilar thing as with Brazil
+
+
+As of current master c7b9b886e8 there are several countries which seem to have their `positive_rate` field in `owid-covid-data.csv` not updated in for some time.
+
+On (url do mojego brancha) I've uploaded charts of 2 lines for 108 countries I'm interested in:
+- `positive_rate * 100` (dashed orange)
+- `new_cases_smoothed / new_tests_smoothed * 100` (solid blue)
+
+I'd expect those 2 lines to be identical. Mostly they are - with the following exceptions though:
+
+- off significantly:
+Argentina, Belgium, Colombia, Costa Rica, Mexico, Peru, Spain
+
+- slightly off:
+Czechia, Finland, France, Germany, Hong Kong, Liechtenstein, Lithuania, Slovakia, Slovenia, Switzerland
+
+- `positive_rate` missing completely:
+Iceland, Quatar
+
+
+
+
+---
+
+> We calculate the positive rate directly - by dividing the number of positive tests by the number of tests - for the following countries:
+> 
+> * Argentina
+> * Belgium
+> * Colombia
+> * Costa Rica
+> * Czechia
+> * Finland
+> * France
+> * Germany
+> * Hong Kong
+> * Lithuania
+> * Liechtenstein
+> * Mexico
+> * Peru
+> * Slovakia
+> * Slovenia
+> * Spain
+> * Switzerland
+
+
+@camappel So, if `positive_rate = new_cases_smoothed / new_tests_smoothed`, how come that my line of `new_cases_smoothed / new_tests_smoothed * 100` and line of `positive_rate * 100` **don't match** for **these 17 countries** although they do match for the majority of other countries?
+
+Please check my [CHARTS.md](https://github.com/czka/covid_toll_tool/blob/positive_test_rate_for_report_to_owid/CHARTS.md). The 2 lines, although supposed to match closely, are clearly off for Argentina, Belgium, Colombia etc., while they match perfectly for the remaining majority of countries (e.g. Armenia, Australia, Bolivia, Bulgaria and several dozen other).
+
+I swear that all those 3*108 charts in my CHARTS.md were generated from a fresh `owid-covid-data.csv` in a uniform manner - namely using my [covid_toll_tool.py](https://github.com/czka/covid_toll_tool/blob/positive_test_rate_for_report_to_owid/covid_toll_tool.py), function `plot_weekly`.
+
+If `new_cases_smoothed / new_tests_smoothed * 100` and `positive_rate * 100` match closely for around 80 of 108 countries, but they don't match for 17 countries although they should, I suppose it's fair to assume there's something fishy going on, right?
+
+I appreciate that you have tried to address all my concerns in one batch. However, to have clear communication, let's get these 17 countries sorted out first.
+
