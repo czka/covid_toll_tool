@@ -16,6 +16,7 @@ https://ourworldindata.org/) project's GitHub repository. Please see [README.md]
 |Australia 2020![Australia 2020](./covid_toll_ALL/Australia_2020.png)|Australia 2021![Australia 2021](./covid_toll_ALL/Australia_2021.png)|Australia 2022![Australia 2022](./covid_toll_ALL/Australia_2022.png)|
 |Austria 2020![Austria 2020](./covid_toll_ALL/Austria_2020.png)|Austria 2021![Austria 2021](./covid_toll_ALL/Austria_2021.png)|Austria 2022![Austria 2022](./covid_toll_ALL/Austria_2022.png)|
 |Azerbaijan 2020![Azerbaijan 2020](./covid_toll_ALL/Azerbaijan_2020.png)|Azerbaijan 2021![Azerbaijan 2021](./covid_toll_ALL/Azerbaijan_2021.png)|Azerbaijan 2022![Azerbaijan 2022](./covid_toll_ALL/Azerbaijan_2022.png)|
+|Bahamas 2020![Bahamas 2020](./covid_toll_ALL/Bahamas_2020.png)|Bahamas 2021![Bahamas 2021](./covid_toll_ALL/Bahamas_2021.png)|Bahamas 2022![Bahamas 2022](./covid_toll_ALL/Bahamas_2022.png)|
 |Barbados 2020![Barbados 2020](./covid_toll_ALL/Barbados_2020.png)|Barbados 2021![Barbados 2021](./covid_toll_ALL/Barbados_2021.png)|Barbados 2022![Barbados 2022](./covid_toll_ALL/Barbados_2022.png)|
 |Belarus 2020![Belarus 2020](./covid_toll_ALL/Belarus_2020.png)|Belarus 2021![Belarus 2021](./covid_toll_ALL/Belarus_2021.png)|Belarus 2022![Belarus 2022](./covid_toll_ALL/Belarus_2022.png)|
 |Belgium 2020![Belgium 2020](./covid_toll_ALL/Belgium_2020.png)|Belgium 2021![Belgium 2021](./covid_toll_ALL/Belgium_2021.png)|Belgium 2022![Belgium 2022](./covid_toll_ALL/Belgium_2022.png)|
