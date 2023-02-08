@@ -331,13 +331,13 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
 
     axs2 = axs.twinx()
 
-    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot='50',
+    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=True, rot=50,
                               color=['deepskyblue', 'dimgrey', 'tab:red', 'black', 'black'],
                               style=[':', ':', ':', '-', '--'],
                               ax=axs, x='date', y=['deaths_min', 'deaths_mean', 'deaths_max',
                                                    'deaths_{}_all_ages'.format(str(year)), 'deaths_noncovid'])
 
-    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot='50',
+    df_merge_country_one.plot(x_compat=True, kind='line', use_index=True, grid=False, rot=50,
                               color=['fuchsia', 'cornflowerblue', 'mediumspringgreen', 'mediumspringgreen',
                                      'mediumspringgreen'],
                               style=['-', '-', '--', '-', '-.'],
