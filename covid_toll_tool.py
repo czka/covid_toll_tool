@@ -376,13 +376,13 @@ def plot_weekly(df_merge_country_one, country, year, morta_year_bgd_notnull_min,
     axs.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
 
     axs2.set(ylabel="percent",
-             xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
+             xlim=[df_merge_country_one['date'].to_list()[0], df_merge_country_one['date'].to_list()[-1]],
              ylim=[-0.25, 100.5])
 
     axs2.yaxis.set_major_locator(mticker.MultipleLocator(10))
 
     axs.set(ylabel="count",
-            xlim=[df_merge_country_one['date'].head(1), df_merge_country_one['date'].tail(1)],
+            xlim=[df_merge_country_one['date'].to_list()[0], df_merge_country_one['date'].to_list()[-1]],
             ylim=[y_min - (abs(y_max) - abs(y_min)) * 0.05, y_max + (abs(y_max) - abs(y_min)) * 0.05])
 
     axs2.set_xlabel(xlabel="date (ISO week Sunday)", loc="right")
